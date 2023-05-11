@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:orientation="horizontal"
+    android:weightSum="10">
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_weight="5"
+        android:orientation="vertical"
+        android:paddingHorizontal="10dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/device_info_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/deviceinfo_desc_1"
+                android:textSize="@dimen/hint_text_size"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/get_userid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="读取userid"
+                android:textSize="@dimen/hint_text_size"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/device_info_title" />
+
+            <Button
+                android:id="@+id/get_clientid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="读取clientId"
+                android:textSize="@dimen/hint_text_size"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/get_userid" />
+
+            <Button
+                android:id="@+id/get_pass_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="读取登录信息"
+                android:textSize="@dimen/hint_text_size"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/get_clientid" />
+
+            <Button
+                android:id="@+id/get_bduss"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="读取bduss"
+                android:textSize="@dimen/hint_text_size"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/get_pass_info" />
+
+            <TextView
+                android:id="@+id/read_device_serial_number_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/deviceinfo_desc_2"
+                android:textSize="@dimen/hint_text_size"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/get_bduss" />
+
+            <TextView
+                android:id="@+id/read_device_unique_id_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/deviceinfo_unique_id_desc"
+                android:textSize="@dimen/hint_text_size"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/read_device_serial_number_title" />
+
+            <Button
+                android:id="@+id/read_device_unique_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="读取设备唯一ID"
+                android:textSize="@dimen/hint_text_size"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/read_device_unique_id_desc" />
+
+            <TextView
+                android:id="@+id/read_device_resettable_unique_id_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/deviceinfo_resettable_unique_id_desc"
+                android:textSize="@dimen/hint_text_size"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/read_device_unique_id" />
+
+            <Button
+                android:id="@+id/read_device_resettable_unique_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="读取设备唯一ID(重置可变)"
+                android:textSize="@dimen/hint_text_size"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/read_device_resettable_unique_id_desc" />
+
+            <TextView
+                android:id="@+id/report_link_clicked_event_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/deviceinfo_desc_3"
+                android:textSize="@dimen/hint_text_size"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/read_device_resettable_unique_id" />
+
+            <Button
+                android:id="@+id/report_link_clicked_event"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="上报linkclicked事件"
+                android:textSize="@dimen/hint_text_size"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/report_link_clicked_event_title" />
+
+            <TextView
+                android:id="@+id/report_resource_progress_event_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/deviceinfo_report_resource_progress_event_desc"
+                android:textSize="@dimen/hint_text_size"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/report_link_clicked_event" />
+
+            <Button
+                android:id="@+id/report_resource_progress_event"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="上报资源消费事件"
+                android:textSize="@dimen/hint_text_size"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/report_resource_progress_event_desc" />
+
+            <TextView
+                android:id="@+id/update_modify_wakeup_state_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="更新是否允许唤醒状态"
+                android:textSize="@dimen/hint_text_size"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/report_resource_progress_event" />
+
+            <Button
+                android:id="@+id/update_modify_wakeup_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="更新唤醒状态"
+                android:textSize="@dimen/hint_text_size"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/update_modify_wakeup_state_title" />
+
+            <TextView
+                android:id="@+id/request_baby_info_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="请求发起人脸解锁title"
+                android:textSize="@dimen/hint_text_size"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/update_modify_wakeup_state" />
+
+            <Button
+                android:id="@+id/request_face_unlock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="发起人脸解锁"
+                android:textSize="@dimen/hint_text_size"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/request_baby_info_title" />
+
+            <TextView
+                android:id="@+id/request_camera_info_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="获取Camera状态"
+                android:textSize="@dimen/hint_text_size"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/request_face_unlock" />
+
+            <Button
+                android:id="@+id/request_camera_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="获取camera状态"
+                android:textSize="@dimen/hint_text_size"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/request_camera_info_title" />
+
+            <TextView
+                android:id="@+id/gesture_list_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/deviceinfo_desc_4"
+                android:textSize="@dimen/hint_text_size"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/request_camera_info" />
+
+            <Button
+                android:id="@+id/register_gesture_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="注册手势能力"
+                android:textSize="@dimen/hint_text_size"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/gesture_list_title" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="5">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/clear_log_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/clear_log_text" />
+
+            <TextView
+                android:id="@+id/result_intent_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/holo_blue_dark"
+                android:minHeight="200dp"
+                android:text="@string/result_intent"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

@@ -1,0 +1,77 @@
+<resources>
+    <string name="app_name">康养管家</string>
+    <string name="intent_hint"><b>云端意图需要在技能平台中配置对应意图，文档参考本仓库wiki第3节</b></string>
+    <string name="fast_forward_hint">依赖自定义词典（时间单位）:对我说：“小度小度，快进一分钟/快进三十秒”</string>
+    <string name="next_intent">引用系统选择意图：对我说：“小度小度，下一个/上一个”</string>
+    <string name="previous_intent">引用系统播放控制意图：对我说：“小度小度，暂停/继续”</string>
+    <string name="result_intent">指令返回结果:\n</string>
+    <string name="clear_log_text">清空日志</string>
+
+    <string name="ui_control_custom">自定义交互的组件,可以对我说：“小度小度，点击登录/注册”</string>
+
+    <string name="audio_recording">Recording</string>
+    <string name="audio_start_record">Start Record</string>
+    <string name="audio_playing">Playing</string>
+    <string name="audio_start_play">Start Play</string>
+    <string name="audio_record_duration">Duration: %1$d</string>
+
+    <string name="audio_format">Format</string>
+
+    <!-- 声道选择 -->
+    <string name="radio_double_voice_channel">双声道</string>
+    <string name="radio_single_voice_channel">单声道</string>
+
+    <!-- 频率选择 -->
+    <string name="radio2_16k_frequency">16K Hz</string>
+    <string name="radio2_22K_frequency">22K Hz</string>
+    <string name="radio2_11K_frequency">11025 Hz</string>
+    <string name="radio2_64K_frequency">64K Hz\n(原始音频)</string>
+
+    <!-- 位宽选择 -->
+    <string name="radio3_bit_width_16">PCM/16BIT</string>
+    <string name="radio3_bit_width_8">PCM/8BIT</string>
+
+    <!-- 音频信号源选择 -->
+    <string name="radio4_source_default">默认音源</string>
+    <string name="radio4_source_original">原始音源</string>
+
+
+    <string name="audio_channel_select">声道选择</string>
+    <string name="frequency_select">频率选择</string>
+    <string name="bit_width_select">位宽选择</string>
+    <string name="audio_source_select">音频选择</string>
+
+    <string name="device_mic_num">当前设备的麦克风数量: %1$s</string>
+
+    <string name="audio_original_desc">注：使用原始音频录制时，请将AudioRecorder配置为：双声道，64KHz采样率录制。\n
+        请开发者自行选择数据处理方式，文件中的数据格式是按声道顺序为一组依次排列：\n
+        [01234567],[01234567], …\n
+        一般前面0到5是mic数据，若mic数量不够将以空数据填充，6,7是参考数据。\n
+        处理原始音频的Wav文件时，注意44byte文件头偏移。\n
+        具体不同机型的mic数量，通过读取属性：persist.audio.mic_num得到。</string>
+
+    <string name="payment_desc_1">对于需要当前设备登录用户的手机号的场景，App可以通过上报事件的方式向DuerOS发起请求，
+        DuerOS会处理上报请求，下发用户手机号</string>
+    <string name="payment_desc_2">对于付费场景，App可以上报一个付费申请给到DuerOS，DuerOS会处理后续付费流程，
+        下发付费结果</string>
+    <string name="payment_desc_3">技能外售卖是指，App可以在百度侧注册商品，参加百度的会场类（如双十一）营销活动。
+        用户是在百度营销会场购买，不需要在设备上打开技能.技能外购买是被动处理发货指令,无法主动触发</string>
+
+    <string name="deviceinfo_desc_1">设备可以通过UserInfoProvider对外输出：用户登录信息，\n
+        userid，bduss，clientid。以上这些信息经过签名验证，加入到设备白名单就可以读取到想要的字段,
+        所以此demo仅为用法示例，读取不到任何信息</string>
+    <string name="deviceinfo_desc_2">读取设备唯一ID：</string>
+    <string name="deviceinfo_desc_3">上报linkclicked事件。三方app可以通过上报事件给DuerOS主动请求\n
+        DuerOS执行某些动作，如下示例，通过事件上报请求DuerOS在用户习惯中增加一个习惯日程</string>
+    <string name="deviceinfo_desc_4">手势能力，手势能力是一种新的交互方式，用户可以通过对着摄像头做手势完成交互</string>
+
+    <string name="deviceinfo_unique_id_desc">读取设备不可变ID\n
+        设备不可变ID在小度体系中可以保证唯一，需要申请添加到唯一ID白名单内方可获取。</string>
+    <string name="deviceinfo_resettable_unique_id_desc">读取设备不可变ID(重置可变)\n
+        该ID在设备重置前可保证唯一，不依赖授权。设备重置后会重新生成。</string>
+
+    <string name="deviceinfo_report_resource_progress_event_desc">上报资源消费事件：\n
+        开发者可将应用内的视频、文章等类型资源消费数据，通过这个统一接口上报到小度云端，\n
+        小度可根据消费数据进一步优化资源推荐模型，提升内容消费效果以及用户体验。\n
+        为避免复杂用户场景下上报频率不可控，导致产生的事件过多。在此强烈建议开发者采取定时上报的方案，上报间隔30s。</string>
+</resources>
