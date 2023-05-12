@@ -1,4 +1,4 @@
-package com.baidu.duer.test_botsdk.utils;
+package com.dataport.wellness.utils;
 
 import android.content.Context;
 

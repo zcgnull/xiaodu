@@ -1,4 +1,4 @@
-package com.baidu.duer.test_botsdk.activity.audio;
+package com.dataport.wellness.activity.audio;
 
 import android.os.Environment;
 import android.util.Log;

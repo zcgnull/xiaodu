@@ -1,4 +1,4 @@
-package com.baidu.duer.test_botsdk.activity;
+package com.dataport.wellness.activity;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,11 +15,11 @@ import androidx.fragment.app.FragmentTabHost;
 
 import com.baidu.duer.bot.directive.payload.AmountInfo;
 import com.baidu.duer.botsdk.IAccountChargeMsgListener;
-import com.baidu.duer.test_botsdk.R;
-import com.baidu.duer.test_botsdk.fragment.GetDeviceInfoFragment;
-import com.baidu.duer.test_botsdk.fragment.HandleIntentFragment;
-import com.baidu.duer.test_botsdk.fragment.PaymentAndAccountFragment;
-import com.baidu.duer.test_botsdk.fragment.UiControlFragment;
+import com.dataport.wellness.R;
+import com.dataport.wellness.fragment.GetDeviceInfoFragment;
+import com.dataport.wellness.fragment.HandleIntentFragment;
+import com.dataport.wellness.fragment.PaymentAndAccountFragment;
+import com.dataport.wellness.fragment.UiControlFragment;
 
 /**
  * 这是一个BotSDK demo， demo包括如下使用案例

@@ -1,4 +1,4 @@
-package com.baidu.duer.test_botsdk.utils;
+package com.dataport.wellness.utils;
 
 import com.baidu.duer.bot.directive.payload.AmountInfo;
 import com.baidu.duer.bot.event.payload.SellerOrderStructure;

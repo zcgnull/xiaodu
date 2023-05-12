@@ -1,11 +1,12 @@
-package com.baidu.duer.test_botsdk.activity;
+package com.dataport.wellness.activity;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baidu.duer.bot.BotMessageProtocol;
-import com.baidu.duer.test_botsdk.R;
-import com.baidu.duer.test_botsdk.activity.audio.AudioDemoActivity;
-import com.baidu.duer.test_botsdk.activity.camera.CameraActivity;
-import com.baidu.duer.test_botsdk.utils.BotConstants;
+import com.dataport.wellness.R;
+import com.dataport.wellness.activity.audio.AudioDemoActivity;
+import com.dataport.wellness.activity.camera.CameraActivity;
+import com.dataport.wellness.utils.BotConstants;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;

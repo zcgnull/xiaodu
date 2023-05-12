@@ -1,4 +1,4 @@
-package com.baidu.duer.test_botsdk.application;
+package com.dataport.wellness.application;
 
 import android.app.Activity;
 import android.app.Application;
@@ -6,11 +6,11 @@ import android.os.Bundle;
 
 import com.baidu.duer.botsdk.BotSdk;
 import com.baidu.duer.botsdk.util.HeartBeatReporter;
-import com.baidu.duer.test_botsdk.BuildConfig;
-import com.baidu.duer.test_botsdk.botsdk.BotMessageListener;
-import com.baidu.duer.test_botsdk.botsdk.BotSDKUtils;
-import com.baidu.duer.test_botsdk.utils.BotConstants;
-import com.baidu.duer.test_botsdk.utils.ContextUtil;
+import com.dataport.wellness.BuildConfig;
+import com.dataport.wellness.botsdk.BotMessageListener;
+import com.dataport.wellness.botsdk.BotSDKUtils;
+import com.dataport.wellness.utils.BotConstants;
+import com.dataport.wellness.utils.ContextUtil;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

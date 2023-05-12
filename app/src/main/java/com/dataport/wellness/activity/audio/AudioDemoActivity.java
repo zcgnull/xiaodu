@@ -1,4 +1,4 @@
-package com.baidu.duer.test_botsdk.activity.audio;
+package com.dataport.wellness.activity.audio;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -22,9 +22,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.baidu.duer.test_botsdk.R;
-import com.baidu.duer.test_botsdk.utils.BotConstants;
-import com.baidu.duer.test_botsdk.utils.DeviceInfoUtil;
+import com.dataport.wellness.R;
+import com.dataport.wellness.utils.BotConstants;
+import com.dataport.wellness.utils.DeviceInfoUtil;
 
 import java.io.File;
 import java.io.FileInputStream;

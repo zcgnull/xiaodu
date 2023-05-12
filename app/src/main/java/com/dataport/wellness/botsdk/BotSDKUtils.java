@@ -1,9 +1,9 @@
-package com.baidu.duer.test_botsdk.botsdk;
+package com.dataport.wellness.botsdk;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.baidu.duer.test_botsdk.utils.BotConstants;
+import com.dataport.wellness.utils.BotConstants;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;

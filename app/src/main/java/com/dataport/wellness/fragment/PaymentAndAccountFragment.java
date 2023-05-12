@@ -1,4 +1,4 @@
-package com.baidu.duer.test_botsdk.fragment;
+package com.dataport.wellness.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -19,10 +19,10 @@ import com.baidu.duer.botsdk.BotIntent;
 import com.baidu.duer.botsdk.BotSdk;
 import com.baidu.duer.botsdk.IAccountChargeMsgListener;
 import com.baidu.duer.botsdk.util.RequestBotSdkUtil;
-import com.baidu.duer.test_botsdk.R;
-import com.baidu.duer.test_botsdk.botsdk.BotMessageListener;
-import com.baidu.duer.test_botsdk.botsdk.IBotIntentCallback;
-import com.baidu.duer.test_botsdk.utils.MockUtil;
+import com.dataport.wellness.R;
+import com.dataport.wellness.botsdk.BotMessageListener;
+import com.dataport.wellness.botsdk.IBotIntentCallback;
+import com.dataport.wellness.utils.MockUtil;
 
 import java.util.HashMap;
 

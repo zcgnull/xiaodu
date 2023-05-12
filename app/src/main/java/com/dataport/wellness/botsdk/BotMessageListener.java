@@ -1,4 +1,4 @@
-package com.baidu.duer.test_botsdk.botsdk;
+package com.dataport.wellness.botsdk;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -7,8 +7,8 @@ import android.widget.Toast;
 import com.baidu.duer.botsdk.BotIdentity;
 import com.baidu.duer.botsdk.BotIntent;
 import com.baidu.duer.botsdk.IBotMessageListener;
-import com.baidu.duer.test_botsdk.application.BotsdkApplication;
-import com.baidu.duer.test_botsdk.utils.ContextUtil;
+import com.dataport.wellness.application.BotsdkApplication;
+import com.dataport.wellness.utils.ContextUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;

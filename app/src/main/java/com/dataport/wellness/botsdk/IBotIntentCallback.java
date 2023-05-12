@@ -1,4 +1,4 @@
-package com.baidu.duer.test_botsdk.botsdk;
+package com.dataport.wellness.botsdk;
 
 import com.baidu.duer.botsdk.BotIntent;
 

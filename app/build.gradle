@@ -4,7 +4,7 @@ android {
     compileSdkVersion 30
     defaultConfig {
         applicationId "com.dataport.wellness"
-        minSdkVersion 19
+        minSdkVersion 19 //
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 30
         versionCode 1

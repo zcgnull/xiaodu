@@ -1,4 +1,4 @@
-package com.baidu.duer.test_botsdk.activity.camera;
+package com.dataport.wellness.activity.camera;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -41,7 +41,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.baidu.duer.bot.BotMessageProtocol;
-import com.baidu.duer.test_botsdk.R;
+import com.dataport.wellness.R;
 
 import java.io.File;
 import java.io.FileNotFoundException;

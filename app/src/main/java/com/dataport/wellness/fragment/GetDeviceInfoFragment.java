@@ -1,4 +1,4 @@
-package com.baidu.duer.test_botsdk.fragment;
+package com.dataport.wellness.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -8,23 +8,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
 import com.baidu.duer.bot.BotMessageProtocol;
 import com.baidu.duer.bot.directive.payload.JsonUtil;
 import com.baidu.duer.bot.event.payload.LinkClickedEventPayload;
-import com.baidu.duer.bot.util.Constants;
 import com.baidu.duer.botsdk.BotIntent;
 import com.baidu.duer.botsdk.BotSdk;
 import com.baidu.duer.botsdk.util.RequestBotSdkUtil;
 import com.baidu.duer.botsdk.util.ResourceProgressElapsedEventPayload;
-import com.baidu.duer.test_botsdk.R;
-import com.baidu.duer.test_botsdk.botsdk.BotMessageListener;
-import com.baidu.duer.test_botsdk.botsdk.IBotIntentCallback;
-import com.baidu.duer.test_botsdk.utils.BotConstants;
-import com.baidu.duer.test_botsdk.utils.DeviceInfoUtil;
+import com.dataport.wellness.R;
+import com.dataport.wellness.botsdk.BotMessageListener;
+import com.dataport.wellness.botsdk.IBotIntentCallback;
+import com.dataport.wellness.utils.BotConstants;
+import com.dataport.wellness.utils.DeviceInfoUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
