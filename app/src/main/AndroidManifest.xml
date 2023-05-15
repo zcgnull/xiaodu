@@ -10,24 +10,37 @@
 
     <application
         android:name=".application.BotsdkApplication"
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+           android:allowBackup="true"
+           android:supportsRtl="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
+            android:roundIcon="@mipmap/ic_launcher_round"
+        >
 
+<!--        >-->
+
+        <!---->
         <!-- 主页 -->
         <activity
-            android:name=".activity.HomeActivity"
-            android:screenOrientation="landscape">
+            android:name=".activity.PortalActivity"
+            android:screenOrientation="landscape"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<!--        <activity-->
+<!--            android:name=".activity.HomeActivity"-->
+<!--            android:screenOrientation="landscape">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
 
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
         <activity
             android:name=".activity.audio.AudioDemoActivity"
             android:screenOrientation="landscape" />
