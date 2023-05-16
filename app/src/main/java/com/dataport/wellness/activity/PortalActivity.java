@@ -1,8 +1,5 @@
 package com.dataport.wellness.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,19 +8,21 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.baidu.duer.botsdk.BotIntent;
 import com.baidu.duer.botsdk.BotSdk;
 import com.dataport.wellness.R;
 import com.dataport.wellness.activity.audio.AudioDemoActivity;
 import com.dataport.wellness.activity.camera.CameraActivity;
+import com.dataport.wellness.api.WellNessApi;
 import com.dataport.wellness.botsdk.BotMessageListener;
 import com.dataport.wellness.botsdk.IBotIntentCallback;
 import com.dataport.wellness.utils.BotConstants;
 import com.dataport.wellness.utils.IntentDecodeUtil;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class PortalActivity extends AppCompatActivity implements View.OnClickListener, IBotIntentCallback {
 //    public class PortalActivity extends AppCompatActivity implements View.OnClickListener {
@@ -33,6 +32,7 @@ public class PortalActivity extends AppCompatActivity implements View.OnClickLis
     private ImageView imageDuer;
     private RecyclerView duerHelp;
     private EditText echoZone;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -49,7 +49,6 @@ public class PortalActivity extends AppCompatActivity implements View.OnClickLis
         deviceBtn.setOnClickListener(this);
         servicerBtn.setOnClickListener(this);
 
-
   /*     echoZone = findViewById(R.id.displayDemo);
         echoZone.setText("created");*/
         //获取deviceId,apiAccesstoken,用于向后台获取设备sn
@@ -58,6 +57,7 @@ public class PortalActivity extends AppCompatActivity implements View.OnClickLis
 
         Log.i(TAG,"device======="+deviceId);
         Log.i(TAG,"device=======apiAccesstoken======="+apiAccesstoken);
+        WellNessApi.getDeviceSn("842ab60c61b81df1cc6fe68c15580f47","jjJyKMunH6xErNeZ/OqxFzHRuQg88Fsxig2YEwIfQkJUfIdd7ghFnqzBhkquDc6/raQRNdf8p+ZXZtOyCjly36ec05DMJxHi3JAaTu83BS6vPC5SpDpyRnraliBlfTRMCiN03gRZnu/5DzH96aJkZwVXWwjRjqZKsn5zPx4Jls23mWnOsny72tJaMOfKixsrhpAPhDvzQd4V6dn8gj8j5NB5fbuyxv12RSOY0sSHJ8YzkrWBJfflYV0T7KaPn1Rw7K/jmRGVHuBOutCM/VtcuMxC/y/bP2s4VWFROkNxTPavCV9klDT4KDACv6PQZV5zuYF4uP1HRprDXnZW6uTOmNr0khzCiI85mEIgsqKTcw6g1rhR1P7s4bwH3Q3zZDx9DFhft2EXOBAUKvCozxlTKSnYAsaVf6VoXluWmQ/Sun8=");
         Log.i(TAG, "on fragment attach");
       //  super.onAttach(context);
         BotMessageListener.getInstance().addCallback(this);
