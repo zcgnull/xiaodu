@@ -52,7 +52,12 @@ public class PortalActivity extends AppCompatActivity implements View.OnClickLis
 
   /*     echoZone = findViewById(R.id.displayDemo);
         echoZone.setText("created");*/
+        //获取deviceId,apiAccesstoken,用于向后台获取设备sn
+        String deviceId = getIntent().getStringExtra("device");
+        String apiAccesstoken=getIntent().getStringExtra("apiAccesstoken");
 
+        Log.i(TAG,"device======="+deviceId);
+        Log.i(TAG,"device=======apiAccesstoken======="+apiAccesstoken);
         Log.i(TAG, "on fragment attach");
       //  super.onAttach(context);
         BotMessageListener.getInstance().addCallback(this);
