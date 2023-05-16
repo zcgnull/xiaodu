@@ -3,24 +3,34 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/image_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toTopOf="@+id/deviceTxt"
+        app:layout_constraintEnd_toStartOf="@+id/deviceBtn"
+        app:layout_constraintStart_toEndOf="@+id/orderBtn"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/bg" />
     <ImageButton
         android:id="@+id/orderBtn"
-        android:layout_width="194dp"
-        android:layout_height="111dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="90dp"
+        android:layout_width="361px"
+        android:layout_height="228px"
+        android:layout_marginStart="50px"
+        android:layout_marginTop="143px"
         android:background="@mipmap/portal_order"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/deviceBtn"
-        android:layout_width="194dp"
-        android:layout_height="111dp"
-        android:layout_marginStart="42dp"
-        android:layout_marginTop="90dp"
+        android:layout_width="361px"
+        android:layout_height="228px"
+        android:layout_marginStart="48px"
+        android:layout_marginTop="143px"
         android:background="@mipmap/portal_device"
         app:layout_constraintStart_toEndOf="@+id/orderBtn"
         app:layout_constraintTop_toTopOf="parent" />
@@ -28,90 +38,82 @@
 
     <ImageButton
         android:id="@+id/servicerBtn"
-        android:layout_width="194dp"
-        android:layout_height="111dp"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="90dp"
+        android:layout_width="361px"
+        android:layout_height="228px"
+        android:layout_marginStart="48px"
+        android:layout_marginTop="143px"
         android:background="@mipmap/portal_servicer"
         app:layout_constraintStart_toEndOf="@+id/deviceBtn"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/doctorBtn"
-        android:layout_width="194dp"
-        android:layout_height="111dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="15dp"
+        android:layout_width="361px"
+        android:layout_height="228px"
+        android:layout_marginStart="50px"
+        android:layout_marginTop="40px"
         android:background="@mipmap/portal_doctor"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/orderBtn" />
 
     <ImageButton
         android:id="@+id/consultantBtn"
-        android:layout_width="194dp"
-        android:layout_height="111dp"
-        android:layout_marginStart="42dp"
-        android:layout_marginTop="15dp"
+        android:layout_width="361px"
+        android:layout_height="228px"
+        android:layout_marginStart="48px"
+        android:layout_marginTop="40px"
         android:background="@mipmap/portal_consultant"
         app:layout_constraintStart_toEndOf="@+id/doctorBtn"
         app:layout_constraintTop_toBottomOf="@+id/deviceBtn" />
 
     <ImageButton
         android:id="@+id/chatBtn"
-        android:layout_width="194dp"
-        android:layout_height="111dp"
-        android:layout_marginStart="46dp"
-        android:layout_marginTop="15dp"
+        android:layout_width="361px"
+        android:layout_height="228px"
+        android:layout_marginStart="48px"
+        android:layout_marginTop="40px"
         android:background="@mipmap/portal_chat"
         app:layout_constraintStart_toEndOf="@+id/consultantBtn"
         app:layout_constraintTop_toBottomOf="@+id/servicerBtn" />
 
     <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@mipmap/portal_icon"
-        tools:layout_editor_absoluteX="60dp"
-        tools:layout_editor_absoluteY="16dp" />
-
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="44dp"
-        android:layout_height="53dp"
-        app:srcCompat="@mipmap/portal_duer"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="678dp" />
+        android:id="@+id/logo"
+        android:layout_width="70px"
+        android:layout_height="70px"
+        android:layout_marginStart="24px"
+        android:layout_marginTop="25px"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/portal_icon" />
 
     <TextView
         android:id="@+id/portal_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="康养管家"
+        android:layout_width="167px"
+        android:layout_height="56px"
+        android:layout_marginStart="12px"
 
+        android:layout_marginTop="30px"
+        android:fontWeight="600"
+        android:text="康养管家"
         android:textColor="#FF333333"
-        android:textSize="40sp"
-        tools:layout_editor_absoluteX="352dp"
-        tools:layout_editor_absoluteY="345dp" />
+        android:textSize="40px"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/logo"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/portal_title2"
-        android:layout_width="181dp"
-        android:layout_height="29dp"
+        android:layout_width="261px"
+        android:layout_height="37px"
+        android:layout_marginStart="989px"
+        android:layout_marginBottom="33px"
+
         android:text="河北数港科技有限公司"
         android:textColor="#FF333333"
-
-        android:textSize="16sp"
-        tools:layout_editor_absoluteX="216dp"
-        tools:layout_editor_absoluteY="686dp" />
-
-    <RelativeLayout
-        android:id="@+id/relativeLayout"
-        android:layout_width="221dp"
-        android:layout_height="34dp"
-        tools:layout_editor_absoluteX="527dp"
-        tools:layout_editor_absoluteY="345dp">
-
-    </RelativeLayout>
+        android:textSize="26px"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/orderTxt"
@@ -122,6 +124,7 @@
         android:text="服务订购"
         android:textColor="#FFFFFFFF"
         android:textSize="30sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/orderBtn"
         app:layout_constraintTop_toTopOf="@+id/orderBtn" />
 
@@ -134,6 +137,7 @@
         android:text="家庭医生"
         android:textColor="#FFFFFFFF"
         android:textSize="30sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/doctorBtn"
         app:layout_constraintTop_toTopOf="@+id/doctorBtn" />
 
@@ -146,6 +150,7 @@
         android:text="在线诊疗"
         android:textColor="#FFFFFFFF"
         android:textSize="30sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/consultantBtn"
         app:layout_constraintTop_toTopOf="@+id/consultantBtn" />
 
@@ -158,6 +163,7 @@
         android:text="亲友视频"
         android:textColor="#FFFFFFFF"
         android:textSize="30sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/chatBtn"
         app:layout_constraintTop_toTopOf="@+id/chatBtn" />
 
@@ -170,6 +176,7 @@
         android:text="智能设备"
         android:textColor="#FFFFFFFF"
         android:textSize="30sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/deviceBtn"
         app:layout_constraintTop_toTopOf="@+id/deviceBtn" />
 
@@ -182,6 +189,7 @@
         android:text="康养管家"
         android:textColor="#FFFFFFFF"
         android:textSize="30sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/servicerBtn"
         app:layout_constraintTop_toTopOf="@+id/servicerBtn" />
 
@@ -203,34 +211,25 @@
         android:layout_height="wrap_content"
         app:barrierDirection="left" />
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="80dp"
-        android:layout_height="20dp"
-        android:background="@drawable/radius_rectangle"
-        tools:layout_editor_absoluteX="594dp"
-        tools:layout_editor_absoluteY="383dp" />
+    <ImageView
+        android:id="@+id/imageDuer"
+        android:layout_width="84px"
+        android:layout_height="84px"
+        android:layout_marginStart="40px"
+        android:layout_marginTop="35dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/doctorBtn"
+        app:srcCompat="@mipmap/portal_duer" />
 
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:spinnerMode="dropdown"
-        app:layout_constraintTop_toTopOf="@id/button"
-
-        tools:layout_editor_absoluteX="542dp" />
-
-    <EditText
-        android:id="@+id/displayDemo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="text"
-        android:text="Name"
-        android:textColor="#F44336"
-        tools:layout_editor_absoluteX="132dp"
-        tools:layout_editor_absoluteY="460dp" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/portalHelpRecycler"
+        android:layout_width="700px"
+        android:layout_height="66px"
+        android:layout_marginStart="140px"
+        android:layout_marginTop="45px"
+        android:textAlignment="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/doctorBtn" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

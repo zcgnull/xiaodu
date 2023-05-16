@@ -94,8 +94,8 @@ public class AudioDemoActivity extends AppCompatActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_audio_demo);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Audio Demo");
+ /*       getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Audio Demo");*/
         mStartRecordDemo = findViewById(R.id.dueros_record_demo);
         mStartRecordDemo.setOnClickListener(this);
         mRecordDuration = findViewById(R.id.demo_record_duration);

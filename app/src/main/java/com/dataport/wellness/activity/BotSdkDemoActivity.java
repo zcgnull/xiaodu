@@ -45,8 +45,8 @@ public class BotSdkDemoActivity extends AppCompatActivity implements IAccountCha
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getSupportActionBar().setTitle("BotSdk Demo");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        /*getSupportActionBar().setTitle("BotSdk Demo");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
         initView();
         //BotSdk.getInstance().setAccountAndChargeListener(this);
     }
