@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--康养管家平台请求地址-->
+    <string name="well_ness_api_url">http://10.20.1.13:48080</string>
+    <!--健康平台请求地址-->
+    <string name="healthy_api_url">http://10.20.1.13:48080</string>
+    <!--养老服务平台请求地址-->
+    <string name="pension_api_url">http://10.20.1.13:48080</string>
+</resources>
