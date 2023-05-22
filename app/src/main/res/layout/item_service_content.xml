@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <RelativeLayout
+        android:id="@+id/rv_item"
+        android:layout_width="match_parent"
+        android:padding="15dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/back_bg"
+        android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/iv_service"
+        android:layout_width="100dp"
+        android:scaleType="fitXY"
+        android:src="@mipmap/ic_launcher_round"
+        android:layout_height="120dp"></ImageView>
+
+    <LinearLayout
+        android:layout_toRightOf="@id/iv_service"
+        android:layout_width="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="15dp"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:text="留置胃管"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="#333"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/tv_price"
+            android:layout_width="wrap_content"
+            android:text="价格：￥200/次"
+            android:ellipsize="end"
+            android:textSize="20sp"
+            android:textColor="#E02020"
+            android:layout_marginTop="3dp"
+            android:maxLines="1"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/tv_distance"
+            android:layout_width="wrap_content"
+            android:text="距离：4.2km"
+            android:textSize="20sp"
+            android:textColor="#333"
+            android:visibility="gone"
+            android:layout_marginTop="3dp"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/tv_saleCount"
+            android:layout_width="wrap_content"
+            android:text="已售：33件"
+            android:textSize="20sp"
+            android:textColor="#333"
+            android:layout_marginTop="3dp"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_company"
+        android:layout_below="@+id/iv_service"
+        android:layout_width="wrap_content"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:text="秦皇岛市荣邦保洁服务有限公司"
+        android:textSize="22sp"
+        android:textColor="#333"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_index"
+        android:layout_width="wrap_content"
+        android:text="1"
+        android:textColor="#fff"
+        android:padding="5dp"
+        android:gravity="center"
+        android:background="@drawable/bule_point"
+        android:layout_height="wrap_content"/>
+
+</RelativeLayout>

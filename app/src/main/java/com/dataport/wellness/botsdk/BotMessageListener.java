@@ -1,8 +1,9 @@
 package com.dataport.wellness.botsdk;
 
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.baidu.duer.botsdk.BotIdentity;
 import com.baidu.duer.botsdk.BotIntent;

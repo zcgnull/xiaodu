@@ -24,6 +24,9 @@ allprojects {
         maven{ url 'https://dueros.baidu.com/maven/repository/maven-releases/'}
         maven{ url 'https://dueros.baidu.com/maven/repository/maven-snapshots/'}
         //maven{ url 'http://st01-rdqa-dev093-niuyu.epc.baidu.com:8081/artifactory/repo-bot-sdk/'}
+        // JitPack 远程仓库：https://jitpack.io
+        maven {url 'https://jitpack.io'}
+        maven { url "https://s01.oss.sonatype.org/content/groups/public" }
     }
 }
 

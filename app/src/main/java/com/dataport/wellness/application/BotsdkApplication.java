@@ -9,12 +9,17 @@ import com.baidu.duer.botsdk.util.HeartBeatReporter;
 import com.dataport.wellness.BuildConfig;
 import com.dataport.wellness.botsdk.BotMessageListener;
 import com.dataport.wellness.botsdk.BotSDKUtils;
+import com.dataport.wellness.http.RequestHandler;
+import com.dataport.wellness.http.RequestServer;
 import com.dataport.wellness.utils.BotConstants;
 import com.dataport.wellness.utils.ContextUtil;
+import com.hjq.http.EasyConfig;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.OkHttpClient;
 
 /**
  * 建议在Application中执行BotSDK初始化动作
@@ -56,6 +61,35 @@ public class BotsdkApplication extends Application {
         // BotSdk.getInstance().register(BotMessageListener.getInstance(), BotConstants.BOTID, BotSDKUtils.getAppKey());
 
         registerActivityLifecycleCallbacks(new ActivityContollor());
+
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .build();
+
+        EasyConfig.with(okHttpClient)
+                // 是否打印日志
+                .setLogEnabled(BuildConfig.DEBUG)
+                // 设置服务器配置（必须设置）
+                .setServer(new RequestServer())
+                // 设置请求处理策略（必须设置）
+                .setHandler(new RequestHandler(this))
+                // 设置请求重试次数
+                .setRetryCount(3)
+                // 添加全局请求参数
+                //.addParam("token", "6666666")
+                // 添加全局请求头
+                //.addHeader("time", "20191030")
+//                .setInterceptor((api, params, headers) -> {
+//                    // 添加全局请求头
+//                    headers.put("token", "66666666666");
+//                    headers.put("deviceOaid", UmengClient.getDeviceOaid());
+//                    headers.put("versionName", AppConfig.getVersionName());
+//                    headers.put("versionCode", String.valueOf(AppConfig.getVersionCode()));
+//                    // 添加全局请求参数
+//                    // params.put("6666666", "6666666");
+//                })
+                // 启用配置
+                .into();
+
     }
 
     public static void exitApp() {

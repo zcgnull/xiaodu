@@ -2,4 +2,6 @@
 <resources>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="hint_text_size">25sp</dimen>
+    <dimen name="dp_20">20dp</dimen>
+    <dimen name="dp_10">10dp</dimen>
 </resources>

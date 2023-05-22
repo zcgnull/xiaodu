@@ -1,8 +1,9 @@
 package com.dataport.wellness.utils;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.baidu.duer.botsdk.BotIntent;
 
@@ -50,7 +51,7 @@ public class IntentDecodeUtil {
         return result;
     }
 
-    private static String getSlotNumberValueBySlotName(@NonNull final List<BotIntent.Slot> slots,
+    public static String getSlotNumberValueBySlotName(@NonNull final List<BotIntent.Slot> slots,
                                                        @NonNull final String slotName) {
         for (BotIntent.Slot slot : slots) {
             if (slot.name.equals(slotName)) {

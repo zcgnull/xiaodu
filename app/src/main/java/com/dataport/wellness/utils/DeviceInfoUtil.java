@@ -2,9 +2,10 @@ package com.dataport.wellness.utils;
 
 import android.database.Cursor;
 import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import java.lang.reflect.Method;
 import java.util.Objects;

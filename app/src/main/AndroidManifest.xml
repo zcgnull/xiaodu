@@ -7,8 +7,13 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.baidu.baiduaccount.permission.READ_USERINFO" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!-- 联网权限 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 访问网络状态 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
     <application
         android:name=".application.BotsdkApplication"
             android:theme="@style/AppTheme"
@@ -50,6 +55,12 @@
             android:screenOrientation="landscape" />
         <activity
             android:name=".activity.BotSdkDemoActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".activity.ServiceOrderActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".activity.ServiceDetailActivity"
             android:screenOrientation="landscape" />
     </application>
 
