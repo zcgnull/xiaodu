@@ -14,5 +14,8 @@
 
     <!--指定了形状四个圆角的半径-->
     <corners
-        android:radius="50dp"/>
+        android:topLeftRadius="@dimen/dp_50"
+        android:topRightRadius="@dimen/dp_50"
+        android:bottomLeftRadius="@dimen/dp_10"
+        android:bottomRightRadius="@dimen/dp_50"/>
 </shape>

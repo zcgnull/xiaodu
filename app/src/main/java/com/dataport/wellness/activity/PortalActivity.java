@@ -3,10 +3,12 @@ package com.dataport.wellness.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,17 +18,22 @@ import com.baidu.duer.botsdk.BotSdk;
 import com.dataport.wellness.R;
 import com.dataport.wellness.activity.audio.AudioDemoActivity;
 import com.dataport.wellness.activity.camera.CameraActivity;
+import com.dataport.wellness.api.QueryBinderApi;
 import com.dataport.wellness.api.QueryCommodityApi;
+import com.dataport.wellness.api.ServiceTabApi;
+import com.dataport.wellness.api.TokenApi;
 import com.dataport.wellness.api.WellNessApi;
 import com.dataport.wellness.botsdk.BotMessageListener;
 import com.dataport.wellness.botsdk.IBotIntentCallback;
 import com.dataport.wellness.http.HttpData;
 import com.dataport.wellness.utils.BotConstants;
 import com.dataport.wellness.utils.IntentDecodeUtil;
+import com.google.android.material.tabs.TabLayout;
 import com.hjq.http.EasyHttp;
 import com.hjq.http.listener.HttpCallback;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class PortalActivity extends BaseActivity implements View.OnClickListener, IBotIntentCallback {
 //    public class PortalActivity extends AppCompatActivity implements View.OnClickListener {
@@ -65,7 +72,7 @@ public class PortalActivity extends BaseActivity implements View.OnClickListener
         Log.i(TAG, "on fragment attach");
         //  super.onAttach(context);
         BotMessageListener.getInstance().addCallback(this);
-
+        getToken();
     }
 
     @Override
@@ -102,14 +109,28 @@ public class PortalActivity extends BaseActivity implements View.OnClickListener
 
     }
 
-    private void queryCommodity() {
-        EasyHttp.get(this)
-                .api(new QueryCommodityApi("", "DESC", "39.93545", "119.59964", 1, 10))
-                .request(new HttpCallback<HttpData<QueryCommodityApi.Bean>>(this) {
+    private void getToken() {
+        EasyHttp.post(this)
+                .api(new TokenApi("jkgl01", "123456", "password", "aaa", "password"))
+                .request(new HttpCallback<TokenApi.Bean>(this) {
 
                     @Override
-                    public void onSucceed(HttpData<QueryCommodityApi.Bean> result) {
+                    public void onSucceed(TokenApi.Bean result) {
+                        BotConstants.HTTP_TOKEN = result.getAccess_token();
+//                        Log.d(TAG, "onSucceed: "+ result);
+                        getPerson();
+                    }
+                });
+    }
 
+    private void getPerson() {
+        EasyHttp.get(this)
+                .api(new QueryBinderApi("9966801040895652"))
+                .request(new HttpCallback<HttpData<List<QueryBinderApi.Bean>>>(this) {
+
+                    @Override
+                    public void onSucceed(HttpData<List<QueryBinderApi.Bean>> result) {
+                        Log.d(TAG, "onSucceed: "+ result);
                     }
                 });
     }

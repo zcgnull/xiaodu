@@ -88,5 +88,10 @@ dependencies {
     //轮播图
     implementation 'io.github.youth5201314:banner:2.2.2'
     //富文本
-    implementation 'com.zzhoujay.richtext:richtext:3.0.0'
+    implementation 'com.zzhoujay.richtext:richtext:3.0.8'
+    implementation 'com.zzhoujay:html:1.0.2'
+
+    //曲线图
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0-alpha'
+
 }

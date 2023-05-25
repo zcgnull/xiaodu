@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+
 import com.baidu.duer.botsdk.BotSdk;
 import com.baidu.duer.botsdk.util.HeartBeatReporter;
 import com.dataport.wellness.BuildConfig;
@@ -12,9 +14,14 @@ import com.dataport.wellness.botsdk.BotSDKUtils;
 import com.dataport.wellness.http.RequestHandler;
 import com.dataport.wellness.http.RequestServer;
 import com.dataport.wellness.http.SSLSocketClient;
+import com.dataport.wellness.http.glide.GlideApp;
 import com.dataport.wellness.utils.BotConstants;
 import com.dataport.wellness.utils.ContextUtil;
 import com.hjq.http.EasyConfig;
+import com.hjq.http.config.IRequestInterceptor;
+import com.hjq.http.model.HttpHeaders;
+import com.hjq.http.model.HttpParams;
+import com.hjq.http.request.HttpRequest;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -90,9 +97,29 @@ public class BotsdkApplication extends Application {
 //                    // 添加全局请求参数
 //                    // params.put("6666666", "6666666");
 //                })
+                .setInterceptor(new IRequestInterceptor() {
+                    @Override
+                    public void interceptArguments(@NonNull HttpRequest<?> httpRequest, @NonNull HttpParams params, @NonNull HttpHeaders headers) {
+                        headers.put("Authorization", "Bearer " + BotConstants.HTTP_TOKEN);
+                    }
+                })
                 // 启用配置
                 .into();
 
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        // 清理所有图片内存缓存
+        GlideApp.get(this).onLowMemory();
+    }
+
+    @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
+        // 根据手机内存剩余情况清理图片内存缓存
+        GlideApp.get(this).onTrimMemory(level);
     }
 
     public static void exitApp() {

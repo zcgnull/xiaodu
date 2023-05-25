@@ -9,7 +9,7 @@ public class QueryCommodityApi implements  IRequestApi {
 
     @Override
     public String getApi() {
-        return "qhdtestrjzlec/biz/ne/mjzx/b/a/queryCommodity";
+        return "biz/ne/mjzx/b/a/queryCommodity";
     }
 
     private String value; // 服务分类主键(非必传)

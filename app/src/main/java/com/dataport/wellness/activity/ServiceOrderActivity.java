@@ -65,6 +65,7 @@ public class ServiceOrderActivity extends BaseActivity {
             Intent intent = new Intent(getApplicationContext(), ServiceDetailActivity.class);
             intent.putExtra("productId", data.getProductId());
             intent.putExtra("providerId", data.getProviderId());
+            intent.putExtra("distance", data.getDistance());
             startActivity(intent);
         });
 
@@ -74,7 +75,7 @@ public class ServiceOrderActivity extends BaseActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 TextView tabView = tab.getCustomView().findViewById(R.id.item_tv_tab);
                 tabView.setBackground(getResources().getDrawable(R.drawable.service_tab_bg));
-                tabView.setTextColor(getResources().getColor(R.color.clolrWhite));
+                tabView.setTextColor(getResources().getColor(R.color.colorWhite));
                 if (tab.getPosition() == 0) {
                     secondTab.setVisibility(View.GONE);
                     serviceId = "";
@@ -96,7 +97,7 @@ public class ServiceOrderActivity extends BaseActivity {
             public void onTabUnselected(TabLayout.Tab tab) {
                 TextView tabView = tab.getCustomView().findViewById(R.id.item_tv_tab);
                 tabView.setBackground(getResources().getDrawable(R.drawable.service_selected_tab_bg));
-                tabView.setTextColor(getResources().getColor(R.color.clolrBule));
+                tabView.setTextColor(getResources().getColor(R.color.colorBule));
             }
 
             @Override
@@ -135,7 +136,7 @@ public class ServiceOrderActivity extends BaseActivity {
         });
 
         List<String> messages = new ArrayList<>();
-        messages.add("请试试对我说：“小度小度，打开第一个”");
+        messages.add("请试试对我说：“小度小度，打开第1个”");
         marqueeView.startWithList(messages);
         queryTab();
     }
@@ -181,7 +182,7 @@ public class ServiceOrderActivity extends BaseActivity {
                         } else {
                             refreshLayout.finishLoadMore();
                             if (result.getList().size() == 0) {
-                                Toast.makeText(ServiceOrderActivity.this, "暂无更多数据", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(ServiceOrderActivity.this, "暂无更多数据", Toast.LENGTH_SHORT).show();
                             } else {
                                 serviceList.addAll(result.getList());
                             }

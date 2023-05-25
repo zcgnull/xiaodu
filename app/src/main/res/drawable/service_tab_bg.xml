@@ -6,7 +6,7 @@
             ring(圆环)
     -->
     <!--    指定了形状内部的填充颜色-->
-    <solid android:color="@color/clolrBule"/>
+    <solid android:color="@color/colorBule"/>
     <!--    指定了形状边线的粗细与颜色-->
     <!--    <stroke-->
     <!--        android:width="5dp"-->

@@ -12,7 +12,7 @@ public class ServiceTabApi implements IRequestApi {
     @NonNull
     @Override
     public String getApi() {
-        return "qhdtestrjzlec/biz/ne/mjzx/b/a/treeDatas";
+        return "biz/ne/mjzx/b/a/treeDatas";
     }
 
     private String pid;

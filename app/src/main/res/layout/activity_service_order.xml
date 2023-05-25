@@ -84,12 +84,13 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         app:tabGravity="center"
-        app:tabIndicatorColor="@color/clolrBule"
+        app:tabIndicatorColor="@color/colorBule"
+        app:tabTextAppearance="@style/TabLayoutTextStyle"
         app:tabMaxWidth="230dp"
         app:tabMinWidth="100dp"
         app:tabMode="scrollable"
         app:tabRippleColor="#DCFBFF"
-        app:tabSelectedTextColor="@color/clolrBule"
+        app:tabSelectedTextColor="@color/colorBule"
         app:tabTextColor="#333" />
 
     <com.scwang.smart.refresh.layout.SmartRefreshLayout
@@ -165,7 +166,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@drawable/yy_bg"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
             android:paddingLeft="20dp"

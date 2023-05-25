@@ -11,7 +11,7 @@ public class RequestServer implements IRequestServer {
 
     @Override
     public String getHost() {
-        return "https://qhdmzj.dataport.com.cn/";
+        return "https://qhdmzj.dataport.com.cn/yltestec/";
     }
 
 //    @Override

@@ -7,13 +7,13 @@ package com.dataport.wellness.http;
 public class HttpData<T> {
 
     /** 返回码 */
-    private int code;
+    private String code;
     /** 提示语 */
     private String msg;
     /** 数据 */
     private T data;
 
-    public int getCode() {
+    public String getCode() {
         return code;
     }
 
@@ -25,17 +25,17 @@ public class HttpData<T> {
         return data;
     }
 
-    /**
-     * 是否请求成功
-     */
-    public boolean isRequestSucceed() {
-        return code == 200;
-    }
-
-    /**
-     * 是否 Token 失效
-     */
-    public boolean isTokenFailure() {
-        return code == 1001;
-    }
+//    /**
+//     * 是否请求成功
+//     */
+//    public boolean isRequestSucceed() {
+//        return code == 200;
+//    }
+//
+//    /**
+//     * 是否 Token 失效
+//     */
+//    public boolean isTokenFailure() {
+//        return code == 1001;
+//    }
 }

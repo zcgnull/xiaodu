@@ -46,18 +46,18 @@ public class BaseActivity extends AppCompatActivity implements OnHttpListener<Ob
     /**
      * 显示加载对话框
      */
-//    public void showDialog() {
-//        if (mDialog == null) {
-//            mDialog = new ProgressDialog(this);
-//            mDialog.setMessage(getResources().getString(R.string.http_loading));
-//            mDialog.setCancelable(false);
-//            mDialog.setCanceledOnTouchOutside(false);
-//        }
-//        if (!mDialog.isShowing()) {
-//            mDialog.show();
-//        }
-//        mDialogTotal++;
-//    }
+    public void showDialog() {
+        if (mDialog == null) {
+            mDialog = new ProgressDialog(this);
+            mDialog.setMessage("加载中。。。");
+            mDialog.setCancelable(false);
+            mDialog.setCanceledOnTouchOutside(false);
+        }
+        if (!mDialog.isShowing()) {
+            mDialog.show();
+        }
+        mDialogTotal++;
+    }
 
     /**
      * 隐藏加载对话框
@@ -75,14 +75,14 @@ public class BaseActivity extends AppCompatActivity implements OnHttpListener<Ob
 
     @Override
     public void onStart(Call call) {
-//        showDialog();
+        showDialog();
     }
 
     @Override
     public void onSucceed(Object result) {
-        if (result instanceof HttpData) {
-            Toast.makeText(this, ((HttpData<?>) result).getMessage(), Toast.LENGTH_SHORT).show();
-        }
+//        if (result instanceof HttpData) {
+//            Toast.makeText(this, ((HttpData<?>) result).getMessage(), Toast.LENGTH_SHORT).show();
+//        }
     }
 
     @Override
