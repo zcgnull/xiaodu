@@ -36,27 +36,27 @@ public class BotConstants {
      * ToDo:内容直达配置
      */
     //广场舞跳转
-    public static final String OPEN_DANCE_URL = "dueros://"+BOTID+"/urlProxy?from=DBP_APK&token=0a5082003c7080bc2b9ed44d706f92f8";
+    public static final String OPEN_DANCE_URL = "dueros://8dcbd6d2-f434-3c9a-41d4-dde55b54a6ca/urlProxy?from=DBP_APK&token=0a5082003c7080bc2b9ed44d706f92f8";
     //电视直播
-    public static final String OPEN_LIVE_TV_URL = "dueros://"+BOTID+"/urlProxy?from=DBP_APK&token=fc43a09fbc2542e1ecfa6cc1828f355d";
+    public static final String OPEN_LIVE_TV_URL = "dueros://8dcbd6d2-f434-3c9a-41d4-dde55b54a6ca/urlProxy?from=DBP_APK&token=fc43a09fbc2542e1ecfa6cc1828f355d";
     //梨园戏曲
-    public static final String OPEN_OPERA_URL = "dueros://"+BOTID+"/urlProxy?from=DBP_APK&token=46c81763a495f57bf0fb77bc992b5dc0";
+    public static final String OPEN_OPERA_URL = "dueros://8dcbd6d2-f434-3c9a-41d4-dde55b54a6ca/urlProxy?from=DBP_APK&token=46c81763a495f57bf0fb77bc992b5dc0";
     //新闻
-    public static final String OPEN_NEWS_URL = "dueros://"+BOTID+"/urlProxy?from=DBP_APK&token=6abfb569831dcd1d015626283d7f3021";
+    public static final String OPEN_NEWS_URL = "dueros://8dcbd6d2-f434-3c9a-41d4-dde55b54a6ca/urlProxy?from=DBP_APK&token=6abfb569831dcd1d015626283d7f3021";
     //测血糖
-    public static final String OPEN_BLOOD_SUGAR_URL = "dueros://"+BOTID+"/urlProxy?from=DBP_APK&token=8b23422987352f66af8c92999b56d4f2";
+    public static final String OPEN_BLOOD_SUGAR_URL = "dueros://8dcbd6d2-f434-3c9a-41d4-dde55b54a6ca/urlProxy?from=DBP_APK&token=8b23422987352f66af8c92999b56d4f2";
     //测血压
-    public static final String OPEN_BLOOD_PRESSURE_URL = "dueros://"+BOTID+"/urlProxy?from=DBP_APK&token=7d97c73a32ad3bce9b8047460d4ac2ff";
+    public static final String OPEN_BLOOD_PRESSURE_URL = "dueros://8dcbd6d2-f434-3c9a-41d4-dde55b54a6ca/urlProxy?from=DBP_APK&token=7d97c73a32ad3bce9b8047460d4ac2ff";
     //用药助手
-    public static final String OPEN_MEDICATION_URL = "dueros://"+BOTID+"/urlProxy?from=DBP_APK&token=f04222f7cbf2504608a35447ca79e0b0";
+    public static final String OPEN_MEDICATION_URL = "dueros://8dcbd6d2-f434-3c9a-41d4-dde55b54a6ca/urlProxy?from=DBP_APK&token=f04222f7cbf2504608a35447ca79e0b0";
     //健康医典
-    public static final String OPEN_HEALTH_CODEX_URL = "dueros://"+BOTID+"/urlProxy?from=DBP_APK&token=eb3a2657930b2174613f56cacb800cdc";
+    public static final String OPEN_HEALTH_CODEX_URL = "dueros://8dcbd6d2-f434-3c9a-41d4-dde55b54a6ca/urlProxy?from=DBP_APK&token=eb3a2657930b2174613f56cacb800cdc";
     //通讯录
-    public static final String OPEN_CONTACTS_URL = "dueros://"+BOTID+"/urlProxy?from=DBP_APK&token=fed4be846a2728889f7ab0b797f38f43";
+    public static final String OPEN_CONTACTS_URL = "dueros://8dcbd6d2-f434-3c9a-41d4-dde55b54a6ca/urlProxy?from=DBP_APK&token=fed4be846a2728889f7ab0b797f38f43";
     //通讯录-家庭医生
-    public static final String OPEN_FAMILY_DOCTOR_URL = "dueros://"+BOTID+"/urlProxy?from=DBP_APK&token=d7a8d4b334e22d9a21d61dafbdf79029";
+    public static final String OPEN_FAMILY_DOCTOR_URL = "dueros://8dcbd6d2-f434-3c9a-41d4-dde55b54a6ca/urlProxy?from=DBP_APK&token=d7a8d4b334e22d9a21d61dafbdf79029";
     //通讯录-康养管家
-    public static final String OPEN_WELL_NESS_URL = "dueros://"+BOTID+"/urlProxy?from=DBP_APK&token=b69d44731c4d77df2e26653274b0152c";
+    public static final String OPEN_WELL_NESS_URL = "dueros://8dcbd6d2-f434-3c9a-41d4-dde55b54a6ca/urlProxy?from=DBP_APK&token=b69d44731c4d77df2e26653274b0152c";
     // 自定义快进意图名称
     public static final String FAST_FORWARD_INTENT = "fast_forward_intent";
     // 系统预定义[数字] 槽位名称
