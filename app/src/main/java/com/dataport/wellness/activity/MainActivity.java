@@ -243,12 +243,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     private void toModel(String url) {
+        LinkClickedEventPayload linkClickedEventPayload = new LinkClickedEventPayload();
+        linkClickedEventPayload.url=url;
         BotSdk.getInstance().sendEvent(
                 "LinkClicked",
                 "ai.dueros.device_interface.screen",
                 true,
-                JsonUtil.toJson(new LinkClickedEventPayload().url = url)
+                JsonUtil.toJson(linkClickedEventPayload)
         );
+        /*//这个也好使
+        LinkClickedEventPayload payload = new LinkClickedEventPayload();
+        payload.url = "dueros://8dcbd6d2-f434-3c9a-41d4-dde55b54a6ca/urlProxy?from=DBP_APK&token=0a5082003c7080bc2b9ed44d706f92f8";
+        BotSdk.getInstance().uploadLinkClickedEvent(payload);*/
     }
 
     @Override
