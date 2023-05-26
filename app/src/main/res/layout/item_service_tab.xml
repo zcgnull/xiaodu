@@ -11,6 +11,8 @@
         android:background="@drawable/service_selected_tab_bg"
         android:text="全部"
         android:padding="5dp"
+        android:maxLines="1"
+        android:ellipsize="end"
         android:gravity="center"
         android:textColor="@color/colorBule"
         android:textSize="20sp"

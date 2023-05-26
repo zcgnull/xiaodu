@@ -113,7 +113,6 @@
                             android:id="@+id/tv_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="留置胃管"
                             android:textColor="#333"
                             android:textSize="22sp"
                             android:textStyle="bold" />
@@ -125,7 +124,6 @@
                             android:layout_marginTop="3dp"
                             android:ellipsize="end"
                             android:maxLines="1"
-                            android:text="价格：￥200/次"
                             android:textColor="#E02020"
                             android:textSize="20sp" />
 
@@ -134,7 +132,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
-                            android:text="距离：4.2km"
                             android:textColor="#333"
                             android:textSize="20sp" />
 
@@ -143,7 +140,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
-                            android:text="已售：33件"
                             android:textColor="#333"
                             android:textSize="20sp" />
 
@@ -155,7 +151,6 @@
                             android:layout_marginTop="3dp"
                             android:ellipsize="end"
                             android:maxLines="1"
-                            android:text="秦皇岛市荣邦保洁服务有限公司"
                             android:textColor="#333"
                             android:textSize="22sp" />
 
@@ -173,8 +168,6 @@
                     android:layout_marginBottom="@dimen/dp_10"
                     android:layout_marginLeft="40dp"
                     android:layout_marginRight="40dp"
-                    app:tabMaxWidth="230dp"
-                    app:tabMinWidth="120dp"
                     app:tabMode="scrollable"
                     app:tabRippleColor="@null" />
 

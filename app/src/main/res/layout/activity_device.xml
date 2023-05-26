@@ -6,9 +6,10 @@
     android:background="@mipmap/bg">
 
     <RelativeLayout
-        android:id="@+id/rl_sucess"
+        android:id="@+id/rl_success"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
         <RelativeLayout
             android:id="@+id/rl_top"
@@ -78,18 +79,18 @@
             app:tabMinWidth="100dp"
             app:tabMode="scrollable"
             app:tabRippleColor="#DCFBFF"
-            app:tabTextAppearance="@style/TabLayoutTextStyle"
             app:tabSelectedTextColor="@color/colorBule"
+            app:tabTextAppearance="@style/TabLayoutTextStyle"
             app:tabTextColor="#333" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/dp_20"
             android:layout_below="@id/second_tab"
-            android:layout_marginTop="@dimen/dp_10"
             android:layout_marginLeft="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_10"
             android:layout_marginRight="@dimen/dp_20"
+            android:layout_marginBottom="@dimen/dp_20"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -136,7 +137,7 @@
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/line_chart"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent" />
 
                 <RelativeLayout
                     android:id="@+id/rl_no_data_line"
@@ -169,8 +170,8 @@
                 android:layout_marginLeft="@dimen/dp_10"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:paddingRight="@dimen/dp_15"
-                android:paddingLeft="@dimen/dp_15">
+                android:paddingLeft="@dimen/dp_15"
+                android:paddingRight="@dimen/dp_15">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -222,9 +223,9 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_content"
-                    android:layout_marginTop="@dimen/dp_10"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_10"
                     android:overScrollMode="never" />
 
                 <RelativeLayout
@@ -258,14 +259,189 @@
 
     <RelativeLayout
         android:id="@+id/rl_fail"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <RelativeLayout
+            android:id="@+id/rl_top1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
 
+            <LinearLayout
+                android:id="@+id/ln_back1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/back_bg"
+                android:gravity="center"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@mipmap/back" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="返回"
+                    android:textColor="#6591F7"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="智能设备"
+                android:textColor="#333333"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rl_top1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/no_sign" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                android:text="当前用户没有体征数据"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sp_20" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_5"
+                android:text="您可以试试一下两种方式"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sp_20" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginLeft="@dimen/dp_50"
+                android:layout_marginRight="@dimen/dp_50"
+                android:background="@drawable/back_bg"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="@dimen/dp_30">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/dp_40"
+                        android:background="@mipmap/type_bg"
+                        android:gravity="center"
+                        android:text="第一种方式"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp_20" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:text="在康养管家首页切换其他家庭成员"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/sp_20" />
+
+                    <ImageView
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:layout_width="@dimen/dp_280"
+                        android:layout_height="@dimen/dp_130"
+                        android:src="@mipmap/no_sign_alert" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_30"
+                    android:layout_marginRight="@dimen/dp_30"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <View
+                        android:layout_width="@dimen/dp_1"
+                        android:layout_height="@dimen/dp_40"
+                        android:background="@color/gray" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_5"
+                        android:layout_marginBottom="@dimen/dp_5"
+                        android:text="或"
+                        android:textSize="@dimen/sp_22" />
+
+                    <View
+                        android:layout_width="@dimen/dp_1"
+                        android:layout_height="@dimen/dp_40"
+                        android:background="@color/gray" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/dp_40"
+                        android:background="@mipmap/type_bg"
+                        android:gravity="center"
+                        android:text="第二种方式"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp_20" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:text="在健康管理小程序中添加一个设备"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/sp_20" />
+
+                    <ImageView
+                        android:layout_width="@dimen/dp_130"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:layout_height="@dimen/dp_130"
+                        android:src="@mipmap/sign_qr" />
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
 
     </RelativeLayout>
-
-
 
 
 </RelativeLayout>

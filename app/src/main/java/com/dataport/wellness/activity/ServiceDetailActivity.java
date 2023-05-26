@@ -48,6 +48,7 @@ public class ServiceDetailActivity extends BaseActivity {
     private TextView name, price, distance, saleCount, company;
     private LinearLayout lnPrice;
     private RelativeLayout noData;
+    private String speck;
 
     private ServicePriceAdapter priceAdapter;
     private List<QueryServiceDetailApi.Bean.OtherItemsDTO> tabList = new ArrayList<>();
@@ -59,7 +60,7 @@ public class ServiceDetailActivity extends BaseActivity {
         initView();
         findViewById(R.id.ln_voice).setOnClickListener(v -> {
             BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
-            BotSdk.getInstance().speakRequest(name.getText().toString() + "," + price.getText().toString());
+            BotSdk.getInstance().speakRequest(speck);
         });
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -70,7 +71,7 @@ public class ServiceDetailActivity extends BaseActivity {
                 price.setText("价格：￥" + tabList.get(tab.getPosition()).getCategoryPrice());
                 saleCount.setText("已售：" + tabList.get(tab.getPosition()).getSaleCount());
                 BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
-                BotSdk.getInstance().speakRequest(name.getText().toString() + "," + price.getText().toString());
+                BotSdk.getInstance().speakRequest(tabList.get(tab.getPosition()).getCategoryName() + name.getText().toString() + "," + price.getText().toString());
             }
 
             @Override
@@ -141,7 +142,6 @@ public class ServiceDetailActivity extends BaseActivity {
                             priceAdapter.setList(result.getSurchargeItems());
                         }
                         String content = RichTextUtil.getRichTextStr(result.getProductDetail());//详情
-                        String speck;
                         if (!content.equals("")) {
                             richText.setVisibility(View.VISIBLE);
                             richText.setText(content);

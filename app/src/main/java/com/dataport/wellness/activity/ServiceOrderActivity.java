@@ -109,6 +109,8 @@ public class ServiceOrderActivity extends BaseActivity implements IBotIntentCall
                         secondTab.addTab(itemTab);
                     }
                 }
+                BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
+                BotSdk.getInstance().speakRequest(tabList.get(tab.getPosition()).getName());
             }
 
             @Override
@@ -131,6 +133,8 @@ public class ServiceOrderActivity extends BaseActivity implements IBotIntentCall
                 pageNum = 1;
                 serviceId = secondTabList.get(tab.getPosition()).getId();
                 queryCommodity(serviceId, 1);
+                BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
+                BotSdk.getInstance().speakRequest(secondTabList.get(tab.getPosition()).getName());
             }
 
             @Override

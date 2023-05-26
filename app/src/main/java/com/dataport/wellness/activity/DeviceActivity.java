@@ -43,7 +43,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
     private TabLayout firstTab, secondTab, thirdTab;
     //    private RefreshLayout refreshLayout;
     private RecyclerView contentRv;
-    private RelativeLayout noData, noDataLine;
+    private RelativeLayout noData, noDataLine, rlSuccess, rlFail;
     private LineChart lineChart;
     private TextView qs, jl;
 
@@ -64,6 +64,9 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device);
         findViewById(R.id.ln_back).setOnClickListener(v -> finish());
+        findViewById(R.id.ln_back1).setOnClickListener(v -> finish());
+        rlSuccess = findViewById(R.id.rl_success);
+        rlFail = findViewById(R.id.rl_fail);
         Intent intent = getIntent();
         binderId = intent.getIntExtra("binderId", 0);
         noData = findViewById(R.id.rl_no_data);
@@ -109,7 +112,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
             public void onTabSelected(TabLayout.Tab tab) {
                 equipmentBindId = equipmentTabs.get(tab.getPosition()).getEquipmentBindId();
                 if (thirdTab.getTabAt(0).isSelected()) {
-                    getDeviceContent(dataTypeCode, TimeUtil.getInstance().getYesterdayTime(), TimeUtil.getInstance().getCurrentTime(), 1);
+                    getDeviceContent(dataTypeCode, TimeUtil.getInstance().getTimeOneMonth(), TimeUtil.getInstance().getCurrentTime(), 1);
                 } else {
                     thirdTab.getTabAt(0).select();
                 }
@@ -136,10 +139,10 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                 if (tab.getPosition() == 1) {
                     getDeviceContent(dataTypeCode, TimeUtil.getInstance().getTimeAWeek(), TimeUtil.getInstance().getCurrentTime(), 1);
                 } else if (tab.getPosition() == 2) {
-                    getDeviceContent(dataTypeCode, TimeUtil.getInstance().getTimeOneMonth(), TimeUtil.getInstance().getCurrentTime(), 1);
+                    getDeviceContent(dataTypeCode, TimeUtil.getInstance().getYesterdayTime(), TimeUtil.getInstance().getCurrentTime(), 1);
                 } else {
                     if (equipmentBindId != 0) {
-                        getDeviceContent(dataTypeCode, TimeUtil.getInstance().getYesterdayTime(), TimeUtil.getInstance().getCurrentTime(), 1);
+                        getDeviceContent(dataTypeCode, TimeUtil.getInstance().getTimeOneMonth(), TimeUtil.getInstance().getCurrentTime(), 1);
                     }
                 }
             }
@@ -156,9 +159,9 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
 
             }
         });
-        dateTabs.add("日");
-        dateTabs.add("周");
         dateTabs.add("月");
+        dateTabs.add("周");
+        dateTabs.add("日");
         for (String bean : dateTabs) {
             TabLayout.Tab tab = thirdTab.newTab();
             View tabView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.date_tab, null);
@@ -223,6 +226,8 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                         if (result.getCode().equals("00000")) {
                             signTabs = result.getData().getList();
                             if (signTabs.size() > 0) {
+                                rlSuccess.setVisibility(View.VISIBLE);
+                                rlFail.setVisibility(View.GONE);
                                 for (SignTypeApi.Bean.ListDTO bean : signTabs) {
                                     TabLayout.Tab tab = firstTab.newTab();
                                     View tabView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.item_service_tab, null);
@@ -231,7 +236,13 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                                     tab.setCustomView(tabView);
                                     firstTab.addTab(tab);
                                 }
+                            } else {
+                                rlSuccess.setVisibility(View.GONE);
+                                rlFail.setVisibility(View.VISIBLE);
                             }
+                        } else {
+                            rlSuccess.setVisibility(View.GONE);
+                            rlFail.setVisibility(View.VISIBLE);
                         }
                     }
                 });

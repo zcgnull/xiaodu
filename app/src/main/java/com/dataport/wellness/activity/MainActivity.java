@@ -80,11 +80,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
         BotMessageListener.getInstance().addCallback(this);
         //获取deviceId,apiAccesstoken,用于向后台获取设备sn
-//        JSONObject jsonObject =  JSON.parseObject(getIntent().getStringExtra("device"));
-//        String deviceId= (String) jsonObject.get("deviceId");
-//        String apiAccesstoken = getIntent().getStringExtra("apiAccesstoken");
-//        getDeviceInfo(deviceId, apiAccesstoken);
-
+//        if (getIntent().getStringExtra("device") != null) {
+//            JSONObject jsonObject = JSON.parseObject(getIntent().getStringExtra("device"));
+//            String deviceId = (String) jsonObject.get("deviceId");
+//            String apiAccesstoken = getIntent().getStringExtra("apiAccesstoken");
+//            getDeviceInfo(deviceId, apiAccesstoken);
+//        } else {
+//
+//        }
         getToken();
         List<String> messages = new ArrayList<>();
         messages.add("请试试对我说：“小度小度，打开服务订购”");
@@ -184,10 +187,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 startActivity(intent);
                 break;
             case R.id.tv_place:
-                BotSdk.getInstance().speakRequest(tvPlace.getText().toString());
+                BotSdk.getInstance().speakRequest(tvPlace.getText().toString() + tvWeather.getText().toString() + tvC.getText().toString());
                 break;
             case R.id.rl_weather:
-                BotSdk.getInstance().speakRequest(tvWeather.getText().toString() + tvC.getText().toString());
+                BotSdk.getInstance().speakRequest(tvPlace.getText().toString() + tvWeather.getText().toString() + tvC.getText().toString());
                 break;
             case R.id.rl_date:
                 BotSdk.getInstance().speakRequest("当前时间" + tvDate.getText().toString() + tvTime.getText().toString());
@@ -216,7 +219,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         // 底部选择框
         List<String> data = new ArrayList<>();
         for (QueryBinderApi.Bean.ListDTO bean : binderList) {
-            data.add(bean.getBinderName());
+            data.add(bean.getBinderName() + "("+ bean.getRelation() + ")");
         }
         new MenuDialog.Builder(this)
                 .setList(data)
@@ -224,7 +227,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
                     @Override
                     public void onSelected(BaseDialog dialog, int position, String string) {
-                        tvBinder.setText(string + "(" + binderList.get(position).getRelation() + ")");
+                        tvBinder.setText(string);
                         binderId = binderList.get(position).getBinderId();
                         String getAddress = binderList.get(position).getBinderProvince() + binderList.get(position).getBinderCity() + binderList.get(position).getBinderDistrict() + binderList.get(position).getBinderAddress();
                         String address = binderList.get(position).getBinderCity() + binderList.get(position).getBinderDistrict();

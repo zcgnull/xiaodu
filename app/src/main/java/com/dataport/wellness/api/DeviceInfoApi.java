@@ -18,7 +18,7 @@ public class DeviceInfoApi  implements IRequestApi, IRequestServer {
     @NonNull
     @Override
     public String getHost() {
-        return "http://10.20.1.13:48080/";
+        return "http://172.20.3.112:8080/";
     }
 
     private String deviceId;
