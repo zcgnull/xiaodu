@@ -12,8 +12,11 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.baidu.duer.bot.BotMessageProtocol;
+import com.baidu.duer.botsdk.BotSdk;
 import com.dataport.wellness.R;
 import com.dataport.wellness.adapter.DeviceContentAdapter;
+import com.dataport.wellness.adapter.ServiceContentAdapter;
 import com.dataport.wellness.api.DeviceContentApi;
 import com.dataport.wellness.api.EquipmentListApi;
 import com.dataport.wellness.api.QueryCommodityApi;
@@ -38,7 +41,7 @@ import java.util.Locale;
 public class DeviceActivity extends BaseActivity implements View.OnClickListener {
 
     private TabLayout firstTab, secondTab, thirdTab;
-//    private RefreshLayout refreshLayout;
+    //    private RefreshLayout refreshLayout;
     private RecyclerView contentRv;
     private RelativeLayout noData, noDataLine;
     private LineChart lineChart;
@@ -78,7 +81,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                 tabView.setTextColor(getResources().getColor(R.color.colorWhite));
                 dataTypeCode = signTabs.get(tab.getPosition()).getDataTypeCode();
                 getEquipmentList(binderId, dataTypeCode);
-                if (dataTypeCode.equals("1")){
+                if (dataTypeCode.equals("1")) {
                     qs.setText("血压趋势");
                     jl.setText("血压记录");
                 } else {
@@ -171,6 +174,19 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
         contentRv.setLayoutManager(contentManger);
         adapter = new DeviceContentAdapter(this);
         contentRv.setAdapter(adapter);
+        adapter.setListener(new DeviceContentAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(DeviceContentApi.Bean.ListDTO data, int pos) {
+                BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
+                if (data.getDataType().equals("1")) {
+                    String speck = data.getStartTime() + "，您的血压为，高压" + data.getSbp() + "毫米汞柱，低压" + data.getDbp() + "毫米汞柱，脉率为" + data.getBpm() + "次每分钟";
+                    BotSdk.getInstance().speakRequest(speck);
+                } else {
+                    String speck = data.getStartTime() + "，您的血糖为" + data.getGls();
+                    BotSdk.getInstance().speakRequest(speck);
+                }
+            }
+        });
 
 //        refreshLayout = findViewById(R.id.refreshLayout);
 //        refreshLayout.setOnRefreshListener(refreshlayout -> {
@@ -270,7 +286,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                         if (contentList.size() > 0) {
                             noDataLine.setVisibility(View.GONE);
                             lineChart.setVisibility(View.VISIBLE);
-                            if (dataTypeCode.equals("1")){
+                            if (dataTypeCode.equals("1")) {
                                 showXYLineChart(contentList);
                             } else {
                                 showXTLineChart(contentList);
@@ -324,6 +340,12 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
         colorList.add(getResources().getColor(R.color.colorBule));
         lineChartManager.setDescription("");
         lineChartManager.setSingleLine(xValues, entries1, lableNameList, colorList);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
     }
 
     @Override

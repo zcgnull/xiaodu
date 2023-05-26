@@ -2,6 +2,7 @@ package com.dataport.wellness.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -12,12 +13,18 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.baidu.duer.bot.BotMessageProtocol;
+import com.baidu.duer.botsdk.BotIntent;
+import com.baidu.duer.botsdk.BotSdk;
 import com.dataport.wellness.R;
 import com.dataport.wellness.adapter.ServiceContentAdapter;
 import com.dataport.wellness.adapter.ServiceTabAdapter;
 import com.dataport.wellness.api.QueryCommodityApi;
 import com.dataport.wellness.api.ServiceTabApi;
+import com.dataport.wellness.botsdk.BotMessageListener;
+import com.dataport.wellness.botsdk.IBotIntentCallback;
 import com.dataport.wellness.http.HttpData;
+import com.dataport.wellness.utils.IntentDecodeUtil;
 import com.google.android.material.tabs.TabLayout;
 import com.hjq.http.EasyHttp;
 import com.hjq.http.listener.HttpCallback;
@@ -27,10 +34,12 @@ import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.sunfusheng.marqueeview.MarqueeView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-public class ServiceOrderActivity extends BaseActivity {
+public class ServiceOrderActivity extends BaseActivity implements IBotIntentCallback {
 
+    private static final String TAG = "ServiceOrderActivity";
     private RelativeLayout noData;
     private RefreshLayout refreshLayout;
     private RecyclerView contentRv;
@@ -46,12 +55,21 @@ public class ServiceOrderActivity extends BaseActivity {
     private int pageNum = 1;
     private int pageSize = 10;
     private String serviceId = "";
+    private String longitude;
+    private String latitude;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service_order);
         findViewById(R.id.ln_back).setOnClickListener(v -> finish());
+        BotMessageListener.getInstance().addCallback(this);
+        Intent getIntent = getIntent();
+        String[] location = getIntent.getStringExtra("location").split(",");
+        longitude = location[0];
+        latitude = location[1];
+        Log.d(TAG, "onCreate: "+longitude+","+latitude);
+
 
         noData = findViewById(R.id.rl_no_data);
         marqueeView = findViewById(R.id.marqueeView);
@@ -138,7 +156,40 @@ public class ServiceOrderActivity extends BaseActivity {
         List<String> messages = new ArrayList<>();
         messages.add("请试试对我说：“小度小度，打开第1个”");
         marqueeView.startWithList(messages);
+        marqueeView.setOnItemClickListener((position, textView) -> {
+            BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
+            BotSdk.getInstance().speakRequest(messages.get(position));
+        });
         queryTab();
+    }
+
+    @Override
+    public void handleIntent(BotIntent intent, String customData) {
+        Intent activityIntent;
+        // name意图标识 slots插槽
+        String intentResult = getString(R.string.result_intent) + intent.name + ",slots:" + intent.slots;
+        Log.d(TAG, "handleIntent: " + intentResult);
+        if ("app_list_select_item".equals(intent.name)) {
+            BotMessageListener.getInstance().clearCallback();
+            activityIntent = new Intent(getApplicationContext(), ServiceDetailActivity.class);
+            activityIntent.putExtra("productId", serviceList.get(Integer.parseInt(intent.slots.get(0).value) - 1).getProductId());
+            activityIntent.putExtra("providerId", serviceList.get(Integer.parseInt(intent.slots.get(0).value) - 1).getProviderId());
+            activityIntent.putExtra("distance", serviceList.get(Integer.parseInt(intent.slots.get(0).value) - 1).getDistance());
+            startActivity(activityIntent);
+        } else {
+//            BotSdk.getInstance().speak("我没有听清，请再说一遍",true);
+            BotSdk.getInstance().speakRequest("我没有听清，请再说一遍");
+        }
+    }
+
+    @Override
+    public void onClickLink(String url, HashMap<String, String> paramMap) {
+
+    }
+
+    @Override
+    public void onHandleScreenNavigatorEvent(int event) {
+
     }
 
     private void queryTab() {
@@ -165,7 +216,7 @@ public class ServiceOrderActivity extends BaseActivity {
 
     private void queryCommodity(String id, int type) {//type:1代表刷新2代表加载
         EasyHttp.get(this)
-                .api(new QueryCommodityApi(id, "ASC", "39.93545", "119.59964", pageNum, pageSize))
+                .api(new QueryCommodityApi(id, "ASC", latitude, longitude, pageNum, pageSize))
                 .request(new HttpCallback<QueryCommodityApi.Bean>(this) {
 
                     @Override
@@ -192,4 +243,15 @@ public class ServiceOrderActivity extends BaseActivity {
                 });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        BotMessageListener.getInstance().addCallback(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        BotMessageListener.getInstance().removeCallback(this);
+    }
 }

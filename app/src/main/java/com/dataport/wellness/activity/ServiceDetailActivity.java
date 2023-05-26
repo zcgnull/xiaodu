@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.baidu.duer.bot.BotMessageProtocol;
+import com.baidu.duer.botsdk.BotSdk;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
@@ -55,6 +57,10 @@ public class ServiceDetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service_detail);
         initView();
+        findViewById(R.id.ln_voice).setOnClickListener(v -> {
+            BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
+            BotSdk.getInstance().speakRequest(name.getText().toString() + "," + price.getText().toString());
+        });
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -63,7 +69,8 @@ public class ServiceDetailActivity extends BaseActivity {
                 tabView.setTextColor(getResources().getColor(R.color.colorWhite));
                 price.setText("价格：￥" + tabList.get(tab.getPosition()).getCategoryPrice());
                 saleCount.setText("已售：" + tabList.get(tab.getPosition()).getSaleCount());
-
+                BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
+                BotSdk.getInstance().speakRequest(name.getText().toString() + "," + price.getText().toString());
             }
 
             @Override
@@ -93,9 +100,13 @@ public class ServiceDetailActivity extends BaseActivity {
         List<String> messages = new ArrayList<>();
         messages.add("请试试对我说：“小度小度,呼叫康养管家”进行代下单。");
         marqueeView.startWithList(messages);
+        marqueeView.setOnItemClickListener((position, textView) -> {
+            BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
+            BotSdk.getInstance().speakRequest(messages.get(position));
+        });
 
         Intent intent = getIntent();
-        distance.setText("距离：" + intent.getStringExtra("distance"));
+        distance.setText("距离：" + intent.getStringExtra("distance") + "km");
         queryDetail(intent.getStringExtra("productId"), intent.getStringExtra("providerId"));
     }
 
@@ -130,9 +141,23 @@ public class ServiceDetailActivity extends BaseActivity {
                             priceAdapter.setList(result.getSurchargeItems());
                         }
                         String content = RichTextUtil.getRichTextStr(result.getProductDetail());//详情
+                        String speck;
                         if (!content.equals("")) {
                             richText.setVisibility(View.VISIBLE);
                             richText.setText(content);
+                            if (result.getSurchargeItems().size() > 0) {//附加费
+                                speck = name.getText().toString() + "," + price.getText().toString() + "," + "本服务有额外的附加费用，服务人员服务前可能收取。" + content;
+                            } else {
+                                speck = name.getText().toString() + "," + price.getText().toString() + "," + content;
+                            }
+                            BotSdk.getInstance().speakRequest(speck);
+                        } else {
+                            if (result.getSurchargeItems().size() > 0) {//附加费
+                                speck = name.getText().toString() + "," + price.getText().toString() + "," + "本服务有额外的附加费用，服务人员服务前可能收取。";
+                            } else {
+                                speck = name.getText().toString() + "," + price.getText().toString();
+                            }
+                            BotSdk.getInstance().speakRequest(speck);
                         }
                         List<String> imgs = RichTextUtil.getRichTextImgListUtil(result.getProductDetail());//详情图片
                         if (imgs.size() > 0) {
@@ -180,6 +205,13 @@ public class ServiceDetailActivity extends BaseActivity {
         lnPrice = findViewById(R.id.ln_price);
         richBanner = findViewById(R.id.rich_banner);
         noData = findViewById(R.id.rl_no_data);
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
     }
 
 }

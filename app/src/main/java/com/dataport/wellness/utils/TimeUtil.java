@@ -42,6 +42,34 @@ public class TimeUtil {
     }
 
     /**
+     * 获取当前时间
+     * @return
+     */
+    public String getMainDate() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            initData();
+            long currentTime = System.currentTimeMillis();
+            String timeNow = new SimpleDateFormat("yyyy-MM-dd").format(currentTime);
+            return timeNow;
+        }
+        return "不支持获取";
+    }
+
+    /**
+     * 获取当前时间
+     * @return
+     */
+    public String getMainTime() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            initData();
+            long currentTime = System.currentTimeMillis();
+            String timeNow = new SimpleDateFormat("HH:mm").format(currentTime);
+            return timeNow;
+        }
+        return "不支持获取";
+    }
+
+    /**
      * 获取昨天时间
      *
      * @return

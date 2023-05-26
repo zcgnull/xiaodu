@@ -66,12 +66,7 @@ public class ServiceContentAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 .transition(DrawableTransitionOptions.withCrossFade(factory))
                 .transform(new RoundedCorners((int) context.getResources().getDimension(R.dimen.dp_10)))
                 .into(contentHolder.icon);
-        contentHolder.item.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.onItemClick(list.get(position), position);
-            }
-        });
+        contentHolder.item.setOnClickListener(v -> listener.onItemClick(list.get(position), position));
     }
 
     public interface OnItemClickListener{

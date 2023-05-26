@@ -49,6 +49,29 @@
             android:textStyle="bold" />
     </RelativeLayout>
 
+    <LinearLayout
+        android:id="@+id/ln_voice"
+        android:layout_width="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/dp_20"
+        android:gravity="center"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="@dimen/dp_40"
+            android:src="@mipmap/play_voice"
+            android:layout_height="@dimen/dp_40"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="读屏"
+            android:layout_marginTop="@dimen/dp_3"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_16"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

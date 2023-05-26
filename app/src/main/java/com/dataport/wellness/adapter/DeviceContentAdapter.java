@@ -21,7 +21,7 @@ public class DeviceContentAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     private Context context;
     private List<DeviceContentApi.Bean.ListDTO> list;
-    private ServiceContentAdapter.OnItemClickListener listener;
+    private OnItemClickListener listener;
 
     public DeviceContentAdapter(Context context) {
         this.context = context;
@@ -32,7 +32,7 @@ public class DeviceContentAdapter extends RecyclerView.Adapter<RecyclerView.View
         notifyDataSetChanged();
     }
 
-    public void setListener(ServiceContentAdapter.OnItemClickListener listener) {
+    public void setListener(OnItemClickListener listener) {
         this.listener = listener;
     }
 
@@ -59,22 +59,21 @@ public class DeviceContentAdapter extends RecyclerView.Adapter<RecyclerView.View
             contentHolder.sbp.setText("收缩压 " + list.get(position).getSbp() + " mmHg");
             contentHolder.dbp.setText("舒张压 " + list.get(position).getDbp() + " mmHg");
             contentHolder.bpm.setText("脉率 " + list.get(position).getBpm() + " 次/分");
-//        contentHolder.equipmentName.setText(list.get(position).getEquipmentName());
-            contentHolder.equipmentName.setText("设备号 " + list.get(position).getEquipmentName());
-
+            if (list.get(position).getPharmacySituation().equals("1")) {//用药前
+                contentHolder.equipmentName.setText("用药前");
+            } else {
+                contentHolder.equipmentName.setText("用药后");
+            }
         } else {
             contentHolder.lnType.setVisibility(View.GONE);
             contentHolder.sbp.setText("血糖 " + list.get(position).getGls() + " mmol/L");
-            if (list.get(position).getPharmacySituation().equals("1")) {//用药前
-                contentHolder.dbp.setText(list.get(position).getMeasureSituation() + "（用药前）");
-            } else {
-                contentHolder.dbp.setText(list.get(position).getMeasureSituation() + "（用药后）");
-            }
+            contentHolder.dbp.setText(list.get(position).getMeasureSituation());
         }
+        contentHolder.lnItem.setOnClickListener(v -> listener.onItemClick(list.get(position), position));
     }
 
     public interface OnItemClickListener {
-        void onItemClick(QueryCommodityApi.Bean.ListDTO data, int pos);
+        void onItemClick(DeviceContentApi.Bean.ListDTO data, int pos);
     }
 
     @Override
@@ -89,7 +88,7 @@ public class DeviceContentAdapter extends RecyclerView.Adapter<RecyclerView.View
         public TextView dbp;
         public TextView bpm;
         public TextView equipmentName;
-        public LinearLayout lnType;
+        public LinearLayout lnType,lnItem;
 
         public ContentHolder(View itemView) {
             super(itemView);
@@ -100,6 +99,7 @@ public class DeviceContentAdapter extends RecyclerView.Adapter<RecyclerView.View
             bpm = itemView.findViewById(R.id.bpm);
             equipmentName = itemView.findViewById(R.id.equipmentName);
             lnType = itemView.findViewById(R.id.ln_type);
+            lnItem = itemView.findViewById(R.id.ln_all);
         }
     }
 }
