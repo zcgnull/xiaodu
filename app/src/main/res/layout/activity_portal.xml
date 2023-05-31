@@ -173,7 +173,7 @@
         android:layout_height="63dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="30dp"
-        android:text="智能设备"
+        android:text="健康监测"
         android:textColor="#FFFFFFFF"
         android:textSize="30sp"
         android:textStyle="bold"
