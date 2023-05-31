@@ -9,7 +9,7 @@
         android:id="@+id/rl_success"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <RelativeLayout
             android:id="@+id/rl_top"
@@ -320,9 +320,9 @@
 
     <RelativeLayout
         android:id="@+id/rl_fail"
-        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -371,8 +371,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="您的设备还没有绑定"
                     android:layout_marginTop="@dimen/dp_10"
+                    android:text="您的设备还没有绑定"
                     android:textColor="@color/black"
                     android:textSize="@dimen/sp_20" />
 
@@ -382,17 +382,18 @@
                     android:layout_marginTop="@dimen/dp_20"
                     android:background="@drawable/back_bg"
                     android:gravity="center"
-                    android:paddingTop="@dimen/dp_30"
-                    android:paddingBottom="@dimen/dp_30"
+                    android:orientation="horizontal"
                     android:paddingLeft="@dimen/dp_70"
+                    android:paddingTop="@dimen/dp_30"
                     android:paddingRight="@dimen/dp_70"
-                    android:orientation="horizontal">
+                    android:paddingBottom="@dimen/dp_30">
 
                     <ImageView
+                        android:id="@+id/iv_qr"
                         android:layout_width="@dimen/dp_200"
                         android:layout_height="@dimen/dp_200"
                         android:layout_marginRight="@dimen/dp_40"
-                        android:src="@mipmap/portal_icon" />
+                        android:src="@mipmap/sign_qr" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -409,6 +410,7 @@
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/tv_nobind"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/dp_5"
@@ -416,51 +418,152 @@
                             android:textColor="@color/black"
                             android:textSize="@dimen/sp_20" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/dp_3"
-                            android:text="2.我的->设备管理"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/sp_20" />
+                        <!--                        <TextView-->
+                        <!--                            android:layout_width="wrap_content"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:layout_marginTop="@dimen/dp_3"-->
+                        <!--                            android:text="2.我的->设备管理"-->
+                        <!--                            android:textColor="@color/black"-->
+                        <!--                            android:textSize="@dimen/sp_20" />-->
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/dp_3"
-                            android:text="3.点击“添加设备”"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/sp_20" />
+                        <!--                        <TextView-->
+                        <!--                            android:layout_width="wrap_content"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:layout_marginTop="@dimen/dp_3"-->
+                        <!--                            android:text="3.点击“添加设备”"-->
+                        <!--                            android:textColor="@color/black"-->
+                        <!--                            android:textSize="@dimen/sp_20" />-->
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/dp_3"
-                            android:text="4.选择“小度智慧屏”"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/sp_20" />
+                        <!--                        <TextView-->
+                        <!--                            android:layout_width="wrap_content"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:layout_marginTop="@dimen/dp_3"-->
+                        <!--                            android:text="4.选择“小度智慧屏”"-->
+                        <!--                            android:textColor="@color/black"-->
+                        <!--                            android:textSize="@dimen/sp_20" />-->
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/dp_3"
-                            android:text="5.按提示绑定即可"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/sp_20" />
+                        <!--                        <TextView-->
+                        <!--                            android:layout_width="wrap_content"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:layout_marginTop="@dimen/dp_3"-->
+                        <!--                            android:text="5.按提示绑定即可"-->
+                        <!--                            android:textColor="@color/black"-->
+                        <!--                            android:textSize="@dimen/sp_20" />-->
 
                     </LinearLayout>
 
-
                 </LinearLayout>
-
 
             </LinearLayout>
 
-
         </RelativeLayout>
-
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/rl_fail1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_20">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/dp_50"
+                    android:layout_height="@dimen/dp_50"
+                    android:src="@mipmap/portal_icon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:text="康养管家"
+                    android:textColor="#FF333333"
+                    android:textSize="@dimen/sp_24"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/no_sign" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                android:text="您的设备未授权使用康养管家"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sp_20" />
+
+            <!--            <TextView-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginTop="@dimen/dp_5"-->
+            <!--                android:text="请联系400-xxxx-xxxxx进行授权"-->
+            <!--                android:textColor="@color/black"-->
+            <!--                android:textSize="@dimen/sp_20" />-->
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_260"
+                android:layout_marginLeft="@dimen/dp_50"
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginRight="@dimen/dp_50"
+                android:background="@drawable/back_bg"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/dp_30"
+                android:paddingTop="@dimen/dp_10"
+                android:paddingRight="@dimen/dp_30"
+                android:paddingBottom="@dimen/dp_10">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="康养管家功能介绍"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sp_22"
+                    android:textStyle="bold" />
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tv_no_auth"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_5"
+                        android:gravity="left"
+                        android:text="介绍文案"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/sp_20" />
+                </ScrollView>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </RelativeLayout>

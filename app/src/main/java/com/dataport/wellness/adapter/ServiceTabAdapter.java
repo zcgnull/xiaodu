@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dataport.wellness.R;
-import com.dataport.wellness.api.ServiceTabApi;
+import com.dataport.wellness.api.old.ServiceTabApi;
 
 import java.util.List;
 

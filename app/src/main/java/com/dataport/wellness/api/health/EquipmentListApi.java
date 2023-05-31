@@ -1,7 +1,8 @@
-package com.dataport.wellness.api;
+package com.dataport.wellness.api.health;
 
 import androidx.annotation.NonNull;
 
+import com.dataport.wellness.utils.BotConstants;
 import com.hjq.http.config.IRequestApi;
 import com.hjq.http.config.IRequestServer;
 
@@ -19,7 +20,7 @@ public class EquipmentListApi  implements IRequestApi, IRequestServer {
     @NonNull
     @Override
     public String getHost() {
-        return "http://10.20.5.21:8110/";
+        return BotConstants.JK_URL;
     }
 
     private String dataTypeCode;

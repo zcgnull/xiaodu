@@ -6,11 +6,21 @@ import androidx.annotation.Nullable;
 
 public class BotConstants {
 
+    //头部信息
     public static String HTTP_TOKEN = "";
+    public static String DEVICE_TOKEN = "";
+    public static String TENANT_ID = "1";
 
     public static final String LOG_TAG_AUDIO = "AudioRecorder";
     public static final String LOG_TAG_CAMERA = "CameraDemo";
     public static final String LOG_TAG_BOTSDK = "BotSDKDemo";
+
+    //健康管理后台地址
+    public static final String JK_URL = "http://10.20.5.21:8110/";
+    //养老信息后台地址
+    public static final String YZ_URL = "https://qhdmzj.dataport.com.cn/yltestec/";
+    //小度服务端
+    public static final String XD_URL = "http://10.20.1.13:48080/";
 
     /**
      * BotID和签名key ,可以在自己的技能控制台看到相关信息：https://dueros.baidu.com/dbp/main/console

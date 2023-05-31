@@ -1,19 +1,27 @@
-package com.dataport.wellness.api;
+package com.dataport.wellness.api.old;
 
 import androidx.annotation.NonNull;
 
+import com.dataport.wellness.utils.BotConstants;
 import com.google.gson.annotations.SerializedName;
 import com.hjq.http.config.IRequestApi;
+import com.hjq.http.config.IRequestServer;
 
 import java.io.Serializable;
 import java.util.List;
 
-public class QueryServiceDetailApi implements IRequestApi {
+public class QueryServiceDetailApi implements IRequestApi , IRequestServer {
 
     @NonNull
     @Override
     public String getApi() {
         return "biz/ne/mjzx/b/a/queryDetailInfo";
+    }
+
+    @NonNull
+    @Override
+    public String getHost() {
+        return BotConstants.YZ_URL;
     }
 
     private String productId;

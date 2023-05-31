@@ -9,7 +9,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,9 +19,8 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.dataport.wellness.R;
 import com.dataport.wellness.adapter.ServicePriceAdapter;
-import com.dataport.wellness.api.ImgBean;
-import com.dataport.wellness.api.QueryServiceDetailApi;
-import com.dataport.wellness.api.ServiceTabApi;
+import com.dataport.wellness.api.old.QueryServiceDetailApi;
+import com.dataport.wellness.base.ImgBean;
 import com.dataport.wellness.utils.RichTextUtil;
 import com.google.android.material.tabs.TabLayout;
 import com.hjq.http.EasyHttp;
@@ -32,8 +30,6 @@ import com.youth.banner.Banner;
 import com.youth.banner.adapter.BannerImageAdapter;
 import com.youth.banner.holder.BannerImageHolder;
 import com.youth.banner.indicator.CircleIndicator;
-import com.zzhoujay.richtext.CacheType;
-import com.zzhoujay.richtext.RichText;
 
 import java.util.ArrayList;
 import java.util.List;

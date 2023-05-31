@@ -1,7 +1,8 @@
-package com.dataport.wellness.api;
+package com.dataport.wellness.api.smalldu;
 
 import androidx.annotation.NonNull;
 
+import com.dataport.wellness.utils.BotConstants;
 import com.hjq.http.config.IRequestApi;
 import com.hjq.http.config.IRequestServer;
 
@@ -19,7 +20,7 @@ public class WeatherAddressApi  implements IRequestApi, IRequestServer {
     @NonNull
     @Override
     public String getHost() {
-        return "http://172.20.3.112:8080/";
+        return BotConstants.XD_URL;
     }
 
     private String fullAddress;

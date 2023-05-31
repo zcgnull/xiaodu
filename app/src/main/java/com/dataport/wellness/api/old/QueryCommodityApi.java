@@ -1,15 +1,25 @@
-package com.dataport.wellness.api;
+package com.dataport.wellness.api.old;
 
+import androidx.annotation.NonNull;
+
+import com.dataport.wellness.utils.BotConstants;
 import com.hjq.http.config.IRequestApi;
+import com.hjq.http.config.IRequestServer;
 
 import java.io.Serializable;
 import java.util.List;
 
-public class QueryCommodityApi implements  IRequestApi {
+public class QueryCommodityApi implements IRequestApi, IRequestServer {
 
     @Override
     public String getApi() {
         return "biz/ne/mjzx/b/a/queryCommodity";
+    }
+
+    @NonNull
+    @Override
+    public String getHost() {
+        return BotConstants.YZ_URL;
     }
 
     private String value; // 服务分类主键(非必传)
@@ -121,7 +131,7 @@ public class QueryCommodityApi implements  IRequestApi {
             this.totalCount = totalCount;
         }
 
-        public static class ListDTO implements Serializable{
+        public static class ListDTO implements Serializable {
 
             private String agvx0200xx;
             private String agvx0404;

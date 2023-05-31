@@ -1,5 +1,6 @@
 package com.dataport.wellness.http;
 
+import com.dataport.wellness.utils.BotConstants;
 import com.hjq.http.config.IRequestServer;
 import com.hjq.http.model.BodyType;
 
@@ -11,7 +12,7 @@ public class RequestServer implements IRequestServer {
 
     @Override
     public String getHost() {
-        return "https://qhdmzj.dataport.com.cn/yltestec/";
+        return BotConstants.XD_URL;
     }
 
 //    @Override

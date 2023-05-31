@@ -7,21 +7,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
 import com.dataport.wellness.R;
-import com.dataport.wellness.api.QueryCommodityApi;
-import com.dataport.wellness.api.ServiceTabApi;
+import com.dataport.wellness.api.old.QueryCommodityApi;
 import com.dataport.wellness.http.glide.GlideApp;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ServiceContentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

@@ -4,20 +4,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
 import com.dataport.wellness.R;
-import com.dataport.wellness.api.QueryCommodityApi;
-import com.dataport.wellness.api.QueryServiceDetailApi;
-import com.dataport.wellness.http.glide.GlideApp;
+import com.dataport.wellness.api.old.QueryCommodityApi;
+import com.dataport.wellness.api.old.QueryServiceDetailApi;
 
 import java.util.List;
 

@@ -1,4 +1,6 @@
-package com.dataport.wellness.api;
+package com.dataport.wellness.base;
+
+import java.util.Random;
 
 
 import java.util.ArrayList;
@@ -83,7 +85,7 @@ public class ImgBean {
 
     public static List<String> getColors(int size) {
         List<String> list = new ArrayList<>();
-        for(int i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++) {
             list.add(getRandColor());
         }
         return list;

@@ -1,7 +1,8 @@
-package com.dataport.wellness.api;
+package com.dataport.wellness.api.smalldu;
 
 import androidx.annotation.NonNull;
 
+import com.dataport.wellness.utils.BotConstants;
 import com.hjq.http.config.IRequestApi;
 import com.hjq.http.config.IRequestServer;
 
@@ -18,7 +19,7 @@ public class DeviceInfoApi  implements IRequestApi, IRequestServer {
     @NonNull
     @Override
     public String getHost() {
-        return "http://172.20.3.112:8080/";
+        return BotConstants.XD_URL;
     }
 
     private String deviceId;
@@ -32,7 +33,16 @@ public class DeviceInfoApi  implements IRequestApi, IRequestServer {
     public static class Bean implements Serializable {
 
         private String sn;
-        private int tenantId;
+
+        public long getTenantId() {
+            return tenantId;
+        }
+
+        public void setTenantId(long tenantId) {
+            this.tenantId = tenantId;
+        }
+
+        private long tenantId;
         private boolean inWarehouse;
 
         public String getSn() {
@@ -43,13 +53,7 @@ public class DeviceInfoApi  implements IRequestApi, IRequestServer {
             this.sn = sn;
         }
 
-        public int getTenantId() {
-            return tenantId;
-        }
 
-        public void setTenantId(int tenantId) {
-            this.tenantId = tenantId;
-        }
 
         public boolean isInWarehouse() {
             return inWarehouse;

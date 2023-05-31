@@ -1,7 +1,6 @@
 package com.dataport.wellness.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +15,9 @@ import com.baidu.duer.bot.BotMessageProtocol;
 import com.baidu.duer.botsdk.BotSdk;
 import com.dataport.wellness.R;
 import com.dataport.wellness.adapter.DeviceContentAdapter;
-import com.dataport.wellness.adapter.ServiceContentAdapter;
-import com.dataport.wellness.api.DeviceContentApi;
-import com.dataport.wellness.api.EquipmentListApi;
-import com.dataport.wellness.api.QueryCommodityApi;
-import com.dataport.wellness.api.ServiceTabApi;
-import com.dataport.wellness.api.SignTypeApi;
+import com.dataport.wellness.api.health.DeviceContentApi;
+import com.dataport.wellness.api.health.EquipmentListApi;
+import com.dataport.wellness.api.health.SignTypeApi;
 import com.dataport.wellness.http.HttpData;
 import com.dataport.wellness.utils.LineChartManager;
 import com.dataport.wellness.utils.TimeUtil;
@@ -30,13 +26,9 @@ import com.github.mikephil.charting.data.Entry;
 import com.google.android.material.tabs.TabLayout;
 import com.hjq.http.EasyHttp;
 import com.hjq.http.listener.HttpCallback;
-import com.scwang.smart.refresh.layout.api.RefreshLayout;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class DeviceActivity extends BaseActivity implements View.OnClickListener {
 

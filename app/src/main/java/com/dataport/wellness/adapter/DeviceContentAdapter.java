@@ -11,9 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dataport.wellness.R;
-import com.dataport.wellness.api.DeviceContentApi;
-import com.dataport.wellness.api.QueryCommodityApi;
-import com.dataport.wellness.api.QueryServiceDetailApi;
+import com.dataport.wellness.api.health.DeviceContentApi;
 
 import java.util.List;
 

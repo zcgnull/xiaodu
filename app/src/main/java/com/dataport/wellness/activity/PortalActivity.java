@@ -3,32 +3,24 @@ package com.dataport.wellness.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.baidu.duer.botsdk.BotIntent;
 import com.baidu.duer.botsdk.BotSdk;
 import com.dataport.wellness.R;
-import com.dataport.wellness.activity.audio.AudioDemoActivity;
 import com.dataport.wellness.activity.camera.CameraActivity;
-import com.dataport.wellness.api.QueryBinderApi;
-import com.dataport.wellness.api.QueryCommodityApi;
-import com.dataport.wellness.api.ServiceTabApi;
-import com.dataport.wellness.api.TokenApi;
-import com.dataport.wellness.api.WellNessApi;
+import com.dataport.wellness.api.health.QueryBinderApi;
+import com.dataport.wellness.api.health.TokenApi;
 import com.dataport.wellness.botsdk.BotMessageListener;
 import com.dataport.wellness.botsdk.IBotIntentCallback;
 import com.dataport.wellness.http.HttpData;
 import com.dataport.wellness.utils.BotConstants;
 import com.dataport.wellness.utils.IntentDecodeUtil;
-import com.google.android.material.tabs.TabLayout;
 import com.hjq.http.EasyHttp;
 import com.hjq.http.listener.HttpCallback;
 
@@ -66,10 +58,7 @@ public class PortalActivity extends BaseActivity implements View.OnClickListener
         String deviceId = getIntent().getStringExtra("device");
         String apiAccesstoken = getIntent().getStringExtra("apiAccesstoken");
 
-        Log.i(TAG, "device=======" + deviceId);
-        Log.i(TAG, "device=======apiAccesstoken=======" + apiAccesstoken);
-        WellNessApi.getDeviceSn("842ab60c61b81df1cc6fe68c15580f47", "jjJyKMunH6xErNeZ/OqxFzHRuQg88Fsxig2YEwIfQkJUfIdd7ghFnqzBhkquDc6/raQRNdf8p+ZXZtOyCjly36ec05DMJxHi3JAaTu83BS6vPC5SpDpyRnraliBlfTRMCiN03gRZnu/5DzH96aJkZwVXWwjRjqZKsn5zPx4Jls23mWnOsny72tJaMOfKixsrhpAPhDvzQd4V6dn8gj8j5NB5fbuyxv12RSOY0sSHJ8YzkrWBJfflYV0T7KaPn1Rw7K/jmRGVHuBOutCM/VtcuMxC/y/bP2s4VWFROkNxTPavCV9klDT4KDACv6PQZV5zuYF4uP1HRprDXnZW6uTOmNr0khzCiI85mEIgsqKTcw6g1rhR1P7s4bwH3Q3zZDx9DFhft2EXOBAUKvCozxlTKSnYAsaVf6VoXluWmQ/Sun8=");
-        Log.i(TAG, "on fragment attach");
+
         //  super.onAttach(context);
         BotMessageListener.getInstance().addCallback(this);
         getToken();
