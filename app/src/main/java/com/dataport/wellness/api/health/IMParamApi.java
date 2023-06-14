@@ -22,10 +22,10 @@ public class IMParamApi implements IRequestApi, IRequestServer {
         return BotConstants.JK_URL;
     }
 
-    private int binderId;
+    private long binderId;
     private String doctorId;
 
-    public IMParamApi(int binderId, String doctorId) {
+    public IMParamApi(long binderId, String doctorId) {
         this.binderId = binderId;
         this.doctorId = doctorId;
     }

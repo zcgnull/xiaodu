@@ -50,7 +50,7 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
 
     private static final String TAG = "OnLineDetailActivity";
     private OnlineDoctorApi.Bean.DoctorListDTO data;
-    private int binderId;
+    private long binderId;
     private String doctorTimId;
     private String binderTimId;
     private String type;
@@ -67,7 +67,7 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
         setContentView(R.layout.activity_online_detail);
         findViewById(R.id.ln_back).setOnClickListener(v -> finish());
         BotMessageListener.getInstance().addCallback(this);
-        binderId = getIntent().getIntExtra("binderId", 0);
+        binderId = getIntent().getLongExtra("binderId", 0);
         data = (OnlineDoctorApi.Bean.DoctorListDTO) getIntent().getSerializableExtra("data");
         getIMLogin(binderId, data.getId());
         initView();
@@ -146,7 +146,7 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
         }
     };
 
-    private void judgeAdvice(String serviceCode, long doctorId, int binderId) {
+    private void judgeAdvice(String serviceCode, long doctorId, long binderId) {
         type = serviceCode;
         EasyHttp.get(this)
                 .api(new JudgeAdviceApi(serviceCode, doctorId, binderId))
@@ -170,7 +170,7 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
                 });
     }
 
-    private void adviceDoctor(String serviceCode, int binderId, long doctorId) {
+    private void adviceDoctor(String serviceCode, long binderId, long doctorId) {
         EasyHttp.get(this)
                 .api(new AdviceDoctorApi(serviceCode, binderId, doctorId))
                 .request(new HttpCallback<AdviceDoctorApi.Bean>(this) {
@@ -227,7 +227,7 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
                 });
     }
 
-    private void getIMLogin(int binderId, long doctorId) {
+    private void getIMLogin(long binderId, long doctorId) {
         EasyHttp.get(this)
                 .api(new IMLoginApi(binderId, doctorId))
                 .request(new HttpCallback<HttpData<IMLoginApi.Bean>>(this) {

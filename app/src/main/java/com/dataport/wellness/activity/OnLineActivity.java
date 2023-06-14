@@ -72,7 +72,7 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
     private int pageSize = 10;
     private String businessType = "";
     private String idCard;
-    private int binderId;
+    private long binderId;
     private boolean isLogin = false;
 
     @Override
@@ -88,7 +88,7 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
         });
         BotMessageListener.getInstance().addCallback(this);
         idCard = getIntent().getStringExtra("idCard");
-        binderId = getIntent().getIntExtra("binderId", 0);
+        binderId = getIntent().getLongExtra("binderId", 0);
         noData = findViewById(R.id.rl_no_data);
         rlSuccess = findViewById(R.id.rl_success);
         rlFail = findViewById(R.id.rl_fail);
@@ -232,7 +232,7 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
                 });
     }
 
-    private void getIMParam(int binderId, String doctorId) {
+    private void getIMParam(long binderId, String doctorId) {
         EasyHttp.get(this)
                 .api(new IMParamApi(binderId, doctorId))
                 .request(new HttpCallback<HttpData<IMParamApi.Bean>>(this) {
@@ -244,7 +244,7 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
                 });
     }
 
-    private void getIMLogin(int binderId, long doctorId) {
+    private void getIMLogin(long binderId, long doctorId) {
         EasyHttp.get(this)
                 .api(new IMLoginApi(binderId, doctorId))
                 .request(new HttpCallback<HttpData<IMLoginApi.Bean>>(this) {

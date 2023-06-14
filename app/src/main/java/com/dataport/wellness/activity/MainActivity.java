@@ -57,7 +57,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private RelativeLayout rlSuccess, rlFail, rlFailSecond;
     private ImageView ivQr;
 
-    private int binderId;
+    private long binderId;
     private String binderIdCard;
     private String location;
     private List<QueryBinderApi.Bean.ListDTO> binderList = new ArrayList<>();
@@ -103,7 +103,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             getDeviceInfo(deviceId, apiAccesstoken);
         }
 //        getToken("9966801040895652");
-//        getDeviceToken("1", true, "950745EAV663360209E9");
+        getDeviceToken("1", true, "950745EAV663360209E9");
         List<String> messages = new ArrayList<>();
         messages.add("请试试对我说：“小度小度，打开服务订购”");
         messages.add("请试试对我说：“小度小度，打开健康监测”");

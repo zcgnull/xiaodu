@@ -24,9 +24,9 @@ public class JudgeAdviceApi implements IRequestApi, IRequestServer {
 
     private String serviceCode;
     private long doctorId;
-    private int binderId;
+    private long binderId;
 
-    public JudgeAdviceApi(String serviceCode, long doctorId, int binderId) {
+    public JudgeAdviceApi(String serviceCode, long doctorId, long binderId) {
         this.serviceCode = serviceCode;
         this.doctorId = doctorId;
         this.binderId = binderId;

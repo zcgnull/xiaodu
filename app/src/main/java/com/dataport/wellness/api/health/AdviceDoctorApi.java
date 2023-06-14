@@ -23,10 +23,10 @@ public class AdviceDoctorApi implements IRequestApi, IRequestServer {
     }
 
     private String serviceCode;
-    private int binderId;
+    private long binderId;
     private long doctorId;
 
-    public AdviceDoctorApi(String serviceCode, int binderId, long doctorId) {
+    public AdviceDoctorApi(String serviceCode, long binderId, long doctorId) {
         this.serviceCode = serviceCode;
         this.binderId = binderId;
         this.doctorId = doctorId;

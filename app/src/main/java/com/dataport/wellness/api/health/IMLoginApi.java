@@ -22,10 +22,10 @@ public class IMLoginApi implements IRequestApi, IRequestServer {
         return BotConstants.JK_URL;
     }
 
-    private int binderId;
+    private long binderId;
     private long doctorId;
 
-    public IMLoginApi(int binderId, long doctorId) {
+    public IMLoginApi(long binderId, long doctorId) {
         this.binderId = binderId;
         this.doctorId = doctorId;
     }

@@ -42,7 +42,7 @@ public class QueryBinderApi implements IRequestApi, IRequestServer {
         }
 
         public static class ListDTO implements Serializable{
-            private int binderId;
+            private long binderId;
             private String relation;
             private String binderPicture;
             private String binderGender;
@@ -56,11 +56,11 @@ public class QueryBinderApi implements IRequestApi, IRequestServer {
             private String binderName;
             private String binderIdcard;
 
-            public int getBinderId() {
+            public long getBinderId() {
                 return binderId;
             }
 
-            public void setBinderId(int binderId) {
+            public void setBinderId(long binderId) {
                 this.binderId = binderId;
             }
 
