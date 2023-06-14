@@ -58,6 +58,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private ImageView ivQr;
 
     private int binderId;
+    private String binderIdCard;
     private String location;
     private List<QueryBinderApi.Bean.ListDTO> binderList = new ArrayList<>();
 
@@ -162,7 +163,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     private void getToken(String sn) {
         EasyHttp.post(this)
-
                 .api(new TokenApi("jkgl01", "123456", "password", "aaa", "password"))
                 .request(new HttpCallback<TokenApi.Bean>(this) {
 
@@ -187,6 +187,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                                 rlSuccess.setVisibility(View.VISIBLE);
                                 tvBinder.setText(binderList.get(0).getBinderName() + "(" + binderList.get(0).getRelation() + ")");
                                 binderId = binderList.get(0).getBinderId();
+                                binderIdCard = binderList.get(0).getBinderIdcard();
                                 String getAddress = binderList.get(0).getBinderProvince() + binderList.get(0).getBinderCity() + binderList.get(0).getBinderDistrict() + binderList.get(0).getBinderAddress();
                                 String address = binderList.get(0).getBinderCity() + binderList.get(0).getBinderDistrict();
                                 tvPlace.setText(address);
@@ -281,7 +282,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 toModel(BotConstants.OPEN_WELL_NESS_URL);
                 break;
             case R.id.ln_use_medical:
-                toModel(BotConstants.OPEN_MEDICATION_URL);
+//                toModel(BotConstants.OPEN_MEDICATION_URL);
+                intent = new Intent(this, OnLineActivity.class);
+                intent.putExtra("idCard", binderIdCard);
+                intent.putExtra("binderId", binderId);
+                startActivity(intent);
                 break;
             case R.id.ln_doctor:
                 toModel(BotConstants.OPEN_FAMILY_DOCTOR_URL);
@@ -311,6 +316,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     public void onSelected(BaseDialog dialog, int position, String string) {
                         tvBinder.setText(string);
                         binderId = binderList.get(position).getBinderId();
+                        binderIdCard = binderList.get(position).getBinderIdcard();
                         String getAddress = binderList.get(position).getBinderProvince() + binderList.get(position).getBinderCity() + binderList.get(position).getBinderDistrict() + binderList.get(position).getBinderAddress();
                         String address = binderList.get(position).getBinderCity() + binderList.get(position).getBinderDistrict();
                         tvPlace.setText(address);
@@ -359,8 +365,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             toModel(BotConstants.OPEN_WELL_NESS_URL);
         } else if ("app_home_doctor".equals(intent.name)) {
             toModel(BotConstants.OPEN_FAMILY_DOCTOR_URL);
-        } else if ("app_home_medication_assistant".equals(intent.name)) {
-            toModel(BotConstants.OPEN_MEDICATION_URL);
+        } else if ("app_home_consultation".equals(intent.name)) {
+//            toModel(BotConstants.OPEN_MEDICATION_URL);
+            activityIntent = new Intent(this, OnLineActivity.class);
+            activityIntent.putExtra("idCard", binderIdCard);
+            activityIntent.putExtra("binderId", binderId);
+            startActivity(activityIntent);
         } else if ("app_home_contact".equals(intent.name)) {
             toModel(BotConstants.OPEN_CONTACTS_URL);
         } else {

@@ -4,7 +4,7 @@ android {
     compileSdkVersion 30
     defaultConfig {
         applicationId "com.dataport.wellness"
-        minSdkVersion 19 //
+        minSdkVersion 21
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 30
         versionCode 1
@@ -51,6 +51,7 @@ repositories {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
+    api project(':tuicallkit')
     // AndroidX
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
@@ -93,5 +94,8 @@ dependencies {
 
     //曲线图
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0-alpha'
+
+//    implementation project(':tuicallkit')
+
 
 }

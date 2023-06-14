@@ -59,12 +59,12 @@ public class ServiceOrderActivity extends BaseActivity implements IBotIntentCall
         findViewById(R.id.ln_back).setOnClickListener(v -> finish());
         BotMessageListener.getInstance().addCallback(this);
         Intent getIntent = getIntent();
-        String[] location = getIntent.getStringExtra("location").split(",");
-        longitude = location[0];
-        latitude = location[1];
-        Log.d(TAG, "onCreate: "+longitude+","+latitude);
-
-
+        if (null != getIntent.getStringExtra("location")){
+            String[] location = getIntent.getStringExtra("location").split(",");
+            longitude = location[0];
+            latitude = location[1];
+            Log.d(TAG, "onCreate: "+longitude+","+latitude);
+        }
         noData = findViewById(R.id.rl_no_data);
         marqueeView = findViewById(R.id.marqueeView);
         contentRv = findViewById(R.id.rv_content);

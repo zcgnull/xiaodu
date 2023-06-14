@@ -12,7 +12,7 @@
 #   public *;
 #}
 
-# Uncomment this to preserve the line number information for
+# Uncomment this to preserve the line number information forg
 # debugging stack traces.
 #-keepattributes SourceFile,LineNumberTable
 
@@ -20,3 +20,4 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 -keep class com.baidu.duer.** {*;}
+-keep class com.tencent.** { *; }
