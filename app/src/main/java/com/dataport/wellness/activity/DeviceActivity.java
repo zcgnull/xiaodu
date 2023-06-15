@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,14 +20,22 @@ import com.dataport.wellness.adapter.DeviceContentAdapter;
 import com.dataport.wellness.api.health.DeviceContentApi;
 import com.dataport.wellness.api.health.EquipmentListApi;
 import com.dataport.wellness.api.health.SignTypeApi;
+import com.dataport.wellness.api.smalldu.GuideDataApi;
 import com.dataport.wellness.http.HttpData;
+import com.dataport.wellness.http.HttpIntData;
+import com.dataport.wellness.http.glide.GlideApp;
+import com.dataport.wellness.utils.BotConstants;
 import com.dataport.wellness.utils.LineChartManager;
 import com.dataport.wellness.utils.TimeUtil;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.google.android.material.tabs.TabLayout;
 import com.hjq.http.EasyHttp;
+import com.hjq.http.config.IRequestInterceptor;
 import com.hjq.http.listener.HttpCallback;
+import com.hjq.http.model.HttpHeaders;
+import com.hjq.http.model.HttpParams;
+import com.hjq.http.request.HttpRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +48,8 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
     private RelativeLayout noData, noDataLine, rlSuccess, rlFail;
     private LineChart lineChart;
     private TextView qs, jl;
+    private TextView noBind;
+    private ImageView ivQr;
 
     private List<String> dateTabs = new ArrayList<>();
     private List<SignTypeApi.Bean.ListDTO> signTabs = new ArrayList<>();
@@ -59,6 +71,8 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
         findViewById(R.id.ln_back1).setOnClickListener(v -> finish());
         rlSuccess = findViewById(R.id.rl_success);
         rlFail = findViewById(R.id.rl_fail);
+        noBind = findViewById(R.id.tv_nobind);
+        ivQr = findViewById(R.id.iv_qr);
         Intent intent = getIntent();
         binderId = intent.getIntExtra("binderId", 0);
         noData = findViewById(R.id.rl_no_data);
@@ -229,12 +243,38 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                                     firstTab.addTab(tab);
                                 }
                             } else {
+                                getGuideData("noSign");
                                 rlSuccess.setVisibility(View.GONE);
-                                rlFail.setVisibility(View.VISIBLE);
                             }
                         } else {
+                            getGuideData("noSign");
                             rlSuccess.setVisibility(View.GONE);
+                        }
+                    }
+                });
+    }
+
+    private void getGuideData(String steerType) {
+        EasyHttp.get(this)
+                .interceptor(new IRequestInterceptor() {
+                    @Override
+                    public void interceptArguments(@NonNull HttpRequest<?> httpRequest, @NonNull HttpParams params, @NonNull HttpHeaders headers) {
+                        headers.put("tenant-id", BotConstants.TENANT_ID);
+                        headers.put("login_user_type", "3");
+                        headers.put("Authorization", BotConstants.DEVICE_TOKEN);
+                    }
+                })
+                .api(new GuideDataApi(steerType))
+                .request(new HttpCallback<HttpIntData<GuideDataApi.Bean>>(this) {
+
+                    @Override
+                    public void onSucceed(HttpIntData<GuideDataApi.Bean> result) {
+                        if (result.getCode() == 0) {
                             rlFail.setVisibility(View.VISIBLE);
+                            noBind.setText(result.getData().getSteerDesc());
+                            GlideApp.with(DeviceActivity.this)
+                                    .load(result.getData().getSteerImg())
+                                    .into(ivQr);
                         }
                     }
                 });

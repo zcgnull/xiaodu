@@ -57,7 +57,6 @@ public class ServiceOrderActivity extends BaseActivity implements IBotIntentCall
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service_order);
         findViewById(R.id.ln_back).setOnClickListener(v -> finish());
-        BotMessageListener.getInstance().addCallback(this);
         Intent getIntent = getIntent();
         if (null != getIntent.getStringExtra("location")){
             String[] location = getIntent.getStringExtra("location").split(",");
@@ -168,7 +167,6 @@ public class ServiceOrderActivity extends BaseActivity implements IBotIntentCall
         String intentResult = getString(R.string.result_intent) + intent.name + ",slots:" + intent.slots;
         Log.d(TAG, "handleIntent: " + intentResult);
         if ("app_list_select_item".equals(intent.name)) {
-            BotMessageListener.getInstance().clearCallback();
             activityIntent = new Intent(getApplicationContext(), ServiceDetailActivity.class);
             activityIntent.putExtra("productId", serviceList.get(Integer.parseInt(intent.slots.get(0).value) - 1).getProductId());
             activityIntent.putExtra("providerId", serviceList.get(Integer.parseInt(intent.slots.get(0).value) - 1).getProviderId());
@@ -248,8 +246,9 @@ public class ServiceOrderActivity extends BaseActivity implements IBotIntentCall
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        BotMessageListener.getInstance().removeCallback(this);
+    protected void onPause() {
+        super.onPause();
+        BotMessageListener.getInstance().clearCallback();
     }
+
 }

@@ -22,6 +22,7 @@ import com.dataport.wellness.api.health.OnlineRecordApi;
 import com.dataport.wellness.api.health.StartRecordApi;
 import com.dataport.wellness.api.health.TurnOffApi;
 import com.dataport.wellness.api.health.TurnOnApi;
+import com.dataport.wellness.botsdk.BotMessageListener;
 import com.dataport.wellness.botsdk.IBotIntentCallback;
 import com.dataport.wellness.http.HttpData;
 import com.hjq.http.EasyHttp;
@@ -231,5 +232,17 @@ public class OnLineRecordActivity extends BaseActivity implements IBotIntentCall
     @Override
     public void onHandleScreenNavigatorEvent(int event) {
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        BotMessageListener.getInstance().addCallback(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        BotMessageListener.getInstance().clearCallback();
     }
 }

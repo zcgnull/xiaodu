@@ -66,7 +66,6 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_online_detail);
         findViewById(R.id.ln_back).setOnClickListener(v -> finish());
-        BotMessageListener.getInstance().addCallback(this);
         binderId = getIntent().getLongExtra("binderId", 0);
         data = (OnlineDoctorApi.Bean.DoctorListDTO) getIntent().getSerializableExtra("data");
         getIMLogin(binderId, data.getId());
@@ -277,8 +276,15 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        BotMessageListener.getInstance().removeCallback(this);
+    protected void onResume() {
+        super.onResume();
+        BotMessageListener.getInstance().addCallback(this);
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        BotMessageListener.getInstance().clearCallback();
+    }
+
 }

@@ -60,7 +60,7 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
     private RecyclerView contentRv;
     private RefreshLayout refreshLayout;
     private RelativeLayout noData, rlSuccess, rlFail;
-    ;
+
     private MarqueeView marqueeView;
     private TextView noOnline;
     private ImageView ivQr;
@@ -86,7 +86,6 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
             intent.putExtra("binderId", binderId);
             startActivity(intent);
         });
-        BotMessageListener.getInstance().addCallback(this);
         idCard = getIntent().getStringExtra("idCard");
         binderId = getIntent().getLongExtra("binderId", 0);
         noData = findViewById(R.id.rl_no_data);
@@ -133,14 +132,11 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
         contentRv.setLayoutManager(contentManger);
         onlineAdapter = new OnlineAdapter(this);
         contentRv.setAdapter(onlineAdapter);
-        onlineAdapter.setListener(new OnlineAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(OnlineDoctorApi.Bean.DoctorListDTO data, int pos) {
-                Intent intent = new Intent(OnLineActivity.this, OnLineDetailActivity.class);
-                intent.putExtra("data", data);
-                intent.putExtra("binderId", binderId);
-                startActivity(intent);
-            }
+        onlineAdapter.setListener((data, pos) -> {
+            Intent intent = new Intent(OnLineActivity.this, OnLineDetailActivity.class);
+            intent.putExtra("data", data);
+            intent.putExtra("binderId", binderId);
+            startActivity(intent);
         });
 
         refreshLayout = findViewById(R.id.refreshLayout);
@@ -161,13 +157,6 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
             BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
             BotSdk.getInstance().speakRequest(messages.get(position));
         });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        getOnlineNum();
-//        getGuideData("noServiceCount");
     }
 
     private void getOnlineNum() {
@@ -326,10 +315,12 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
     @Override
     public void handleIntent(BotIntent intent, String customData) {
         Intent activityIntent;
+        String intentResult = getString(R.string.result_intent) + intent.name + ",slots:" + intent.slots;
+        Log.d(TAG, "handleIntent: " + intentResult);
         if ("app_list_select_item".equals(intent.name)) {
-            BotMessageListener.getInstance().clearCallback();
-            activityIntent = new Intent(getApplicationContext(), ServiceDetailActivity.class);
+            activityIntent = new Intent(OnLineActivity.this, OnLineDetailActivity.class);
             activityIntent.putExtra("data", doctorList.get(Integer.parseInt(intent.slots.get(0).value) - 1));
+            activityIntent.putExtra("binderId", binderId);
             startActivity(activityIntent);
         } else {
 //            BotSdk.getInstance().speak("我没有听清，请再说一遍",true);
@@ -348,8 +339,18 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        BotMessageListener.getInstance().removeCallback(this);
+    protected void onResume() {
+        super.onResume();
+        getOnlineNum();
+        BotMessageListener.getInstance().addCallback(this);
+        Log.d(TAG, "handleIntent: onResume");
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        BotMessageListener.getInstance().clearCallback();
+        Log.d(TAG, "handleIntent: onPause");
+    }
+
 }

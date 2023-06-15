@@ -347,7 +347,7 @@
 
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/dp_230"
                     android:orientation="vertical">
 
                     <TextView
@@ -405,7 +405,7 @@
 
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/dp_230"
                     android:orientation="vertical">
 
                     <TextView
@@ -417,20 +417,31 @@
                         android:textColor="@color/white"
                         android:textSize="@dimen/sp_20" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_10"
-                        android:text="在健康管理小程序中添加一个设备"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/sp_20" />
 
-                    <ImageView
-                        android:layout_width="@dimen/dp_130"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/dp_10"
-                        android:layout_height="@dimen/dp_130"
-                        android:src="@mipmap/sign_qr" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/iv_qr"
+                            android:layout_width="@dimen/dp_130"
+                            android:layout_height="@dimen/dp_130"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="@dimen/dp_10"
+                            android:src="@mipmap/sign_qr" />
+
+                        <TextView
+                            android:id="@+id/tv_nobind"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="服务包次数用尽"
+                            android:layout_marginLeft="@dimen/dp_10"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/sp_20" />
+
+                    </LinearLayout>
 
 
                 </LinearLayout>

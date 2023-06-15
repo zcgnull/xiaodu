@@ -94,7 +94,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         tvDate.setText(TimeUtil.getInstance().getMainDate());
         tvTime.setText(TimeUtil.getInstance().getMainTime());
 
-        BotMessageListener.getInstance().addCallback(this);
         //获取deviceId,apiAccesstoken,用于向后台获取设备sn
         if (getIntent().getStringExtra("device") != null) {
             JSONObject jsonObject = JSON.parseObject(getIntent().getStringExtra("device"));
@@ -102,7 +101,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             String apiAccesstoken = getIntent().getStringExtra("apiAccesstoken");
             getDeviceInfo(deviceId, apiAccesstoken);
         }
-//        getToken("9966801040895652");
 //        getDeviceToken("1", true, "950745EAV663360209E9");
         List<String> messages = new ArrayList<>();
         messages.add("请试试对我说：“小度小度，打开服务订购”");
@@ -351,30 +349,32 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         // name意图标识 slots插槽
         String intentResult = getString(R.string.result_intent) + intent.name + ",slots:" + intent.slots;
         Log.d(TAG, "handleIntent: " + intentResult);
-        if ("app_home_serveorder".equals(intent.name)) {//服务订购
-            BotMessageListener.getInstance().clearCallback();
-            activityIntent = new Intent(this, ServiceOrderActivity.class);
-            activityIntent.putExtra("location", location);
-            startActivity(activityIntent);
-        } else if ("app_home_device".equals(intent.name)) {
-            BotMessageListener.getInstance().clearCallback();
-            activityIntent = new Intent(this, DeviceActivity.class);
-            activityIntent.putExtra("binderId", binderId);
-            startActivity(activityIntent);
-        } else if ("app_home_wellness".equals(intent.name)) {
-            toModel(BotConstants.OPEN_WELL_NESS_URL);
-        } else if ("app_home_doctor".equals(intent.name)) {
-            toModel(BotConstants.OPEN_FAMILY_DOCTOR_URL);
-        } else if ("app_home_consultation".equals(intent.name)) {
+        if ("app_home".equals(intent.name)) {
+            if ("app_home_serveorder".equals(intent.slots.get(0).name)) {
+                activityIntent = new Intent(this, ServiceOrderActivity.class);
+                activityIntent.putExtra("location", location);
+                startActivity(activityIntent);
+            } else if ("app_home_device".equals(intent.slots.get(0).name)) {
+                activityIntent = new Intent(this, DeviceActivity.class);
+                activityIntent.putExtra("binderId", binderId);
+                startActivity(activityIntent);
+            } else if ("app_home_wellness".equals(intent.slots.get(0).name)) {
+                toModel(BotConstants.OPEN_WELL_NESS_URL);
+            } else if ("app_home_doctor".equals(intent.slots.get(0).name)) {
+                toModel(BotConstants.OPEN_FAMILY_DOCTOR_URL);
+            } else if ("app_home_consultation".equals(intent.slots.get(0).name)) {
 //            toModel(BotConstants.OPEN_MEDICATION_URL);
-            activityIntent = new Intent(this, OnLineActivity.class);
-            activityIntent.putExtra("idCard", binderIdCard);
-            activityIntent.putExtra("binderId", binderId);
-            startActivity(activityIntent);
-        } else if ("app_home_contact".equals(intent.name)) {
-            toModel(BotConstants.OPEN_CONTACTS_URL);
+                activityIntent = new Intent(this, OnLineActivity.class);
+                activityIntent.putExtra("idCard", binderIdCard);
+                activityIntent.putExtra("binderId", binderId);
+                startActivity(activityIntent);
+            } else if ("app_home_contact".equals(intent.slots.get(0).name)) {
+                toModel(BotConstants.OPEN_CONTACTS_URL);
+            } else {
+                BotSdk.getInstance().speakRequest("我没有听清，请再说一遍");
+            }
         } else {
-//            BotSdk.getInstance().speak("我没有听清，请再说一遍", true);
+            //            BotSdk.getInstance().speak("我没有听清，请再说一遍", true);
             BotSdk.getInstance().speakRequest("我没有听清，请再说一遍");
         }
     }
@@ -393,11 +393,20 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     protected void onResume() {
         super.onResume();
         BotMessageListener.getInstance().addCallback(this);
+        Log.d(TAG, "handleIntent: onResume");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        BotMessageListener.getInstance().clearCallback();
+        Log.d(TAG, "handleIntent: onPause");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.d(TAG, "handleIntent: onDestroy");
         BotMessageListener.getInstance().removeCallback(this);
     }
 }
