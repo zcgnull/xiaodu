@@ -100,7 +100,7 @@ public class PortalActivity extends BaseActivity implements View.OnClickListener
 
     private void getToken() {
         EasyHttp.post(this)
-                .api(new TokenApi("jkgl01", "123456", "password", "aaa", "password"))
+                .api(new TokenApi("xiaodu01", "ZQPXP3rkZx7ZLzPK", "client_credentials"))
                 .request(new HttpCallback<TokenApi.Bean>(this) {
 
                     @Override

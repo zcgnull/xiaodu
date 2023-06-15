@@ -103,13 +103,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             getDeviceInfo(deviceId, apiAccesstoken);
         }
 //        getToken("9966801040895652");
-        getDeviceToken("1", true, "950745EAV663360209E9");
+//        getDeviceToken("1", true, "950745EAV663360209E9");
         List<String> messages = new ArrayList<>();
         messages.add("请试试对我说：“小度小度，打开服务订购”");
         messages.add("请试试对我说：“小度小度，打开健康监测”");
         messages.add("请试试对我说：“小度小度，打开康养管家”");
         messages.add("请试试对我说：“小度小度，打开家庭医生”");
-        messages.add("请试试对我说：“小度小度，打开用药助手”");
+        messages.add("请试试对我说：“小度小度，打开在线咨询”");
         messages.add("请试试对我说：“小度小度，打开亲友视频”");
         marqueeView.startWithList(messages);
         marqueeView.setOnItemClickListener((position, textView) -> {
@@ -163,7 +163,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     private void getToken(String sn) {
         EasyHttp.post(this)
-                .api(new TokenApi("jkgl01", "123456", "password", "aaa", "password"))
+                .api(new TokenApi("xiaodu01", "ZQPXP3rkZx7ZLzPK", "client_credentials"))
                 .request(new HttpCallback<TokenApi.Bean>(this) {
 
                     @Override
