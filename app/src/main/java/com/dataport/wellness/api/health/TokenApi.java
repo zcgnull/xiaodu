@@ -25,15 +25,11 @@ public class TokenApi implements IRequestApi , IRequestServer {
     private String client_id;
     private String client_secret;
     private String grant_type;
-    private String username;
-    private String password;
 
-    public TokenApi(String client_id, String client_secret, String grant_type, String username, String password) {
+    public TokenApi(String client_id, String client_secret, String grant_type ) {
         this.client_id = client_id;
         this.client_secret = client_secret;
         this.grant_type = grant_type;
-        this.username = username;
-        this.password = password;
     }
 
     public static class Bean implements Serializable {
