@@ -22,9 +22,9 @@ public class SignTypeApi implements IRequestApi, IRequestServer {
         return BotConstants.JK_URL;
     }
 
-    private int binderId;
+    private long binderId;
 
-    public SignTypeApi(int binderId) {
+    public SignTypeApi(long binderId) {
         this.binderId = binderId;
     }
 

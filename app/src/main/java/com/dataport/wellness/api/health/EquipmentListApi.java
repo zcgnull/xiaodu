@@ -24,9 +24,9 @@ public class EquipmentListApi  implements IRequestApi, IRequestServer {
     }
 
     private String dataTypeCode;
-    private int binderId;
+    private long binderId;
 
-    public EquipmentListApi(String dataTypeCode, int binderId) {
+    public EquipmentListApi(String dataTypeCode, long binderId) {
         this.dataTypeCode = dataTypeCode;
         this.binderId = binderId;
     }

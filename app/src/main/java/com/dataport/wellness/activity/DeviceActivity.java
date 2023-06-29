@@ -55,7 +55,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
     private List<SignTypeApi.Bean.ListDTO> signTabs = new ArrayList<>();
     private List<EquipmentListApi.Bean.ListDTO> equipmentTabs = new ArrayList<>();
     private List<DeviceContentApi.Bean.ListDTO> contentList = new ArrayList<>();
-    private int binderId;
+    private long binderId;
     private int equipmentBindId = 0;
     private String dataTypeCode = "1";
 //    private int pageNum = 1;
@@ -74,7 +74,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
         noBind = findViewById(R.id.tv_nobind);
         ivQr = findViewById(R.id.iv_qr);
         Intent intent = getIntent();
-        binderId = intent.getIntExtra("binderId", 0);
+        binderId = intent.getLongExtra("binderId", 0);
         noData = findViewById(R.id.rl_no_data);
         noDataLine = findViewById(R.id.rl_no_data_line);
         lineChart = findViewById(R.id.line_chart);
@@ -222,7 +222,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
         getSignType(binderId);
     }
 
-    private void getSignType(int binderId) {
+    private void getSignType(long binderId) {
         EasyHttp.get(this)
                 .api(new SignTypeApi(binderId))
                 .request(new HttpCallback<HttpData<SignTypeApi.Bean>>(this) {
@@ -280,7 +280,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                 });
     }
 
-    private void getEquipmentList(int binderId, String dataTypeCode) {
+    private void getEquipmentList(long binderId, String dataTypeCode) {
         EasyHttp.get(this)
                 .api(new EquipmentListApi(dataTypeCode, binderId))
                 .request(new HttpCallback<HttpData<EquipmentListApi.Bean>>(this) {
