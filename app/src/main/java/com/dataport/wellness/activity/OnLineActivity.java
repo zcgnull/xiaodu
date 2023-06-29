@@ -1,5 +1,7 @@
 package com.dataport.wellness.activity;
 
+import static androidx.core.os.HandlerCompat.postDelayed;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +21,8 @@ import com.baidu.duer.bot.BotMessageProtocol;
 import com.baidu.duer.botsdk.BotIntent;
 import com.baidu.duer.botsdk.BotSdk;
 import com.dataport.wellness.R;
+import com.dataport.wellness.activity.dialog.BaseDialog;
+import com.dataport.wellness.activity.dialog.WaitDialog;
 import com.dataport.wellness.adapter.OnlineAdapter;
 import com.dataport.wellness.api.health.AdviceDoctorApi;
 import com.dataport.wellness.api.health.IMLoginApi;
@@ -88,6 +93,8 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
     private String type = "";
     private String handleType = "";
     private int delay = 0;
+
+    private BaseDialog mWaitDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -441,6 +448,15 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
     }
 
     private void loginTUI(String userId, String userSig) {
+        if (mWaitDialog == null) {
+            mWaitDialog = new WaitDialog.Builder(this)
+                    // 消息文本可以不用填写
+                    .setMessage("音视频组件初始化中。。。")
+                    .create();
+        }
+        if (!mWaitDialog.isShowing()) {
+            mWaitDialog.show();
+        }
         //设置对登录结果的监听器
         TUILoginListener mLoginListener = new TUILoginListener() {
             @Override
@@ -468,12 +484,15 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
                     @Override
                     public void onSuccess() {
                         Log.i(TAG, "login success");
+                        isLogin = true;
+                        mWaitDialog.dismiss();
                     }
 
 
                     @Override
                     public void onError(int errorCode, String errorMessage) {
                         Log.e(TAG, "login failed, errorCode: " + errorCode + " msg:" + errorMessage);
+                        Toast.makeText(OnLineActivity.this, errorMessage + ",请退出重试！", Toast.LENGTH_SHORT).show();
                     }
                 });
     }

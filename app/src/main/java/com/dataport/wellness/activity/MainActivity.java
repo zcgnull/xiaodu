@@ -72,6 +72,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.AppTheme); // 设置为原主题
         setContentView(R.layout.activity_porttal_new);
         rlSuccess = findViewById(R.id.rl_success);
         rlFail = findViewById(R.id.rl_fail);
@@ -117,8 +118,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             // 输出SERIAL号
             Log.d("Serial Number", "Serial Number: " + serialNumber);
             getDeviceInfo(serialNumber);
-//            getToken(serialNumber);
-//            getDeviceToken("1", true, "950745EAV663360209E9");
+//            getDeviceInfo("950745EAV663360209E9");
         } catch (NoSuchFieldException | IllegalAccessException e) {
             Toast.makeText(this, "获取本机SN失败", Toast.LENGTH_LONG).show();
         }

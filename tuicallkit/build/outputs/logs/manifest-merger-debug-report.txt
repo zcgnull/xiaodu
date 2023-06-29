@@ -3,21 +3,9 @@ manifest
 ADDED from F:\githubproject\dueros_wellness_app\tuicallkit\src\main\AndroidManifest.xml:2:1-51:12
 INJECTED from F:\githubproject\dueros_wellness_app\tuicallkit\src\main\AndroidManifest.xml:2:1-51:12
 INJECTED from F:\githubproject\dueros_wellness_app\tuicallkit\src\main\AndroidManifest.xml:2:1-51:12
-INJECTED from F:\githubproject\dueros_wellness_app\tuicallkit\src\main\AndroidManifest.xml:2:1-51:12
-INJECTED from F:\githubproject\dueros_wellness_app\tuicallkit\src\main\AndroidManifest.xml:2:1-51:12
-INJECTED from F:\githubproject\dueros_wellness_app\tuicallkit\src\main\AndroidManifest.xml:2:1-51:12
-INJECTED from F:\githubproject\dueros_wellness_app\tuicallkit\src\main\AndroidManifest.xml:2:1-51:12
 	package
 		ADDED from F:\githubproject\dueros_wellness_app\tuicallkit\src\main\AndroidManifest.xml:3:5-51
 		INJECTED from F:\githubproject\dueros_wellness_app\tuicallkit\src\main\AndroidManifest.xml
-		INJECTED from F:\githubproject\dueros_wellness_app\tuicallkit\src\main\AndroidManifest.xml
-	android:versionName
-		INJECTED from F:\githubproject\dueros_wellness_app\tuicallkit\src\main\AndroidManifest.xml
-		ADDED from F:\githubproject\dueros_wellness_app\tuicallkit\src\main\AndroidManifest.xml:2:1-51:12
-		INJECTED from F:\githubproject\dueros_wellness_app\tuicallkit\src\main\AndroidManifest.xml
-	android:versionCode
-		INJECTED from F:\githubproject\dueros_wellness_app\tuicallkit\src\main\AndroidManifest.xml
-		ADDED from F:\githubproject\dueros_wellness_app\tuicallkit\src\main\AndroidManifest.xml:2:1-51:12
 		INJECTED from F:\githubproject\dueros_wellness_app\tuicallkit\src\main\AndroidManifest.xml
 	xmlns:android
 		ADDED from F:\githubproject\dueros_wellness_app\tuicallkit\src\main\AndroidManifest.xml:2:11-69

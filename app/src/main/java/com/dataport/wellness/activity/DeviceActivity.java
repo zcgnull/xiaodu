@@ -18,6 +18,7 @@ import com.baidu.duer.botsdk.BotSdk;
 import com.dataport.wellness.R;
 import com.dataport.wellness.adapter.DeviceContentAdapter;
 import com.dataport.wellness.api.health.DeviceContentApi;
+import com.dataport.wellness.api.health.DeviceContentPageApi;
 import com.dataport.wellness.api.health.EquipmentListApi;
 import com.dataport.wellness.api.health.SignTypeApi;
 import com.dataport.wellness.api.smalldu.GuideDataApi;
@@ -36,6 +37,7 @@ import com.hjq.http.listener.HttpCallback;
 import com.hjq.http.model.HttpHeaders;
 import com.hjq.http.model.HttpParams;
 import com.hjq.http.request.HttpRequest;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +45,7 @@ import java.util.List;
 public class DeviceActivity extends BaseActivity implements View.OnClickListener {
 
     private TabLayout firstTab, secondTab, thirdTab;
-    //    private RefreshLayout refreshLayout;
+        private RefreshLayout refreshLayout;
     private RecyclerView contentRv;
     private RelativeLayout noData, noDataLine, rlSuccess, rlFail;
     private LineChart lineChart;
@@ -55,12 +57,12 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
     private List<SignTypeApi.Bean.ListDTO> signTabs = new ArrayList<>();
     private List<EquipmentListApi.Bean.ListDTO> equipmentTabs = new ArrayList<>();
     private List<DeviceContentApi.Bean.ListDTO> contentList = new ArrayList<>();
+    private List<DeviceContentPageApi.Bean.RecordListDTO> rightList = new ArrayList<>();
     private long binderId;
     private int equipmentBindId = 0;
     private String dataTypeCode = "1";
-//    private int pageNum = 1;
-//    private int pageSize = 10;
-
+    private int pageNum = 0;
+    private int pageSize = 10;
     private DeviceContentAdapter adapter;
 
     @Override
@@ -119,6 +121,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                 equipmentBindId = equipmentTabs.get(tab.getPosition()).getEquipmentBindId();
                 if (thirdTab.getTabAt(0).isSelected()) {
                     getDeviceContent(dataTypeCode, TimeUtil.getInstance().getTimeOneMonth(), TimeUtil.getInstance().getCurrentTime(), 1);
+                    getDeviceContentPage(dataTypeCode, TimeUtil.getInstance().getTimeOneMonth(), TimeUtil.getInstance().getCurrentTime(), 1);
                 } else {
                     thirdTab.getTabAt(0).select();
                 }
@@ -144,11 +147,14 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                 tabView.setTextColor(getResources().getColor(R.color.colorWhite));
                 if (tab.getPosition() == 1) {
                     getDeviceContent(dataTypeCode, TimeUtil.getInstance().getTimeAWeek(), TimeUtil.getInstance().getCurrentTime(), 1);
+                    getDeviceContentPage(dataTypeCode, TimeUtil.getInstance().getTimeAWeek(), TimeUtil.getInstance().getCurrentTime(), 1);
                 } else if (tab.getPosition() == 2) {
                     getDeviceContent(dataTypeCode, TimeUtil.getInstance().getYesterdayTime(), TimeUtil.getInstance().getCurrentTime(), 1);
+                    getDeviceContentPage(dataTypeCode, TimeUtil.getInstance().getYesterdayTime(), TimeUtil.getInstance().getCurrentTime(), 1);
                 } else {
                     if (equipmentBindId != 0) {
                         getDeviceContent(dataTypeCode, TimeUtil.getInstance().getTimeOneMonth(), TimeUtil.getInstance().getCurrentTime(), 1);
+                        getDeviceContentPage(dataTypeCode, TimeUtil.getInstance().getTimeOneMonth(), TimeUtil.getInstance().getCurrentTime(), 1);
                     }
                 }
             }
@@ -183,41 +189,38 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
         contentRv.setLayoutManager(contentManger);
         adapter = new DeviceContentAdapter(this);
         contentRv.setAdapter(adapter);
-        adapter.setListener(new DeviceContentAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(DeviceContentApi.Bean.ListDTO data, int pos) {
-                BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
-                if (data.getDataType().equals("1")) {
-                    String speck = data.getStartTime() + "，您的血压为，高压" + data.getSbp() + "毫米汞柱，低压" + data.getDbp() + "毫米汞柱，脉率为" + data.getBpm() + "次每分钟";
-                    BotSdk.getInstance().speakRequest(speck);
-                } else {
-                    String speck = data.getStartTime() + "，您的血糖为" + data.getGls();
-                    BotSdk.getInstance().speakRequest(speck);
-                }
+        adapter.setListener((data, pos) -> {
+            BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
+            if (data.getDataType().equals("1")) {
+                String speck = data.getStartTime() + "，您的血压为，高压" + data.getSbp() + "毫米汞柱，低压" + data.getDbp() + "毫米汞柱，脉率为" + data.getBpm() + "次每分钟";
+                BotSdk.getInstance().speakRequest(speck);
+            } else {
+                String speck = data.getStartTime() + "，您的血糖为" + data.getGls();
+                BotSdk.getInstance().speakRequest(speck);
             }
         });
 
-//        refreshLayout = findViewById(R.id.refreshLayout);
-//        refreshLayout.setOnRefreshListener(refreshlayout -> {
-//            pageNum = 1;
-//            if (thirdTab.getTabAt(0).isSelected()) {
-//                getDeviceContent(dataTypeCode, TimeUtil.getInstance().getYesterdayTime(), TimeUtil.getInstance().getCurrentTime(), 1);
-//            } else if (thirdTab.getTabAt(0).isSelected()) {
-//                getDeviceContent(dataTypeCode, TimeUtil.getInstance().getTimeAWeek(), TimeUtil.getInstance().getCurrentTime(), 1);
-//            } else {
-//                getDeviceContent(dataTypeCode, TimeUtil.getInstance().getTimeOneMonth(), TimeUtil.getInstance().getCurrentTime(), 1);
-//            }
-//        });
-//        refreshLayout.setOnLoadMoreListener(refreshlayout -> {
-//            pageNum += 1;
-//            if (thirdTab.getTabAt(0).isSelected()) {
-//                getDeviceContent(dataTypeCode, TimeUtil.getInstance().getYesterdayTime(), TimeUtil.getInstance().getCurrentTime(), 2);
-//            } else if (thirdTab.getTabAt(0).isSelected()) {
-//                getDeviceContent(dataTypeCode, TimeUtil.getInstance().getTimeAWeek(), TimeUtil.getInstance().getCurrentTime(), 2);
-//            } else {
-//                getDeviceContent(dataTypeCode, TimeUtil.getInstance().getTimeOneMonth(), TimeUtil.getInstance().getCurrentTime(), 2);
-//            }
-//        });
+        refreshLayout = findViewById(R.id.refreshLayout);
+        refreshLayout.setOnRefreshListener(refreshlayout -> {
+            pageNum = 0;
+            if (thirdTab.getTabAt(0).isSelected()) {
+                getDeviceContentPage(dataTypeCode, TimeUtil.getInstance().getTimeOneMonth(), TimeUtil.getInstance().getCurrentTime(), 1);
+            } else if (thirdTab.getTabAt(1).isSelected()) {
+                getDeviceContentPage(dataTypeCode, TimeUtil.getInstance().getTimeAWeek(), TimeUtil.getInstance().getCurrentTime(), 1);
+            } else {
+                getDeviceContentPage(dataTypeCode, TimeUtil.getInstance().getYesterdayTime(), TimeUtil.getInstance().getCurrentTime(), 1);
+            }
+        });
+        refreshLayout.setOnLoadMoreListener(refreshlayout -> {
+            pageNum += 1;
+            if (thirdTab.getTabAt(0).isSelected()) {
+                getDeviceContentPage(dataTypeCode, TimeUtil.getInstance().getTimeOneMonth(), TimeUtil.getInstance().getCurrentTime(), 2);
+            } else if (thirdTab.getTabAt(1).isSelected()) {
+                getDeviceContentPage(dataTypeCode, TimeUtil.getInstance().getTimeAWeek(), TimeUtil.getInstance().getCurrentTime(), 2);
+            } else {
+                getDeviceContentPage(dataTypeCode, TimeUtil.getInstance().getYesterdayTime(), TimeUtil.getInstance().getCurrentTime(), 2);
+            }
+        });
 
         getSignType(binderId);
     }
@@ -303,29 +306,14 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                 });
     }
 
-    private void getDeviceContent(String dataTypeCode, String beginDate, String endDate, int type) {//type:1代表刷新2代表加载
+    private void getDeviceContent(String dataTypeCode, String beginDate, String endDate, int type) {
         EasyHttp.get(this)
                 .api(new DeviceContentApi(equipmentBindId, dataTypeCode, beginDate, endDate))
                 .request(new HttpCallback<HttpData<DeviceContentApi.Bean>>(this) {
 
                     @Override
                     public void onSucceed(HttpData<DeviceContentApi.Bean> result) {
-                        if (type == 1) {
-                            contentList.clear();
-//                            refreshLayout.finishRefresh();
-                            if (result.getData().getList().size() == 0) {
-                                noData.setVisibility(View.VISIBLE);
-                            } else {
-                                noData.setVisibility(View.GONE);
-                                contentList = result.getData().getList();
-                            }
-                        } else {
-//                            refreshLayout.finishLoadMore();
-                            if (result.getData().getList().size() > 0) {
-                                contentList.addAll(result.getData().getList());
-                            }
-                        }
-                        adapter.setList(contentList);
+                        contentList = result.getData().getList();
                         if (contentList.size() > 0) {
                             noDataLine.setVisibility(View.GONE);
                             lineChart.setVisibility(View.VISIBLE);
@@ -338,6 +326,33 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                             noDataLine.setVisibility(View.VISIBLE);
                             lineChart.setVisibility(View.GONE);
                         }
+                    }
+                });
+    }
+
+    private void getDeviceContentPage(String dataTypeCode, String beginDate, String endDate, int type) {//type:1代表刷新2代表加载
+        EasyHttp.get(this)
+                .api(new DeviceContentPageApi(equipmentBindId, dataTypeCode, beginDate, endDate, pageNum, pageSize))
+                .request(new HttpCallback<HttpData<DeviceContentPageApi.Bean>>(this) {
+
+                    @Override
+                    public void onSucceed(HttpData<DeviceContentPageApi.Bean> result) {
+                        if (type == 1) {
+                            rightList.clear();
+                            refreshLayout.finishRefresh();
+                            if (result.getData().getRecordList().size() == 0) {
+                                noData.setVisibility(View.VISIBLE);
+                            } else {
+                                noData.setVisibility(View.GONE);
+                                rightList = result.getData().getRecordList();
+                            }
+                        } else {
+                            refreshLayout.finishLoadMore();
+                            if (result.getData().getRecordList().size() > 0) {
+                                rightList.addAll(result.getData().getRecordList());
+                            }
+                        }
+                        adapter.setList(rightList);
                     }
                 });
     }

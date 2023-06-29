@@ -9,7 +9,7 @@
         android:id="@+id/rl_success"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <RelativeLayout
             android:id="@+id/rl_top"
@@ -196,37 +196,30 @@
 
                 </LinearLayout>
 
-                <!--            <com.scwang.smart.refresh.layout.SmartRefreshLayout-->
-                <!--                android:id="@+id/refreshLayout"-->
-                <!--                android:layout_width="match_parent"-->
-                <!--                android:layout_height="wrap_content"-->
-                <!--                android:visibility="visible"-->
-                <!--                android:layout_above="@id/ln_bottom"-->
-                <!--                android:layout_below="@id/second_tab"-->
-                <!--                android:layout_marginTop="10dp">-->
-
-                <!--                <com.scwang.smart.refresh.header.ClassicsHeader-->
-                <!--                    android:layout_width="match_parent"-->
-                <!--                    android:layout_height="wrap_content" />-->
-
-                <!--                <androidx.recyclerview.widget.RecyclerView-->
-                <!--                    android:id="@+id/rv_content"-->
-                <!--                    android:layout_width="match_parent"-->
-                <!--                    android:layout_height="match_parent"-->
-                <!--                    android:overScrollMode="never" />-->
-
-                <!--                <com.scwang.smart.refresh.footer.ClassicsFooter-->
-                <!--                    android:layout_width="match_parent"-->
-                <!--                    android:layout_height="wrap_content" />-->
-
-                <!--            </com.scwang.smart.refresh.layout.SmartRefreshLayout>-->
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_content"
+                <com.scwang.smart.refresh.layout.SmartRefreshLayout
+                    android:id="@+id/refreshLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_10"
-                    android:overScrollMode="never" />
+                    android:layout_above="@id/ln_bottom"
+                    android:layout_below="@id/second_tab"
+                    android:layout_marginTop="10dp"
+                    android:visibility="visible">
+
+                    <com.scwang.smart.refresh.header.ClassicsHeader
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:overScrollMode="never" />
+
+                    <com.scwang.smart.refresh.footer.ClassicsFooter
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 
                 <RelativeLayout
                     android:id="@+id/rl_no_data"
@@ -259,9 +252,9 @@
 
     <RelativeLayout
         android:id="@+id/rl_fail"
-        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
         <RelativeLayout
             android:id="@+id/rl_top1"
@@ -337,8 +330,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_10"
                 android:layout_marginLeft="@dimen/dp_50"
+                android:layout_marginTop="@dimen/dp_10"
                 android:layout_marginRight="@dimen/dp_50"
                 android:background="@drawable/back_bg"
                 android:gravity="center"
@@ -368,9 +361,9 @@
                         android:textSize="@dimen/sp_20" />
 
                     <ImageView
-                        android:layout_marginTop="@dimen/dp_10"
                         android:layout_width="@dimen/dp_280"
                         android:layout_height="@dimen/dp_130"
+                        android:layout_marginTop="@dimen/dp_10"
                         android:src="@mipmap/no_sign_alert" />
 
 
@@ -420,9 +413,9 @@
 
                     <LinearLayout
                         android:layout_width="wrap_content"
-                        android:orientation="horizontal"
+                        android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:layout_height="wrap_content">
+                        android:orientation="horizontal">
 
                         <ImageView
                             android:id="@+id/iv_qr"
@@ -436,8 +429,8 @@
                             android:id="@+id/tv_nobind"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="服务包次数用尽"
                             android:layout_marginLeft="@dimen/dp_10"
+                            android:text="服务包次数用尽"
                             android:textColor="@color/black"
                             android:textSize="@dimen/sp_20" />
 

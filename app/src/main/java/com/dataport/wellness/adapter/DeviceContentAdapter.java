@@ -12,20 +12,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dataport.wellness.R;
 import com.dataport.wellness.api.health.DeviceContentApi;
+import com.dataport.wellness.api.health.DeviceContentPageApi;
 
 import java.util.List;
 
 public class DeviceContentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
-    private List<DeviceContentApi.Bean.ListDTO> list;
+    private List<DeviceContentPageApi.Bean.RecordListDTO> list;
     private OnItemClickListener listener;
 
     public DeviceContentAdapter(Context context) {
         this.context = context;
     }
 
-    public void setList(List<DeviceContentApi.Bean.ListDTO> list) {
+    public void setList(List<DeviceContentPageApi.Bean.RecordListDTO> list) {
         this.list = list;
         notifyDataSetChanged();
     }
@@ -59,7 +60,7 @@ public class DeviceContentAdapter extends RecyclerView.Adapter<RecyclerView.View
             contentHolder.bpm.setText("脉率 " + list.get(position).getBpm() + " 次/分");
             if (list.get(position).getPharmacySituation().equals("1")) {//用药前
                 contentHolder.equipmentName.setText("用药前");
-            } else {
+            } else if (list.get(position).getPharmacySituation().equals("2")){
                 contentHolder.equipmentName.setText("用药后");
             }
         } else {
@@ -71,7 +72,7 @@ public class DeviceContentAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     public interface OnItemClickListener {
-        void onItemClick(DeviceContentApi.Bean.ListDTO data, int pos);
+        void onItemClick(DeviceContentPageApi.Bean.RecordListDTO data, int pos);
     }
 
     @Override

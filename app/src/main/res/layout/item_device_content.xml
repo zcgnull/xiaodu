@@ -17,14 +17,12 @@
             android:id="@+id/tv_time"
             android:layout_width="wrap_content"
             android:textColor="@color/gray"
-            android:text="2023-03-22"
             android:textSize="@dimen/sp_18"
             android:layout_height="wrap_content"/>
 
         <TextView
             android:id="@+id/tv_type"
             android:layout_width="wrap_content"
-            android:text="手动录入"
             android:textSize="@dimen/sp_18"
             android:textColor="@color/colorBule"
             android:layout_alignParentRight="true"
@@ -44,7 +42,6 @@
             android:layout_weight="1"
             android:textColor="@color/black"
             android:gravity="center"
-            android:text="收缩压 120 mmHg"
             android:textSize="@dimen/sp_20"
             android:layout_height="wrap_content"/>
 
@@ -52,7 +49,6 @@
             android:id="@+id/dbp"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:text="舒张压 80 mmHg"
             android:gravity="center"
             android:textSize="@dimen/sp_20"
             android:textColor="@color/black"
@@ -75,7 +71,6 @@
             android:layout_weight="1"
             android:textColor="@color/black"
             android:gravity="center"
-            android:text="脉率 60 次/分"
             android:textSize="@dimen/sp_20"
             android:layout_height="wrap_content"/>
 
@@ -83,7 +78,6 @@
             android:id="@+id/equipmentName"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:text="设备号"
             android:gravity="center"
             android:textSize="@dimen/sp_20"
             android:textColor="@color/black"

@@ -52,7 +52,7 @@ public class DeviceContentApi implements IRequestApi, IRequestServer {
             private String equipmentNo;
             private String equipmentName;
             private int equipmentBindId;
-            private int binderId;
+            private long binderId;
             private String dbp;
             private String sbp;
             private String bpm;
@@ -87,11 +87,11 @@ public class DeviceContentApi implements IRequestApi, IRequestServer {
                 this.equipmentBindId = equipmentBindId;
             }
 
-            public int getBinderId() {
+            public long getBinderId() {
                 return binderId;
             }
 
-            public void setBinderId(int binderId) {
+            public void setBinderId(long binderId) {
                 this.binderId = binderId;
             }
 

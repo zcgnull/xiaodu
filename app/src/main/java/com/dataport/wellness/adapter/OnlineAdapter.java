@@ -79,9 +79,13 @@ public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         contentHolder.item.setOnClickListener(v -> listener.onItemClick(list.get(position), position));
         if (list.get(position).isStartVoice()){
             contentHolder.yy.setVisibility(View.VISIBLE);
+        } else {
+            contentHolder.yy.setVisibility(View.GONE);
         }
         if (list.get(position).isStartVideo()){
             contentHolder.sp.setVisibility(View.VISIBLE);
+        } else {
+            contentHolder.sp.setVisibility(View.GONE);
         }
         contentHolder.yy.setOnClickListener(v -> yyClickListener.onyyClickListener(list.get(position), position));
         contentHolder.sp.setOnClickListener(v -> spClickListener.onspClickListener(list.get(position), position));
