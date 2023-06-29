@@ -13,7 +13,6 @@ import com.dataport.wellness.botsdk.BotMessageListener;
 import com.dataport.wellness.botsdk.BotSDKUtils;
 import com.dataport.wellness.http.RequestHandler;
 import com.dataport.wellness.http.RequestServer;
-import com.dataport.wellness.http.SSLSocketClient;
 import com.dataport.wellness.http.glide.GlideApp;
 import com.dataport.wellness.utils.BotConstants;
 import com.dataport.wellness.utils.ContextUtil;
@@ -71,8 +70,6 @@ public class BotsdkApplication extends Application {
         registerActivityLifecycleCallbacks(new ActivityContollor());
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .sslSocketFactory(SSLSocketClient.getSSLSocketFactory(), SSLSocketClient.getX509TrustManager())
-                .hostnameVerifier(SSLSocketClient.getHostnameVerifier())
                 .build();
 
         EasyConfig.with(okHttpClient)

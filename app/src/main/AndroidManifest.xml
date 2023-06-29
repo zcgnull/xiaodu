@@ -22,8 +22,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        tools:replace="allowBackup"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
+        tools:replace="allowBackup">
 
         <!--        >-->
 
@@ -74,6 +75,9 @@
             android:screenOrientation="landscape" />
         <activity
             android:name=".activity.OnLineRecordActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".activity.SpeechActivity"
             android:screenOrientation="landscape" />
     </application>
 

@@ -134,22 +134,56 @@
                     android:layout_marginTop="@dimen/dp_10"
                     android:orientation="horizontal">
 
-                    <Button
+                    <LinearLayout
                         android:id="@+id/btn_yy"
-                        android:layout_width="@dimen/dp_120"
-                        android:layout_height="@dimen/dp_40"
-                        android:background="@drawable/btn_bg"
-                        android:text="语音咨询"
-                        android:textColor="@color/white" />
+                        android:layout_width="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:padding="@dimen/dp_10"
+                        android:background="@drawable/btn_bg_green"
+                        android:layout_height="wrap_content">
 
-                    <Button
+                        <ImageView
+                            android:layout_width="@dimen/dp_30"
+                            android:src="@mipmap/yy"
+                            android:layout_height="@dimen/dp_30"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:text="语音咨询"
+                            android:layout_marginLeft="@dimen/dp_5"
+                            android:layout_marginRight="@dimen/dp_5"
+                            android:textSize="@dimen/sp_19"
+                            android:textColor="@color/white"
+                            android:layout_height="wrap_content"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:id="@+id/btn_sp"
-                        android:layout_width="@dimen/dp_120"
-                        android:layout_height="@dimen/dp_40"
+                        android:layout_width="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
                         android:layout_marginLeft="@dimen/dp_10"
+                        android:padding="@dimen/dp_10"
                         android:background="@drawable/btn_bg"
-                        android:text="视频咨询"
-                        android:textColor="@color/white" />
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_width="@dimen/dp_30"
+                            android:src="@mipmap/sp"
+                            android:layout_height="@dimen/dp_30"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:text="视频咨询"
+                            android:layout_marginLeft="@dimen/dp_5"
+                            android:layout_marginRight="@dimen/dp_5"
+                            android:textSize="@dimen/sp_19"
+                            android:textColor="@color/white"
+                            android:layout_height="wrap_content"/>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 

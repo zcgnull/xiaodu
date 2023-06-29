@@ -25,9 +25,9 @@ public class OnlineRecordApi implements IRequestApi, IRequestServer {
 
     private Integer pageNo;//页码 一开始
     private Integer pageSize;//每页条数
-    private Integer binderId;
+    private long binderId;
 
-    public OnlineRecordApi(Integer binderId,Integer pageNo, Integer pageSize) {
+    public OnlineRecordApi(long binderId,Integer pageNo, Integer pageSize) {
         this.pageNo = pageNo;
         this.pageSize = pageSize;
         this.binderId = binderId;

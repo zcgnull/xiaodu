@@ -4,7 +4,9 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -16,6 +18,8 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
 import com.dataport.wellness.R;
 import com.dataport.wellness.api.health.OnlineDoctorApi;
+import com.dataport.wellness.api.health.OnlineDoctorV2Api;
+import com.dataport.wellness.api.health.OnlineRecordApi;
 import com.dataport.wellness.api.old.QueryCommodityApi;
 import com.dataport.wellness.http.glide.GlideApp;
 
@@ -24,20 +28,30 @@ import java.util.List;
 public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     private Context context;
-    private List<OnlineDoctorApi.Bean.DoctorListDTO> list;
+    private List<OnlineDoctorV2Api.Bean.DoctorListDTO> list;
     private OnItemClickListener listener;
+    private yyClickListener yyClickListener;
+    private spClickListener spClickListener;
 
     public OnlineAdapter(Context context) {
         this.context = context;
     }
 
-    public void setList(List<OnlineDoctorApi.Bean.DoctorListDTO> list) {
+    public void setList(List<OnlineDoctorV2Api.Bean.DoctorListDTO> list) {
         this.list = list;
         notifyDataSetChanged();
     }
 
     public void setListener(OnItemClickListener listener){
         this.listener = listener;
+    }
+
+    public void setYyClickListener(yyClickListener listener){
+        this.yyClickListener = listener;
+    }
+
+    public void setSpClickListener(spClickListener listener){
+        this.spClickListener = listener;
     }
 
     @NonNull
@@ -63,10 +77,26 @@ public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 .transform(new RoundedCorners((int) context.getResources().getDimension(R.dimen.dp_10)))
                 .into(contentHolder.icon);
         contentHolder.item.setOnClickListener(v -> listener.onItemClick(list.get(position), position));
+        if (list.get(position).isStartVoice()){
+            contentHolder.yy.setVisibility(View.VISIBLE);
+        }
+        if (list.get(position).isStartVideo()){
+            contentHolder.sp.setVisibility(View.VISIBLE);
+        }
+        contentHolder.yy.setOnClickListener(v -> yyClickListener.onyyClickListener(list.get(position), position));
+        contentHolder.sp.setOnClickListener(v -> spClickListener.onspClickListener(list.get(position), position));
     }
 
     public interface OnItemClickListener{
-        void onItemClick(OnlineDoctorApi.Bean.DoctorListDTO data, int pos);
+        void onItemClick(OnlineDoctorV2Api.Bean.DoctorListDTO data, int pos);
+    }
+
+    public interface yyClickListener {
+        void onyyClickListener(OnlineDoctorV2Api.Bean.DoctorListDTO data, int pos);
+    }
+
+    public interface spClickListener {
+        void onspClickListener(OnlineDoctorV2Api.Bean.DoctorListDTO data, int pos);
     }
 
     @Override
@@ -81,7 +111,9 @@ public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         public TextView company;
         public TextView index;
         public ImageView icon;
-        private RelativeLayout item;
+        public RelativeLayout item;
+        public LinearLayout yy, sp;
+
 
         public ContentHolder(View itemView) {
             super(itemView);
@@ -92,6 +124,8 @@ public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             index = itemView.findViewById(R.id.tv_index);
             icon = itemView.findViewById(R.id.iv_doctor);
             item = itemView.findViewById(R.id.rv_item);
+            yy = itemView.findViewById(R.id.btn_yy);
+            sp = itemView.findViewById(R.id.btn_sp);
         }
     }
 }

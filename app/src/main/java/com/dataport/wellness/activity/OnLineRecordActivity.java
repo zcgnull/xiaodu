@@ -48,7 +48,7 @@ public class OnLineRecordActivity extends BaseActivity implements IBotIntentCall
     private RelativeLayout noData;
     private RecyclerView contentRv;
 
-    private int binderId;
+    private long binderId;
     private int pageNum = 0;
     private int pageSize = 10;
     private int delay = 0;
@@ -63,7 +63,7 @@ public class OnLineRecordActivity extends BaseActivity implements IBotIntentCall
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record_list);
-        binderId = getIntent().getIntExtra("binderId", 0);
+        binderId = getIntent().getLongExtra("binderId", 0);
         findViewById(R.id.ln_back).setOnClickListener(v -> finish());
         noData = findViewById(R.id.rl_no_data);
         refreshLayout = findViewById(R.id.refreshLayout);
@@ -153,7 +153,7 @@ public class OnLineRecordActivity extends BaseActivity implements IBotIntentCall
                 });
     }
 
-    private void getIMLogin(int binderId, long doctorId) {
+    private void getIMLogin(long binderId, long doctorId) {
         EasyHttp.get(this)
                 .api(new IMLoginApi(binderId, doctorId))
                 .request(new HttpCallback<HttpData<IMLoginApi.Bean>>(this) {

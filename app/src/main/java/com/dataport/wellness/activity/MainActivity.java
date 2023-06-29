@@ -1,7 +1,11 @@
 package com.dataport.wellness.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,8 +17,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.baidu.duer.bot.BotMessageProtocol;
 import com.baidu.duer.bot.directive.payload.JsonUtil;
 import com.baidu.duer.bot.event.payload.LinkClickedEventPayload;
@@ -44,7 +46,9 @@ import com.hjq.http.model.HttpParams;
 import com.hjq.http.request.HttpRequest;
 import com.sunfusheng.marqueeview.MarqueeView;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -61,6 +65,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private String binderIdCard;
     private String location;
     private List<QueryBinderApi.Bean.ListDTO> binderList = new ArrayList<>();
+
+    private boolean timeFlag = false;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -92,16 +99,29 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         marqueeView = findViewById(R.id.marqueeView);
 
         tvDate.setText(TimeUtil.getInstance().getMainDate());
-        tvTime.setText(TimeUtil.getInstance().getMainTime());
+//        tvTime.setText(TimeUtil.getInstance().getMainTime());
 
         //获取deviceId,apiAccesstoken,用于向后台获取设备sn
-        if (getIntent().getStringExtra("device") != null) {
-            JSONObject jsonObject = JSON.parseObject(getIntent().getStringExtra("device"));
-            String deviceId = (String) jsonObject.get("deviceId");
-            String apiAccesstoken = getIntent().getStringExtra("apiAccesstoken");
-            getDeviceInfo(deviceId, apiAccesstoken);
+//        if (getIntent().getStringExtra("device") != null) {
+//            JSONObject jsonObject = JSON.parseObject(getIntent().getStringExtra("device"));
+//            String deviceId = (String) jsonObject.get("deviceId");
+//            String apiAccesstoken = getIntent().getStringExtra("apiAccesstoken");
+//        }
+//        Log.d(TAG, "onCreate: " + Build.SERIAL);
+        try {
+            Field serialField = Build.class.getDeclaredField("SERIAL");
+            // 将字段设置为可访问，以便反射调用
+            serialField.setAccessible(true);
+            // 获取SERIAL字段的值
+            String serialNumber = (String) serialField.get(null);
+            // 输出SERIAL号
+            Log.d("Serial Number", "Serial Number: " + serialNumber);
+            getDeviceInfo(serialNumber);
+//            getToken(serialNumber);
+//            getDeviceToken("1", true, "950745EAV663360209E9");
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            Toast.makeText(this, "获取本机SN失败", Toast.LENGTH_LONG).show();
         }
-//        getDeviceToken("1", true, "950745EAV663360209E9");
         List<String> messages = new ArrayList<>();
         messages.add("请试试对我说：“小度小度，打开服务订购”");
         messages.add("请试试对我说：“小度小度，打开健康监测”");
@@ -114,23 +134,40 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
             BotSdk.getInstance().speakRequest(messages.get(position));
         });
+
     }
 
-    private void getDeviceInfo(String deviceId, String apiAccesstoken) {
-        EasyHttp.get(this)
-                .api(new DeviceInfoApi(deviceId, apiAccesstoken))
-                .request(new HttpCallback<HttpIntData<DeviceInfoApi.Bean>>(this) {
+    private void getDeviceInfo(String sn) {
+        try {
+            EasyHttp.get(this)
+                    .api(new DeviceInfoApi(sn))
+                    .request(new HttpCallback<HttpIntData<DeviceInfoApi.Bean>>(this) {
 
-                    @Override
-                    public void onSucceed(HttpIntData<DeviceInfoApi.Bean> result) {
-                        if (result.getCode() == 0) {
-                            long tenantId = result.getData().isInWarehouse() ? result.getData().getTenantId() : 1;
-                            getDeviceToken(String.valueOf(tenantId), result.getData().isInWarehouse(), result.getData().getSn());
-                        } else {
-                            Toast.makeText(MainActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
+                        @Override
+                        public void onSucceed(HttpIntData<DeviceInfoApi.Bean> result) {
+                            if (result.getCode() == 0) {
+                                SharedPreferences sharedPreferences = getSharedPreferences("XD", MODE_PRIVATE);
+                                String token = sharedPreferences.getString("XD_TOKEN", null);
+                                Log.d(TAG, "SharedPreferencesToken: " + token);
+                                if (null == token) {
+                                    long tenantId = result.getData().isInWarehouse() ? result.getData().getTenantId() : 1;
+                                    getDeviceToken(String.valueOf(tenantId), result.getData().isInWarehouse(), result.getData().getSn());
+                                } else {
+                                    BotConstants.DEVICE_TOKEN = token;
+                                    if (!result.getData().isInWarehouse()) {//未授权
+                                        getGuideData("noAuth");
+                                    } else {
+                                        getToken(result.getData().getSn());
+                                    }
+                                }
+                            } else {
+                                Toast.makeText(MainActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
+                    });
+        } catch (Exception e) {
+            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
+        }
     }
 
     private void getDeviceToken(String tenantId, boolean inWarehouse, String sn) {
@@ -149,6 +186,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     public void onSucceed(HttpIntData<DeviceTokenApi.Bean> result) {
                         if (result.getCode() == 0) {
                             BotConstants.DEVICE_TOKEN = "Bearer " + result.getData().getAccess_token();
+                            SharedPreferences preferences = getSharedPreferences("XD", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putString("XD_TOKEN", BotConstants.DEVICE_TOKEN);
+                            editor.commit();
                             if (!inWarehouse) {//未授权
                                 getGuideData("noAuth");
                             } else {
@@ -242,6 +283,33 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                                 tvNoAuth.setText(result.getData().getSteerDesc());
                                 BotSdk.getInstance().speakRequest("您的设备未授权使用康养管家，康养管家功能介绍，" + result.getData().getSteerDesc());
                             }
+                        } else if (result.getCode() == 401 || result.getCode() == 403) {
+                            refreshToken(steerType);
+                        }
+                    }
+                });
+    }
+
+    private void refreshToken(String steerType) {
+        EasyHttp.post(this)
+                .interceptor(new IRequestInterceptor() {
+                    @Override
+                    public void interceptArguments(@NonNull HttpRequest<?> httpRequest, @NonNull HttpParams params, @NonNull HttpHeaders headers) {
+                        headers.put("tenant-id", BotConstants.TENANT_ID);
+                    }
+                })
+                .api(new DeviceTokenApi("client_credentials", "", "dueros_client", "Mqd7Wk9WRmUHBRyMj3Twz4jUeJ"))
+                .request(new HttpCallback<HttpIntData<DeviceTokenApi.Bean>>(this) {
+
+                    @Override
+                    public void onSucceed(HttpIntData<DeviceTokenApi.Bean> result) {
+                        if (result.getCode() == 0) {
+                            BotConstants.DEVICE_TOKEN = "Bearer " + result.getData().getAccess_token();
+                            SharedPreferences preferences = getSharedPreferences("XD", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putString("XD_TOKEN", BotConstants.DEVICE_TOKEN);
+                            editor.commit();
+                            getGuideData(steerType);
                         }
                     }
                 });
@@ -264,6 +332,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 break;
             case R.id.ln_device:
                 intent = new Intent(this, DeviceActivity.class);
+//                intent = new Intent(this, SpeechActivity.class);
                 intent.putExtra("binderId", binderId);
                 startActivity(intent);
                 break;
@@ -389,11 +458,47 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     }
 
+
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            if (msg.what == 0) {
+                Calendar instance = Calendar.getInstance();
+                int hour = instance.get(Calendar.HOUR_OF_DAY);
+                int minute = instance.get(Calendar.MINUTE);
+                int second = instance.get(Calendar.SECOND);
+                if (second < 10) {
+                    tvTime.setText(hour + ":" + minute + ":0" + second);
+                } else {
+                    tvTime.setText(hour + ":" + minute + ":" + second);
+                }
+            }
+        }
+    };
+
+
     @Override
     protected void onResume() {
         super.onResume();
         BotMessageListener.getInstance().addCallback(this);
         Log.d(TAG, "handleIntent: onResume");
+        timeFlag = true;
+        new Thread() {
+            @Override
+            public void run() {
+                while (timeFlag) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    Message msg = new Message();
+                    msg.what = 0;  //消息(一个整型值)
+                    handler.sendMessage(msg);// 每隔1秒发送一个msg给mHandler
+                }
+            }
+        }.start();
+
     }
 
     @Override
@@ -401,6 +506,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         super.onPause();
         BotMessageListener.getInstance().clearCallback();
         Log.d(TAG, "handleIntent: onPause");
+        timeFlag = false;
     }
 
     @Override
@@ -408,5 +514,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         super.onDestroy();
         Log.d(TAG, "handleIntent: onDestroy");
         BotMessageListener.getInstance().removeCallback(this);
+        timeFlag = false;
     }
 }

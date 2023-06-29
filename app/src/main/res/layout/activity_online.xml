@@ -10,7 +10,7 @@
         android:id="@+id/rl_success"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <RelativeLayout
             android:id="@+id/rl_top"
@@ -84,6 +84,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/rl_top"
             android:paddingLeft="20dp"
+            android:visibility="gone"
             android:paddingRight="20dp">
 
             <!--        <androidx.recyclerview.widget.RecyclerView-->
@@ -109,7 +110,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@id/ln_bottom"
-            android:layout_below="@id/rl_tab"
+            android:layout_below="@id/rl_top"
             android:layout_marginTop="10dp">
 
             <com.scwang.smart.refresh.header.ClassicsHeader
@@ -150,7 +151,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/iv_no_data"
                 android:layout_centerHorizontal="true"
-                android:text="暂无数据"
+                android:text="暂无在线医生"
                 android:textColor="#333"
                 android:textSize="24sp" />
         </RelativeLayout>

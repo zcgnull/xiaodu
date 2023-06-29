@@ -13,7 +13,7 @@ public class DeviceInfoApi  implements IRequestApi, IRequestServer {
     @NonNull
     @Override
     public String getApi() {
-        return "app-api/dueros/device-warehouse/parse-device-info";
+        return "app-api/dueros/device-warehouse/V1/parse-device-info";
     }
 
     @NonNull
@@ -22,12 +22,10 @@ public class DeviceInfoApi  implements IRequestApi, IRequestServer {
         return BotConstants.XD_URL;
     }
 
-    private String deviceId;
-    private String apiAccessToken;
+    private String sn;
 
-    public DeviceInfoApi(String deviceId, String apiAccessToken) {
-        this.deviceId = deviceId;
-        this.apiAccessToken = apiAccessToken;
+    public DeviceInfoApi(String sn) {
+        this.sn = sn;
     }
 
     public static class Bean implements Serializable {

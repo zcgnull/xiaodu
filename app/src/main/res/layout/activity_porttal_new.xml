@@ -74,8 +74,9 @@
                 android:layout_marginLeft="@dimen/dp_20"
                 android:layout_marginRight="@dimen/dp_20"
                 android:layout_toStartOf="@id/rl_weather"
+                android:textStyle="bold"
                 android:textColor="@color/black"
-                android:textSize="@dimen/sp_20" />
+                android:textSize="@dimen/sp_22" />
 
             <RelativeLayout
                 android:id="@+id/rl_date"
@@ -90,7 +91,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/sp_20"
+                    android:textSize="@dimen/sp_22"
                     android:textStyle="bold" />
 
                 <TextView
@@ -99,7 +100,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tv_time"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/sp_18" />
+                    android:textStyle="bold"
+                    android:textSize="@dimen/sp_20" />
 
             </RelativeLayout>
 
@@ -117,7 +119,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/sp_20"
+                    android:textSize="@dimen/sp_22"
                     android:textStyle="bold" />
 
                 <TextView
@@ -126,7 +128,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tv_weather"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/sp_18" />
+                    android:textStyle="bold"
+                    android:textSize="@dimen/sp_20" />
 
             </RelativeLayout>
 
