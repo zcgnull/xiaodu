@@ -10,7 +10,7 @@
 
     <style name="StartTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="android:windowBackground">@mipmap/bg</item>
+        <item name="android:windowBackground">@mipmap/start</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:navigationBarColor">@color/transparent</item>
     </style>

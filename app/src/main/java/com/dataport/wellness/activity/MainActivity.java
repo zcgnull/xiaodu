@@ -58,14 +58,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private LinearLayout lnBinder, lnService;
     private MarqueeView marqueeView;
     private TextView tvBinder, tvWeather, tvC, tvTime, tvDate, tvPlace, tvNoBind, tvNoAuth;
-    private RelativeLayout rlSuccess, rlFail, rlFailSecond;
+    private RelativeLayout rlSuccess, rlFail, rlFailSecond,mainBg;
     private ImageView ivQr;
 
     private long binderId;
     private String binderIdCard;
     private String location;
     private List<QueryBinderApi.Bean.ListDTO> binderList = new ArrayList<>();
-
     private boolean timeFlag = false;
 
 
@@ -74,6 +73,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         super.onCreate(savedInstanceState);
         setTheme(R.style.AppTheme); // 设置为原主题
         setContentView(R.layout.activity_porttal_new);
+        mainBg = findViewById(R.id.main_bg);
         rlSuccess = findViewById(R.id.rl_success);
         rlFail = findViewById(R.id.rl_fail);
         rlFailSecond = findViewById(R.id.rl_fail1);
@@ -146,6 +146,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                         @Override
                         public void onSucceed(HttpIntData<DeviceInfoApi.Bean> result) {
                             if (result.getCode() == 0) {
+                                mainBg.setBackgroundResource(R.mipmap.bg);
                                 SharedPreferences sharedPreferences = getSharedPreferences("XD", MODE_PRIVATE);
                                 String token = sharedPreferences.getString("XD_TOKEN", null);
                                 Log.d(TAG, "SharedPreferencesToken: " + token);
