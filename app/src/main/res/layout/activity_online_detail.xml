@@ -136,6 +136,7 @@
 
                     <LinearLayout
                         android:id="@+id/btn_yy"
+                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center"
@@ -161,6 +162,7 @@
 
                     <LinearLayout
                         android:id="@+id/btn_sp"
+                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center"

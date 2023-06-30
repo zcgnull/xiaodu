@@ -21,3 +21,4 @@
 #-renamesourcefileattribute SourceFile
 -keep class com.baidu.duer.** {*;}
 -keep class com.tencent.** { *; }
+-keep class com.baidu.speech.**{*;}

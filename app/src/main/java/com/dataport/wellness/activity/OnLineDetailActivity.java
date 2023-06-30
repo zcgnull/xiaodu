@@ -2,6 +2,7 @@ package com.dataport.wellness.activity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -100,6 +101,12 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
         yy = findViewById(R.id.btn_yy);
         sp = findViewById(R.id.btn_sp);
         content = findViewById(R.id.tv_context);
+        if (data.isStartVoice()){
+            yy.setVisibility(View.VISIBLE);
+        }
+        if (data.isStartVideo()){
+            sp.setVisibility(View.VISIBLE);
+        }
     }
 
     private void initData() {

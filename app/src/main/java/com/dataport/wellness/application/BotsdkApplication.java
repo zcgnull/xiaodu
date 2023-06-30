@@ -22,8 +22,6 @@ import com.hjq.http.config.IRequestInterceptor;
 import com.hjq.http.model.HttpHeaders;
 import com.hjq.http.model.HttpParams;
 import com.hjq.http.request.HttpRequest;
-import com.hjq.http.ssl.HttpSslConfig;
-import com.hjq.http.ssl.HttpSslFactory;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -71,7 +69,7 @@ public class BotsdkApplication extends Application {
         // BotSdk.getInstance().register(BotMessageListener.getInstance(), BotConstants.BOTID, BotSDKUtils.getAppKey());
 
         registerActivityLifecycleCallbacks(new ActivityContollor());
-        HttpSslConfig  sslConfig= HttpSslFactory.generateSslConfig();
+
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .sslSocketFactory(SSLSocketClient.getSSLSocketFactory(),SSLSocketClient.platformTrustManager())
                 .hostnameVerifier((hostname, session) -> SSLSocketClient.hostnameVerifier(hostname,session))
