@@ -75,7 +75,7 @@ public class BaseActivity extends AppCompatActivity implements OnHttpListener<Ob
 
     @Override
     public void onStart(Call call) {
-//        showDialog();
+        showDialog();
     }
 
     @Override
@@ -92,7 +92,7 @@ public class BaseActivity extends AppCompatActivity implements OnHttpListener<Ob
 
     @Override
     public void onEnd(Call call) {
-//        hideDialog();
+        hideDialog();
     }
 
     public static void setAndroidNativeLightStatusBar(Activity activity, boolean dark) {
