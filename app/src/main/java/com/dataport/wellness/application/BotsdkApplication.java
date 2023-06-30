@@ -13,6 +13,7 @@ import com.dataport.wellness.botsdk.BotMessageListener;
 import com.dataport.wellness.botsdk.BotSDKUtils;
 import com.dataport.wellness.http.RequestHandler;
 import com.dataport.wellness.http.RequestServer;
+import com.dataport.wellness.http.SSLSocketClient;
 import com.dataport.wellness.http.glide.GlideApp;
 import com.dataport.wellness.utils.BotConstants;
 import com.dataport.wellness.utils.ContextUtil;
@@ -21,6 +22,8 @@ import com.hjq.http.config.IRequestInterceptor;
 import com.hjq.http.model.HttpHeaders;
 import com.hjq.http.model.HttpParams;
 import com.hjq.http.request.HttpRequest;
+import com.hjq.http.ssl.HttpSslConfig;
+import com.hjq.http.ssl.HttpSslFactory;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -68,8 +71,10 @@ public class BotsdkApplication extends Application {
         // BotSdk.getInstance().register(BotMessageListener.getInstance(), BotConstants.BOTID, BotSDKUtils.getAppKey());
 
         registerActivityLifecycleCallbacks(new ActivityContollor());
-
+        HttpSslConfig  sslConfig= HttpSslFactory.generateSslConfig();
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .sslSocketFactory(SSLSocketClient.getSSLSocketFactory(),SSLSocketClient.platformTrustManager())
+                .hostnameVerifier((hostname, session) -> SSLSocketClient.hostnameVerifier(hostname,session))
                 .build();
 
         EasyConfig.with(okHttpClient)
