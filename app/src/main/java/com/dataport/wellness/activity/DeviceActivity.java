@@ -91,6 +91,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                 tabView.setBackground(getResources().getDrawable(R.drawable.service_tab_bg));
                 tabView.setTextColor(getResources().getColor(R.color.colorWhite));
                 dataTypeCode = signTabs.get(tab.getPosition()).getDataTypeCode();
+                pageNum = 0;
                 getEquipmentList(binderId, dataTypeCode);
                 if (dataTypeCode.equals("1")) {
                     qs.setText("血压趋势");
