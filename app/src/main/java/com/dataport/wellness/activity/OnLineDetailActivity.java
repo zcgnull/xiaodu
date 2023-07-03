@@ -294,6 +294,7 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
     protected void onPause() {
         super.onPause();
         BotMessageListener.getInstance().clearCallback();
+        observer = null;
     }
 
 }

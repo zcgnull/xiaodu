@@ -60,13 +60,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private TextView tvBinder, tvWeather, tvC, tvTime, tvDate, tvPlace, tvNoBind, tvNoAuth;
     private RelativeLayout rlSuccess, rlFail, rlFailSecond,mainBg;
     private ImageView ivQr;
-
     private long binderId;
     private String binderIdCard;
     private String location;
     private List<QueryBinderApi.Bean.ListDTO> binderList = new ArrayList<>();
     private boolean timeFlag = false;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -119,22 +117,22 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             Log.d("Serial Number", "Serial Number: " + serialNumber);
             getDeviceInfo(serialNumber);
 //            getDeviceInfo("950745EAV663360209E9");
+//            getDeviceInfo("8T22041A2926DFA5");
         } catch (NoSuchFieldException | IllegalAccessException e) {
             Toast.makeText(this, "获取本机SN失败", Toast.LENGTH_LONG).show();
         }
         List<String> messages = new ArrayList<>();
-        messages.add("请试试对我说：“小度小度，打开服务订购”");
-        messages.add("请试试对我说：“小度小度，打开健康监测”");
-        messages.add("请试试对我说：“小度小度，打开康养管家”");
-        messages.add("请试试对我说：“小度小度，打开家庭医生”");
-        messages.add("请试试对我说：“小度小度，打开在线咨询”");
-        messages.add("请试试对我说：“小度小度，打开亲友视频”");
+        messages.add("请试试对我说：“小度小度，呼叫家庭医生”");
+        messages.add("请试试对我说：“小度小度，打开线上医生”");
+        messages.add("请试试对我说：“小度小度，打开健康数据”");
+        messages.add("请试试对我说：“小度小度，呼叫服务中心”");
+        messages.add("请试试对我说：“小度小度，打开养老服务”");
+        messages.add("请试试对我说：“小度小度，打开亲朋好友”");
         marqueeView.startWithList(messages);
         marqueeView.setOnItemClickListener((position, textView) -> {
             BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
             BotSdk.getInstance().speakRequest(messages.get(position));
         });
-
     }
 
     private void getDeviceInfo(String sn) {

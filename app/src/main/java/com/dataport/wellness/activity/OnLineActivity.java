@@ -73,13 +73,10 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
     private RecyclerView contentRv;
     private RefreshLayout refreshLayout;
     private RelativeLayout noData, rlSuccess, rlFail;
-
     private MarqueeView marqueeView;
     private TextView noOnline;
     private ImageView ivQr;
-
     private OnlineAdapter onlineAdapter;
-    private List<String> dateTabs = new ArrayList<>();
     private List<OnlineDoctorV2Api.Bean.DoctorListDTO> doctorList = new ArrayList<>();
     private OnlineDoctorV2Api.Bean.DoctorListDTO doctor;
     private int pageNum = 0;
@@ -133,37 +130,6 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
         ivQr = findViewById(R.id.iv_qr);
         tabLayout = findViewById(R.id.first_tab);
         contentRv = findViewById(R.id.rv_content);
-        //        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-//            @Override
-//            public void onTabSelected(TabLayout.Tab tab) {
-//                TextView tabView = tab.getCustomView().findViewById(R.id.item_tv_tab);
-//                tabView.setBackground(getResources().getDrawable(R.drawable.service_tab_bg));
-//                tabView.setTextColor(getResources().getColor(R.color.colorWhite));
-//                pageNum = 0;
-//                if (tab.getPosition() == 0) {
-//                    businessType = "";
-//                    getOnlineDoctor(1);
-//                } else if (tab.getPosition() == 1) {//4语音咨询
-//                    businessType = "4";
-//                    getOnlineDoctor(1);
-//                } else {//5视频咨询
-//                    businessType = "5";
-//                    getOnlineDoctor(1);
-//                }
-//            }
-//
-//            @Override
-//            public void onTabUnselected(TabLayout.Tab tab) {
-//                TextView tabView = tab.getCustomView().findViewById(R.id.item_tv_tab);
-//                tabView.setBackground(getResources().getDrawable(R.drawable.service_selected_tab_bg));
-//                tabView.setTextColor(getResources().getColor(R.color.colorBule));
-//            }
-//
-//            @Override
-//            public void onTabReselected(TabLayout.Tab tab) {
-//
-//            }
-//        });
         refreshLayout = findViewById(R.id.refreshLayout);
         refreshLayout.setOnRefreshListener(refreshlayout -> {
             pageNum = 0;
@@ -199,6 +165,12 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
         public void onCallEnd(TUICommonDefine.RoomId roomId, TUICallDefine.MediaType callMediaType, TUICallDefine.Role callRole, long totalTime) {
             Log.i(TAG, "onCallEnd!");
             turnOff(type);
+        }
+
+        @Override
+        public void onError(int code, String msg) {
+            super.onError(code, msg);
+            Log.i(TAG, "onError!" + code + msg);
         }
 
         public void onUserNetworkQualityChanged(List<TUICommonDefine.NetworkQualityInfo> networkQualityList) {
@@ -306,68 +278,6 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
                 });
     }
 
-    private void getOnlineNum() {
-        EasyHttp.get(this)
-                .api(new OnlineAdviceNumApi(idCard))
-                .request(new HttpCallback<HttpData<OnlineAdviceNumApi.Bean>>(this) {
-
-                    @Override
-                    public void onSucceed(HttpData<OnlineAdviceNumApi.Bean> result) {
-                        if (result.getData().getVioceReamin() == 0 && result.getData().getVideoReamin() == 0) {
-                            getGuideData("noServiceCount");
-                        } else {
-                            rlSuccess.setVisibility(View.VISIBLE);
-                            tabLayout.removeAllTabs();
-                            dateTabs.clear();
-                            dateTabs.add("全部");
-//                        dateTabs.add("语音咨询（剩余" + result.getData().getVioceReamin() + "/" + result.getData().getVioceSum() + "次）");
-//                        dateTabs.add("视频咨询（剩余" + result.getData().getVideoReamin() + "/" + result.getData().getVideoSum() + "次）");
-                            dateTabs.add("语音咨询(" + result.getData().getVioceReamin() + "次)");
-                            dateTabs.add("视频咨询(" + result.getData().getVideoReamin() + "次)");
-                            for (String bean : dateTabs) {
-                                TabLayout.Tab tab = tabLayout.newTab();
-                                View tabView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.item_online_tab, null);
-                                TextView tabText = tabView.findViewById(R.id.item_tv_tab);
-                                tabText.setText(bean);
-                                tab.setCustomView(tabView);
-                                tabLayout.addTab(tab);
-                            }
-                        }
-                    }
-                });
-    }
-
-//    private void getOnlineDoctor(int type) {//type:1代表刷新2代表加载
-//        EasyHttp.get(this)
-//                .api(new OnlineDoctorApi(businessType, pageNum, pageSize))
-//                .request(new HttpCallback<HttpData<OnlineDoctorApi.Bean>>(this) {
-//
-//                    @Override
-//                    public void onSucceed(HttpData<OnlineDoctorApi.Bean> result) {
-//                        if (type == 1) {
-//                            doctorList.clear();
-//                            refreshLayout.finishRefresh();
-//                            if (result.getData().getDoctorList().size() == 0) {
-//                                noData.setVisibility(View.VISIBLE);
-//                            } else {
-//                                noData.setVisibility(View.GONE);
-//                                doctorList = result.getData().getDoctorList();
-//                            }
-//                        } else {
-//                            refreshLayout.finishLoadMore();
-//                            if (result.getData().getDoctorList().size() == 0) {
-//                            } else {
-//                                doctorList.addAll(result.getData().getDoctorList());
-//                            }
-//                        }
-//                        onlineAdapter.setList(doctorList);
-//                        if (!isLogin && doctorList.size() > 0) {
-//                            getIMLogin(binderId, doctorList.get(0).getId());
-//                        }
-//                    }
-//                });
-//    }
-
     private void getOnlineDoctor(int type) {//type:1代表刷新2代表加载
         EasyHttp.get(this)
                 .api(new OnlineDoctorV2Api(idCard, pageNum, pageSize))
@@ -404,18 +314,6 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
                 });
     }
 
-    private void getIMParam(long binderId, String doctorId) {
-        EasyHttp.get(this)
-                .api(new IMParamApi(binderId, doctorId))
-                .request(new HttpCallback<HttpData<IMParamApi.Bean>>(this) {
-
-                    @Override
-                    public void onSucceed(HttpData<IMParamApi.Bean> result) {
-
-                    }
-                });
-    }
-
     private void getIMLogin(long binderId, long doctorId) {
         EasyHttp.get(this)
                 .api(new IMLoginApi(binderId, doctorId))
@@ -426,7 +324,6 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
                         if (result.getCode().equals("00000")) {
                             binderTimId = result.getData().getTimBinder().getBinderTimId();
                             loginTUI(result.getData().getTimBinder().getBinderTimId(), result.getData().getTimBinder().getBinderTimUsersig());
-//                            loginTUI("70906b8e1a2da6b5dd25ec81973db37c", "eJw1TksOgjAUvEvXBtoHtIXEhTuNfBJRWQOvQjUoVoJE490loLObb*ZN9mFqqaHVRpFAAB2xmLReGRIQsCiZ*QMvedtqJAFzKeWO60qYHY3q2umTngqC*pQXUrEcMOeFhwieKiXzhYOFI8r-mq7GsNlVxWaIwiSpzdkc12Eq7k093F52V2*zJx76eIWQxZHtLn-FTjfjUcYlBwYSxOcLRDY4rw__");
                         }
                     }
                 });
@@ -488,7 +385,6 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
                         mWaitDialog.dismiss();
                     }
 
-
                     @Override
                     public void onError(int errorCode, String errorMessage) {
                         Log.e(TAG, "login failed, errorCode: " + errorCode + " msg:" + errorMessage);
@@ -530,17 +426,25 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
         Log.d(TAG, "handleIntent: " + intentResult);
         Log.d(TAG, "handleIntentType: " + handleType);
         if ("app_consultation_video".equals(intent.name)) {//视频咨询
-            if (handleType.equals("5")){
+            if (handleType.equals("5")) {
                 handleType = "";
-                getIMDoctor(binderId, doctor.getId(), "4");
+                if (doctor.isStartVideo()) {
+                    getIMDoctor(binderId, doctor.getId(), "4");
+                } else {
+                    BotSdk.getInstance().speakRequest("当前医生不支持视频咨询");
+                }
             } else {
                 handleType = "4";
                 BotSdk.getInstance().speak("请问您想视频咨询第几个医生", true);
             }
         } else if ("app_consultation_audio".equals(intent.name)) {//语音咨询
-            if (handleType.equals("5")){
+            if (handleType.equals("5")) {
                 handleType = "";
-                getIMDoctor(binderId, doctor.getId(), "3");
+                if (doctor.isStartVoice()) {
+                    getIMDoctor(binderId, doctor.getId(), "3");
+                } else {
+                    BotSdk.getInstance().speakRequest("当前医生不支持语音咨询");
+                }
             } else {
                 handleType = "3";
                 BotSdk.getInstance().speak("请问您想语音咨询第几个医生", true);
@@ -549,24 +453,32 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
             if (Integer.parseInt(intent.slots.get(0).value) <= doctorList.size()) {
                 if (handleType.equals("3")) {
                     handleType = "";
-                    getIMDoctor(binderId, doctorList.get(Integer.parseInt(intent.slots.get(0).value) - 1).getId(), "3");
+                    if (doctorList.get(Integer.parseInt(intent.slots.get(0).value) - 1).isStartVoice()) {
+                        getIMDoctor(binderId, doctorList.get(Integer.parseInt(intent.slots.get(0).value) - 1).getId(), "3");
+                    } else {
+                        BotSdk.getInstance().speakRequest("当前医生不支持语音咨询");
+                    }
                 } else if (handleType.equals("4")) {
                     handleType = "";
-                    getIMDoctor(binderId, doctorList.get(Integer.parseInt(intent.slots.get(0).value) - 1).getId(), "4");
+                    if (doctorList.get(Integer.parseInt(intent.slots.get(0).value) - 1).isStartVideo()) {
+                        getIMDoctor(binderId, doctorList.get(Integer.parseInt(intent.slots.get(0).value) - 1).getId(), "4");
+                    } else {
+                        BotSdk.getInstance().speakRequest("当前医生不支持视频咨询");
+                    }
                 } else {
                     handleType = "5";
                     doctor = doctorList.get(Integer.parseInt(intent.slots.get(0).value) - 1);
-                    if (doctor.isStartVoice() && doctor.isStartVideo()){
+                    if (doctor.isStartVoice() && doctor.isStartVideo()) {
                         BotSdk.getInstance().speak("请问您想语音咨询还是视频咨询", true);
                     } else {
-                        if (doctor.isStartVoice()){
-                            handleType = "";
-                            doctor = null;
+                        if (doctor.isStartVoice()) {
                             getIMDoctor(binderId, doctor.getId(), "3");
-                        } else if (doctor.isStartVideo()){
                             handleType = "";
                             doctor = null;
+                        } else if (doctor.isStartVideo()) {
                             getIMDoctor(binderId, doctor.getId(), "4");
+                            handleType = "";
+                            doctor = null;
                         }
                     }
 //                    activityIntent = new Intent(OnLineActivity.this, OnLineDetailActivity.class);
@@ -580,9 +492,17 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
         } else if ("consultation_list".equals(intent.name)) {//咨询第几个
             if (Integer.parseInt(intent.slots.get(1).value) <= doctorList.size()) {
                 if ("app_consultation_audio".equals(intent.slots.get(0).name)) {
-                    getIMDoctor(binderId, doctorList.get(Integer.parseInt(intent.slots.get(1).value) - 1).getId(), "3");
+                    if (doctorList.get(Integer.parseInt(intent.slots.get(1).value) - 1).isStartVoice()) {
+                        getIMDoctor(binderId, doctorList.get(Integer.parseInt(intent.slots.get(1).value) - 1).getId(), "3");
+                    } else {
+                        BotSdk.getInstance().speakRequest("当前医生不支持语音咨询");
+                    }
                 } else if ("app_consultation_video".equals(intent.slots.get(0).name)) {
-                    getIMDoctor(binderId, doctorList.get(Integer.parseInt(intent.slots.get(1).value) - 1).getId(), "4");
+                    if (doctorList.get(Integer.parseInt(intent.slots.get(1).value) - 1).isStartVideo()) {
+                        getIMDoctor(binderId, doctorList.get(Integer.parseInt(intent.slots.get(1).value) - 1).getId(), "4");
+                    } else {
+                        BotSdk.getInstance().speakRequest("当前医生不支持视频咨询");
+                    }
                 }
             } else {
                 BotSdk.getInstance().speakRequest("抱歉！没有第" + intent.slots.get(1).value + "个医生");
@@ -605,7 +525,6 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
     @Override
     protected void onResume() {
         super.onResume();
-//        getOnlineNum();
         pageNum = 0;
         getOnlineDoctor(1);
         BotMessageListener.getInstance().addCallback(this);
@@ -615,6 +534,7 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
     protected void onPause() {
         super.onPause();
         BotMessageListener.getInstance().clearCallback();
+        observer = null;
     }
 
 }

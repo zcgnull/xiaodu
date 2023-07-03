@@ -84,6 +84,7 @@ public class BotsdkApplication extends Application {
                 .setHandler(new RequestHandler(this))
                 // 设置请求重试次数
                 .setRetryCount(3)
+
                 // 添加全局请求参数
                 //.addParam("token", "6666666")
                 // 添加全局请求头

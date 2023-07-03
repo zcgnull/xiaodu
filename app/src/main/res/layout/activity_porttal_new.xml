@@ -147,73 +147,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_160"
                 android:layout_marginLeft="@dimen/dp_40"
-                android:layout_marginRight="@dimen/dp_40"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:id="@+id/ln_service"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@mipmap/portal_order">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/dp_30"
-                        android:text="服务订购"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/sp_36"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/ln_device"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_40"
-                    android:layout_marginRight="@dimen/dp_40"
-                    android:layout_weight="1"
-                    android:background="@mipmap/portal_device">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/dp_30"
-                        android:text="健康监测"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/sp_36"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/ln_wellness"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@mipmap/portal_servicer">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/dp_30"
-                        android:text="康养管家"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/sp_36"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_160"
-                android:layout_marginLeft="@dimen/dp_40"
-                android:layout_marginTop="@dimen/dp_40"
-                android:layout_marginRight="@dimen/dp_40"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -247,7 +180,79 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/dp_30"
-                        android:text="在线咨询"
+                        android:text="线上医生"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp_36"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+
+
+                <LinearLayout
+                    android:id="@+id/ln_device"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/dp_40"
+                    android:layout_weight="1"
+                    android:background="@mipmap/portal_device">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/dp_30"
+                        android:text="健康数据"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp_36"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_160"
+                android:layout_marginLeft="@dimen/dp_40"
+                android:layout_marginTop="@dimen/dp_40"
+                android:layout_marginRight="@dimen/dp_40"
+                android:orientation="horizontal">
+
+
+                <LinearLayout
+                    android:id="@+id/ln_wellness"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@mipmap/portal_servicer">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/dp_30"
+                        android:text="服务中心"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp_36"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ln_service"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="@dimen/dp_40"
+                    android:layout_marginRight="@dimen/dp_40"
+                    android:background="@mipmap/portal_order">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/dp_30"
+                        android:text="养老服务"
                         android:textColor="@color/white"
                         android:textSize="@dimen/sp_36"
                         android:textStyle="bold" />
@@ -265,7 +270,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/dp_30"
-                        android:text="亲友视频"
+                        android:text="亲朋好友"
                         android:textColor="@color/white"
                         android:textSize="@dimen/sp_36"
                         android:textStyle="bold" />
