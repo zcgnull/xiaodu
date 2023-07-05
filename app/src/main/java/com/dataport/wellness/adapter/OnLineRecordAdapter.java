@@ -65,8 +65,8 @@ public class OnLineRecordAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         contentHolder.doctor.setText(list.get(position).getDoctorName());
         contentHolder.time.setText(list.get(position).getCreateTime());
 
-        contentHolder.xz.setText(Integer.valueOf(list.get(position).getLimitDuration()) / 60 + "分");
-        contentHolder.sj.setText(Integer.valueOf(list.get(position).getServiceDuration()) / 60 + "分");
+        contentHolder.xz.setText(sumSecondToTime(Integer.valueOf(list.get(position).getLimitDuration())));
+        contentHolder.sj.setText(sumSecondToTime(Integer.valueOf(list.get(position).getServiceDuration())));
         contentHolder.done.setText(list.get(position).getCompleteTime());
         if (list.get(position).getUseState().equals("1")) {
             contentHolder.status.setText("未接诊");
@@ -83,6 +83,20 @@ public class OnLineRecordAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
         contentHolder.cancel.setOnClickListener(v -> cancelClickListener.onCancelClickListener(list.get(position), position));
         contentHolder.confirm.setOnClickListener(v -> adviceClickListener.onAdviceClickListener(list.get(position), position));
+    }
+
+    private static String sumSecondToTime(int sumSecond) {
+        if(sumSecond <= 0){
+            return "0秒";
+        }
+        int h = sumSecond/3600;
+        int m = (sumSecond-h*3600)/60;
+        int s = sumSecond - h*3600-m*60;
+        String hS=h>0?String.format("%s时",h):"";
+        String mS=m>0?String.format("%s分",m):"";
+        String sS=s>0?String.format("%s秒",s):"";
+        String  time = String.format("%s%s%s",hS,mS,sS);
+        return time;
     }
 
     public interface OnCancelClickListener {
