@@ -9,7 +9,8 @@
         android:id="@+id/rl_success"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible">
+        android:paddingTop="@dimen/dp_10"
+        android:visibility="gone">
 
         <RelativeLayout
             android:id="@+id/rl_top"
@@ -254,6 +255,7 @@
         android:id="@+id/rl_fail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingTop="@dimen/dp_10"
         android:visibility="gone">
 
         <RelativeLayout

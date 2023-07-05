@@ -104,6 +104,7 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
         onlineAdapter = new OnlineAdapter(this);
         contentRv.setAdapter(onlineAdapter);
         onlineAdapter.setListener((data, pos) -> {
+            TUICallEngine.createInstance(OnLineActivity.this).removeObserver(observer);
             Intent intent = new Intent(OnLineActivity.this, OnLineDetailActivity.class);
             intent.putExtra("data", data);
             intent.putExtra("binderId", binderId);
@@ -114,9 +115,10 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
     }
 
     private void initView() {
-        findViewById(R.id.ln_back).setOnClickListener(v -> finish());
+        findViewById(R.id.ln_back_online).setOnClickListener(v -> finish());
         findViewById(R.id.ln_back1).setOnClickListener(v -> finish());
         findViewById(R.id.ln_record).setOnClickListener(v -> {
+            TUICallEngine.createInstance(OnLineActivity.this).removeObserver(observer);
             Intent intent = new Intent(OnLineActivity.this, OnLineRecordActivity.class);
             intent.putExtra("binderId", binderId);
             startActivity(intent);
@@ -151,7 +153,6 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
             BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
             BotSdk.getInstance().speakRequest(messages.get(position));
         });
-        TUICallEngine.createInstance(OnLineActivity.this).addObserver(observer);
     }
 
     private TUICallObserver observer = new TUICallObserver() {
@@ -165,16 +166,6 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
         public void onCallEnd(TUICommonDefine.RoomId roomId, TUICallDefine.MediaType callMediaType, TUICallDefine.Role callRole, long totalTime) {
             Log.i(TAG, "onCallEnd!");
             turnOff(type);
-        }
-
-        @Override
-        public void onError(int code, String msg) {
-            super.onError(code, msg);
-            Log.i(TAG, "onError!" + code + msg);
-        }
-
-        public void onUserNetworkQualityChanged(List<TUICommonDefine.NetworkQualityInfo> networkQualityList) {
-            Log.i(TAG, "onUserNetworkQualityChanged!");
         }
     };
 
@@ -530,13 +521,13 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
         pageNum = 0;
         getOnlineDoctor(1);
         BotMessageListener.getInstance().addCallback(this);
+        TUICallEngine.createInstance(OnLineActivity.this).addObserver(observer);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         BotMessageListener.getInstance().clearCallback();
-        observer = null;
     }
 
 }

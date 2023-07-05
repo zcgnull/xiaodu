@@ -138,6 +138,12 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        TUICallEngine.createInstance(OnLineDetailActivity.this).removeObserver(observer);
+    }
+
     private TUICallObserver observer = new TUICallObserver() {
         @Override
         public void onCallBegin(TUICommonDefine.RoomId roomId, TUICallDefine.MediaType callMediaType, TUICallDefine.Role callRole) {
@@ -296,7 +302,6 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
     protected void onPause() {
         super.onPause();
         BotMessageListener.getInstance().clearCallback();
-        observer = null;
     }
 
 }

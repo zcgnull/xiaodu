@@ -10,16 +10,17 @@
         android:id="@+id/rl_success"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingTop="@dimen/dp_10"
         android:visibility="gone">
 
         <RelativeLayout
             android:id="@+id/rl_top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp">
+            android:layout_margin="@dimen/dp_10">
 
             <LinearLayout
-                android:id="@+id/ln_back"
+                android:id="@+id/ln_back_online"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -197,6 +198,7 @@
         android:id="@+id/rl_fail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingTop="@dimen/dp_10"
         android:visibility="gone">
 
         <RelativeLayout

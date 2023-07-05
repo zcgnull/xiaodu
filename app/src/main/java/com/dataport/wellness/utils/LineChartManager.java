@@ -13,7 +13,9 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -352,6 +354,12 @@ public class LineChartManager {
             }
             return "";
         });
+        leftAxis.setValueFormatter(new IAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                return (int)value + "";
+            }
+        });
 //        xAxis.setDrawGridLines(false);
 //        leftAxis.setAxisMaximum(200f);
         LineDataSet lineDataSet1 = new LineDataSet(entries1,labels.get(0));
@@ -362,10 +370,16 @@ public class LineChartManager {
         initLineDataSet(lineDataSet2, colours.get(1), false);
 
         LineData lineData = new LineData(lineDataSet1,lineDataSet2);
+        lineData.setValueFormatter(new MonthlyIntegerYValueFormatter());
 
         lineChart.setData(lineData);
     }
-
+    public class MonthlyIntegerYValueFormatter implements IValueFormatter {
+        @Override
+        public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+            return (int) (value) + "";
+        }
+    }
     public void setSingleLine(ArrayList<String> xValues,List<Entry> entries1, List<String> labels, List<Integer> colours) {
         initLineChart(true);
 

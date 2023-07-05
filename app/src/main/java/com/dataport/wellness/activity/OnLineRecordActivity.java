@@ -92,6 +92,12 @@ public class OnLineRecordActivity extends BaseActivity implements IBotIntentCall
         TUICallEngine.createInstance(OnLineRecordActivity.this).addObserver(observer);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        TUICallEngine.createInstance(OnLineRecordActivity.this).removeObserver(observer);
+    }
+
     private TUICallObserver observer = new TUICallObserver() {
         @Override
         public void onCallBegin(TUICommonDefine.RoomId roomId, TUICallDefine.MediaType callMediaType, TUICallDefine.Role callRole) {
@@ -249,6 +255,5 @@ public class OnLineRecordActivity extends BaseActivity implements IBotIntentCall
     protected void onPause() {
         super.onPause();
         BotMessageListener.getInstance().clearCallback();
-        observer = null;
     }
 }
