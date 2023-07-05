@@ -466,10 +466,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 int hour = instance.get(Calendar.HOUR_OF_DAY);
                 int minute = instance.get(Calendar.MINUTE);
                 int second = instance.get(Calendar.SECOND);
-                if (second < 10) {
-                    tvTime.setText(hour + ":" + minute + ":0" + second);
+                if (minute < 10){
+                    if (second < 10) {
+                        tvTime.setText(hour + ":0" + minute + ":0" + second);
+                    } else {
+                        tvTime.setText(hour + ":0" + minute + ":" + second);
+                    }
                 } else {
-                    tvTime.setText(hour + ":" + minute + ":" + second);
+                    if (second < 10) {
+                        tvTime.setText(hour + ":" + minute + ":0" + second);
+                    } else {
+                        tvTime.setText(hour + ":" + minute + ":" + second);
+                    }
                 }
             }
         }

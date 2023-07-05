@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.baidu.duer.botsdk.BotIntent;
+import com.baidu.duer.botsdk.BotSdk;
 import com.dataport.wellness.R;
 import com.dataport.wellness.adapter.OnLineRecordAdapter;
 import com.dataport.wellness.adapter.OnlineAdapter;
@@ -221,7 +222,11 @@ public class OnLineRecordActivity extends BaseActivity implements IBotIntentCall
 
     @Override
     public void handleIntent(BotIntent intent, String customData) {
-
+        if ("hangup".equals(intent.name)) {
+            hangUp();
+        } else {
+            BotSdk.getInstance().speakRequest("我没有听清，请再说一遍");
+        }
     }
 
     @Override

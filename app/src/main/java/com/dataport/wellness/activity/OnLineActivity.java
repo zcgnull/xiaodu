@@ -507,6 +507,8 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
             } else {
                 BotSdk.getInstance().speakRequest("抱歉！没有第" + intent.slots.get(1).value + "个医生");
             }
+        } else if ("hangup".equals(intent.name)) {
+            hangUp();
         } else {
             BotSdk.getInstance().speakRequest("我没有听清，请再说一遍");
         }

@@ -95,7 +95,7 @@ public class ServiceDetailActivity extends BaseActivity {
         priceRv.setAdapter(priceAdapter);
 
         List<String> messages = new ArrayList<>();
-        messages.add("请试试对我说：“小度小度,呼叫康养管家”进行代下单。");
+        messages.add("请试试对我说：“小度小度,呼叫服务中心”进行代下单。");
         marqueeView.startWithList(messages);
         marqueeView.setOnItemClickListener((position, textView) -> {
             BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);

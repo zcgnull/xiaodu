@@ -101,10 +101,10 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
         yy = findViewById(R.id.btn_yy);
         sp = findViewById(R.id.btn_sp);
         content = findViewById(R.id.tv_context);
-        if (data.isStartVoice()){
+        if (data.isStartVoice()) {
             yy.setVisibility(View.VISIBLE);
         }
-        if (data.isStartVideo()){
+        if (data.isStartVideo()) {
             sp.setVisibility(View.VISIBLE);
         }
     }
@@ -131,6 +131,8 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
             judgeAdvice("4", data.getId(), binderId);
         } else if ("app_consultation_audio".equals(intent.name)) {//语音咨询
             judgeAdvice("3", data.getId(), binderId);
+        } else if ("hangup".equals(intent.name)) {
+            hangUp();
         } else {
             BotSdk.getInstance().speakRequest("我没有听清，请再说一遍");
         }

@@ -72,7 +72,7 @@ public class BotConstants {
     //通讯录-家庭医生
     public static final String OPEN_FAMILY_DOCTOR_URL = "dueros://8dcbd6d2-f434-3c9a-41d4-dde55b54a6ca/urlProxy?from=DBP_APK&token=d7a8d4b334e22d9a21d61dafbdf79029";
     //通讯录-康养管家
-    public static final String OPEN_WELL_NESS_URL = "dueros://8dcbd6d2-f434-3c9a-41d4-dde55b54a6ca/urlProxy?from=DBP_APK&token=b69d44731c4d77df2e26653274b0152c";
+    public static final String OPEN_WELL_NESS_URL = "dueros://8dcbd6d2-f434-3c9a-41d4-dde55b54a6ca/urlProxy?from=DBP_APK&token=7bfbe7b28e773ed6e71ca31e1b064a49";
     // 自定义快进意图名称
     public static final String FAST_FORWARD_INTENT = "fast_forward_intent";
     // 系统预定义[数字] 槽位名称
