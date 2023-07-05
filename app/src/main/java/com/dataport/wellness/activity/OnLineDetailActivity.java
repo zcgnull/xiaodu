@@ -63,6 +63,7 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
     private TextView docName, docCompany, docDep, docType, buyNum, content;
     private LinearLayout yy, sp;
     private MarqueeView marqueeView;
+    private String speck;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,9 +76,11 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
         initView();
         initData();
         yy.setOnClickListener(v -> {
+            BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
             judgeAdvice("3", data.getId(), binderId);
         });
         sp.setOnClickListener(v -> {
+            BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
             judgeAdvice("4", data.getId(), binderId);
         });
         List<String> messages = new ArrayList<>();
@@ -107,6 +110,10 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
         if (data.isStartVideo()) {
             sp.setVisibility(View.VISIBLE);
         }
+        findViewById(R.id.ln_voice).setOnClickListener(v -> {
+            BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
+            BotSdk.getInstance().speakRequest(speck);
+        });
     }
 
     private void initData() {
@@ -123,6 +130,10 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
         buyNum.setText("已服务次数:" + data.getServiceNum());
         content.setText(data.getGoodat() == null ? "暂无" : data.getGoodat());
         TUICallEngine.createInstance(OnLineDetailActivity.this).addObserver(observer);
+        speck = docName.getText().toString()+ "，" + (data.getInstitutionName().equals("") ? "" : docCompany.getText().toString()) + "，" +
+                (data.getDeptName().equals("") ? "" : docDep.getText().toString()) +"，" + (data.getTitleName().equals("") ? "" : docType.getText().toString()) +"，" +
+                (data.getGoodat().equals("") ? "" : content.getText().toString());
+        BotSdk.getInstance().speakRequest(speck);
     }
 
     @Override
@@ -141,6 +152,7 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
         TUICallEngine.createInstance(OnLineDetailActivity.this).removeObserver(observer);
     }
 
