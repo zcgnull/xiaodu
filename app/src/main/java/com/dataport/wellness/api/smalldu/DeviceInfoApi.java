@@ -7,6 +7,7 @@ import com.hjq.http.config.IRequestApi;
 import com.hjq.http.config.IRequestServer;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class DeviceInfoApi  implements IRequestApi, IRequestServer {
 
@@ -42,6 +43,25 @@ public class DeviceInfoApi  implements IRequestApi, IRequestServer {
 
         private long tenantId;
         private boolean inWarehouse;
+
+        private String oldUrl;
+        private String healthUrl;
+
+        public String getOldUrl() {
+            return oldUrl;
+        }
+
+        public void setOldUrl(String oldUrl) {
+            this.oldUrl = oldUrl;
+        }
+
+        public String getHealthUrl() {
+            return healthUrl;
+        }
+
+        public void setHealthUrl(String healthUrl) {
+            this.healthUrl = healthUrl;
+        }
 
         public String getSn() {
             return sn;

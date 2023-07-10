@@ -18,10 +18,10 @@ public class BotConstants {
     //健康管理后台地址
 //    public static final String JK_URL = "http://10.20.5.21:8110/";
 //    public static final String JK_URL = "http://10.20.5.19:8099/";
-    public static final String JK_URL = "https://jkgl.dataport.com.cn/";
+    public static String JK_URL = "https://jkgl.dataport.com.cn/";
 //    public static final String JK_URL = "http://172.20.3.51:9110/";
     //养老信息后台地址
-    public static final String YZ_URL = "https://qhdmzj.dataport.com.cn:8888/rjzlec/";
+    public static String YZ_URL = "https://qhdmzj.dataport.com.cn:8888/rjzlec/";
     //小度服务端
 //    public static final String XD_URL = "http://10.20.1.13:48080/";
 //    public static final String XD_URL = "http://10.20.0.158:48080/";

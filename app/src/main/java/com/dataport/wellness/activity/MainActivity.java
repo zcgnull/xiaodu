@@ -148,6 +148,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                                 SharedPreferences sharedPreferences = getSharedPreferences("XD", MODE_PRIVATE);
                                 String token = sharedPreferences.getString("XD_TOKEN", null);
                                 Log.d(TAG, "SharedPreferencesToken: " + token);
+                                BotConstants.JK_URL = result.getData().getHealthUrl();
+                                BotConstants.YZ_URL = result.getData().getOldUrl();
                                 if (null == token) {
                                     long tenantId = result.getData().isInWarehouse() ? result.getData().getTenantId() : 1;
                                     getDeviceToken(String.valueOf(tenantId), result.getData().isInWarehouse(), result.getData().getSn());
