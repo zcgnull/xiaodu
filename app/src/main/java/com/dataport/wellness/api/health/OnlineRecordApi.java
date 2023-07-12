@@ -33,7 +33,7 @@ public class OnlineRecordApi implements IRequestApi, IRequestServer {
         this.binderId = binderId;
     }
 
-    public static class Bean implements Serializable {
+    public class Bean implements Serializable {
 
 
         private List<AdviceRecordListDTO> adviceRecordList;
@@ -55,7 +55,7 @@ public class OnlineRecordApi implements IRequestApi, IRequestServer {
             this.totalElements = totalElements;
         }
 
-        public static class AdviceRecordListDTO implements Serializable{
+        public class AdviceRecordListDTO implements Serializable{
             private int id;
             private int servicePackageId;
             private String servicePackageName;

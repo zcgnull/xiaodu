@@ -28,7 +28,7 @@ public class OnlineAdviceNumApi implements IRequestApi, IRequestServer {
         this.idcard = idcard;
     }
 
-    public static class Bean implements Serializable {
+    public class Bean implements Serializable {
 
         private int videoSum;
         private int videoReamin;

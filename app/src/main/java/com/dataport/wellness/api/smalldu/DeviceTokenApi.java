@@ -33,7 +33,7 @@ public class DeviceTokenApi implements IRequestApi, IRequestServer {
         this.client_secret = client_secret;
     }
 
-    public static class Bean implements Serializable {
+    public class Bean implements Serializable {
 
         private String scope;
         private String access_token;

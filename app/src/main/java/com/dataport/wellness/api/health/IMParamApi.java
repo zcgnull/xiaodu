@@ -30,7 +30,7 @@ public class IMParamApi implements IRequestApi, IRequestServer {
         this.doctorId = doctorId;
     }
 
-    public static class Bean implements Serializable {
+    public class Bean implements Serializable {
 
         private int sdkappid;
         private String key;

@@ -32,7 +32,7 @@ public class TokenApi implements IRequestApi , IRequestServer {
         this.grant_type = grant_type;
     }
 
-    public static class Bean implements Serializable {
+    public class Bean implements Serializable {
 
         private String access_token;
         private String token_type;

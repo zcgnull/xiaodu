@@ -39,7 +39,7 @@ public class DeviceContentPageApi implements IRequestApi, IRequestServer {
         this.pageSize = pageSize;
     }
 
-    public static class Bean implements Serializable {
+    public class Bean implements Serializable {
 
         private List<RecordListDTO> recordList;
         private Integer totalElements;
@@ -60,7 +60,7 @@ public class DeviceContentPageApi implements IRequestApi, IRequestServer {
             this.totalElements = totalElements;
         }
 
-        public static class RecordListDTO implements Serializable{
+        public class RecordListDTO implements Serializable{
             private String equipmentNo;
             private String equipmentName;
             private Integer equipmentBindId;

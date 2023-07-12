@@ -35,8 +35,7 @@ public class DeviceContentApi implements IRequestApi, IRequestServer {
         this.endDate = endDate;
     }
 
-    public static class Bean implements Serializable {
-
+    public class Bean implements Serializable {
 
         private List<ListDTO> list;
 
@@ -48,7 +47,7 @@ public class DeviceContentApi implements IRequestApi, IRequestServer {
             this.list = list;
         }
 
-        public static class ListDTO {
+        public class ListDTO {
             private String equipmentNo;
             private String equipmentName;
             private int equipmentBindId;

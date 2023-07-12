@@ -31,7 +31,7 @@ public class EquipmentListApi  implements IRequestApi, IRequestServer {
         this.binderId = binderId;
     }
 
-    public static class Bean implements Serializable {
+    public class Bean implements Serializable {
 
         private List<ListDTO> list;
 
@@ -43,7 +43,7 @@ public class EquipmentListApi  implements IRequestApi, IRequestServer {
             this.list = list;
         }
 
-        public static class ListDTO {
+        public class ListDTO {
             private String equipmentName;
             private Object factoryName;
             private Object equipmentPicture;

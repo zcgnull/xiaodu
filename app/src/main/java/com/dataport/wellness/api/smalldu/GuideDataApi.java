@@ -30,7 +30,7 @@ public class GuideDataApi implements IRequestApi, IRequestServer {
         this.steerType = steerType;
     }
 
-    public static class Bean implements Serializable {
+    public class Bean implements Serializable {
 
         private int steerType;
         private String steerDesc;

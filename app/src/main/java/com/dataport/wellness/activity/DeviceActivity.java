@@ -345,7 +345,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                                 noData.setVisibility(View.VISIBLE);
                             } else {
                                 noData.setVisibility(View.GONE);
-                                rightList = result.getData().getRecordList();
+                                rightList.addAll(result.getData().getRecordList());
                             }
                         } else {
                             refreshLayout.finishLoadMore();

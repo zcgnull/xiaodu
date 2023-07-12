@@ -12,19 +12,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dataport.wellness.R;
 import com.dataport.wellness.api.old.ServiceTabApi;
+import com.dataport.wellness.api.old.ServiceTabBean;
 
 import java.util.List;
 
 public class ServiceTabAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
-    private List<ServiceTabApi.Bean> list;
+    private List<ServiceTabBean> list;
 
     public ServiceTabAdapter(Context context) {
         this.context = context;
     }
 
-    public void setList(List<ServiceTabApi.Bean> list) {
+    public void setList(List<ServiceTabBean> list) {
         this.list = list;
         notifyDataSetChanged();
     }

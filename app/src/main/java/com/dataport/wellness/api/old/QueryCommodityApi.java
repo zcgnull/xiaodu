@@ -38,7 +38,7 @@ public class QueryCommodityApi implements IRequestApi, IRequestServer {
         this.pageSize = pageSize;
     }
 
-    public static class Bean implements Serializable {
+    public class Bean implements Serializable {
 
         private boolean firstPage;
         private boolean lastPage;
@@ -131,7 +131,7 @@ public class QueryCommodityApi implements IRequestApi, IRequestServer {
             this.totalCount = totalCount;
         }
 
-        public static class ListDTO implements Serializable {
+        public class ListDTO implements Serializable {
 
             private String agvx0200xx;
             private String agvx0404;

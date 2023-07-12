@@ -30,9 +30,7 @@ public class IMLoginApi implements IRequestApi, IRequestServer {
         this.doctorId = doctorId;
     }
 
-    public static class Bean implements Serializable {
-
-
+    public class Bean implements Serializable {
         private TimBinderDTO timBinder;
         private TimDoctorDTO timDoctor;
 
@@ -52,7 +50,7 @@ public class IMLoginApi implements IRequestApi, IRequestServer {
             this.timDoctor = timDoctor;
         }
 
-        public static class TimBinderDTO {
+        public class TimBinderDTO {
             private long binderId;
             private String binderName;
             private String binderTimId;
@@ -109,7 +107,7 @@ public class IMLoginApi implements IRequestApi, IRequestServer {
             }
         }
 
-        public static class TimDoctorDTO {
+        public class TimDoctorDTO {
             private long doctorId;
             private String doctorName;
             private String doctorTimId;

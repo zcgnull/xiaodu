@@ -29,7 +29,7 @@ public class DeviceInfoApi  implements IRequestApi, IRequestServer {
         this.sn = sn;
     }
 
-    public static class Bean implements Serializable {
+    public class Bean implements Serializable {
 
         private String sn;
 

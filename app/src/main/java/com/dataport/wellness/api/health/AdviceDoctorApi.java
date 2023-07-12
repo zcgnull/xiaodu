@@ -32,8 +32,7 @@ public class AdviceDoctorApi implements IRequestApi, IRequestServer {
         this.doctorId = doctorId;
     }
 
-    public static class Bean implements Serializable {
-
+    public class Bean implements Serializable {
 
         private String msg;
         private String code;
@@ -63,7 +62,7 @@ public class AdviceDoctorApi implements IRequestApi, IRequestServer {
             this.info = info;
         }
 
-        public static class InfoDTO {
+        public class InfoDTO {
             private int adviceUseRecordId;
             private String isLimit;
             private int limitDuration;

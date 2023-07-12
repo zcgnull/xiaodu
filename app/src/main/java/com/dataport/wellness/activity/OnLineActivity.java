@@ -287,7 +287,7 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
                                     noData.setVisibility(View.VISIBLE);
                                 } else {
                                     noData.setVisibility(View.GONE);
-                                    doctorList = result.getData().getDoctorList();
+                                    doctorList.addAll(result.getData().getDoctorList());
                                 }
                             } else {
                                 refreshLayout.finishLoadMore();
@@ -530,4 +530,8 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
         BotMessageListener.getInstance().clearCallback();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }

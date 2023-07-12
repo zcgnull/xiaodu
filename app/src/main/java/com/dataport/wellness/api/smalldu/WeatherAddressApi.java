@@ -29,7 +29,7 @@ public class WeatherAddressApi  implements IRequestApi, IRequestServer {
         this.fullAddress = fullAddress;
     }
 
-    public static class Bean implements Serializable {
+    public class Bean implements Serializable {
 
         private List<WeatherInfoRespVoDTO> weatherInfoRespVo;
         private List<LocationInfoRespVoDTO> locationInfoRespVo;
@@ -50,7 +50,7 @@ public class WeatherAddressApi  implements IRequestApi, IRequestServer {
             this.locationInfoRespVo = locationInfoRespVo;
         }
 
-        public static class WeatherInfoRespVoDTO implements Serializable{
+        public class WeatherInfoRespVoDTO implements Serializable{
             private String province;
             private String city;
             private String adcode;
@@ -134,7 +134,7 @@ public class WeatherAddressApi  implements IRequestApi, IRequestServer {
             }
         }
 
-        public static class LocationInfoRespVoDTO implements Serializable{
+        public class LocationInfoRespVoDTO implements Serializable{
             private String location;
             private String adcode;
 

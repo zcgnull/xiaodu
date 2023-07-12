@@ -19,6 +19,7 @@ import com.dataport.wellness.R;
 import com.dataport.wellness.adapter.ServiceContentAdapter;
 import com.dataport.wellness.api.old.QueryCommodityApi;
 import com.dataport.wellness.api.old.ServiceTabApi;
+import com.dataport.wellness.api.old.ServiceTabBean;
 import com.dataport.wellness.botsdk.BotMessageListener;
 import com.dataport.wellness.botsdk.IBotIntentCallback;
 import com.google.android.material.tabs.TabLayout;
@@ -43,8 +44,8 @@ public class ServiceOrderActivity extends BaseActivity implements IBotIntentCall
 
     private ServiceContentAdapter contentAdapter;
 
-    private List<ServiceTabApi.Bean> tabList = new ArrayList<>();
-    private List<ServiceTabApi.Bean.ChildDTO> secondTabList = new ArrayList<>();
+    private List<ServiceTabBean> tabList = new ArrayList<>();
+    private List<ServiceTabBean.ChildDTO> secondTabList = new ArrayList<>();
     private List<QueryCommodityApi.Bean.ListDTO> serviceList = new ArrayList<>();
     private int pageNum = 1;
     private int pageSize = 10;
@@ -96,7 +97,7 @@ public class ServiceOrderActivity extends BaseActivity implements IBotIntentCall
                     secondTab.removeAllTabs();
                     secondTab.setVisibility(View.VISIBLE);
                     secondTabList = tabList.get(tab.getPosition()).getChild();
-                    for (ServiceTabApi.Bean.ChildDTO bean : secondTabList) {
+                    for (ServiceTabBean.ChildDTO bean : secondTabList) {
                         TabLayout.Tab itemTab = secondTab.newTab();
                         itemTab.setText(bean.getName());
                         secondTab.addTab(itemTab);
@@ -191,14 +192,14 @@ public class ServiceOrderActivity extends BaseActivity implements IBotIntentCall
     private void queryTab() {
         EasyHttp.get(this)
                 .api(new ServiceTabApi(""))
-                .request(new HttpCallback<List<ServiceTabApi.Bean>>(this) {
+                .request(new HttpCallback<List<ServiceTabBean>>(this) {
 
                     @Override
-                    public void onSucceed(List<ServiceTabApi.Bean> result) {
+                    public void onSucceed(List<ServiceTabBean> result) {
                         tabList = result;
-                        ServiceTabApi.Bean data = new ServiceTabApi.Bean("0", "全部", null);
+                        ServiceTabBean data = new ServiceTabBean("0", "全部", null);
                         tabList.add(0, data);
-                        for (ServiceTabApi.Bean bean : tabList) {
+                        for (ServiceTabBean bean : tabList) {
                             TabLayout.Tab tab = firstTab.newTab();
                             View tabView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.item_service_tab, null);
                             TextView tabText = tabView.findViewById(R.id.item_tv_tab);
@@ -224,7 +225,7 @@ public class ServiceOrderActivity extends BaseActivity implements IBotIntentCall
                                 noData.setVisibility(View.VISIBLE);
                             } else {
                                 noData.setVisibility(View.GONE);
-                                serviceList = result.getList();
+                                serviceList.addAll(result.getList());
                             }
                         } else {
                             refreshLayout.finishLoadMore();
@@ -232,6 +233,7 @@ public class ServiceOrderActivity extends BaseActivity implements IBotIntentCall
 //                                Toast.makeText(ServiceOrderActivity.this, "暂无更多数据", Toast.LENGTH_SHORT).show();
                             } else {
                                 serviceList.addAll(result.getList());
+
                             }
                         }
                         contentAdapter.setList(serviceList);
@@ -251,4 +253,11 @@ public class ServiceOrderActivity extends BaseActivity implements IBotIntentCall
         BotMessageListener.getInstance().clearCallback();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        tabList = null;
+        secondTabList = null;
+        serviceList = null;
+    }
 }

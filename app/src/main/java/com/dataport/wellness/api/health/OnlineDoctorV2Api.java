@@ -33,7 +33,7 @@ public class OnlineDoctorV2Api implements IRequestApi, IRequestServer {
         this.pageSize = pageSize;
     }
 
-    public static class Bean implements Serializable {
+    public class Bean implements Serializable {
 
         private int videoSum;
         private int publicReamin;
@@ -108,7 +108,7 @@ public class OnlineDoctorV2Api implements IRequestApi, IRequestServer {
             this.totalElements = totalElements;
         }
 
-        public static class DoctorListDTO implements  Serializable{
+        public class DoctorListDTO implements  Serializable{
             private long id;
             private String doctorCode;
             private String doctorName;

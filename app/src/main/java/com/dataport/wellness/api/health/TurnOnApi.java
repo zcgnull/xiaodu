@@ -31,8 +31,4 @@ public class TurnOnApi  implements IRequestApi, IRequestServer {
         this.doctorTimId = doctorTimId;
         this.serviceCode = serviceCode;
     }
-
-    public static class Bean implements Serializable {
-
-    }
 }

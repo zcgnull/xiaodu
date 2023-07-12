@@ -32,7 +32,7 @@ public class QueryServiceDetailApi implements IRequestApi , IRequestServer {
         this.providerId = providerId;
     }
 
-    public static class Bean implements Serializable {
+    public class Bean implements Serializable {
 
         private String productName;
         private String productDetail;
@@ -127,7 +127,7 @@ public class QueryServiceDetailApi implements IRequestApi , IRequestServer {
             this.goal = goal;
         }
 
-        public static class SurchargeItemsDTO implements Serializable{
+        public class SurchargeItemsDTO implements Serializable{
 
             private String surchargeDesc;
             private String surchargePrice;
@@ -158,7 +158,7 @@ public class QueryServiceDetailApi implements IRequestApi , IRequestServer {
             }
         }
 
-        public static class OtherItemsDTO implements Serializable {
+        public class OtherItemsDTO implements Serializable {
 
             private String categoryName;
             private String categoryPrice;

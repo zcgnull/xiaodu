@@ -28,8 +28,7 @@ public class QueryBinderApi implements IRequestApi, IRequestServer {
         this.equipmentNo = equipmentNo;
     }
 
-    public static class Bean implements Serializable {
-
+    public class Bean implements Serializable {
 
         private List<ListDTO> list;
 
@@ -41,7 +40,7 @@ public class QueryBinderApi implements IRequestApi, IRequestServer {
             this.list = list;
         }
 
-        public static class ListDTO implements Serializable{
+        public class ListDTO implements Serializable{
             private long binderId;
             private String relation;
             private String binderPicture;
