@@ -68,6 +68,9 @@
             android:name=".activity.DeviceActivity"
             android:screenOrientation="landscape" />
         <activity
+            android:name=".activity.DeviceEnvActivity"
+            android:screenOrientation="landscape" />
+        <activity
             android:name=".activity.OnLineActivity"
             android:screenOrientation="landscape" />
         <activity

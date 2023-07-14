@@ -84,6 +84,12 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
         jl = findViewById(R.id.tv_jl);
 
         firstTab = findViewById(R.id.first_tab);
+        //环境监测
+        findViewById(R.id.ln_env_device).setOnClickListener(v -> {
+            Intent deviceEnvIntent = new Intent(DeviceActivity.this, DeviceEnvActivity.class);
+            deviceEnvIntent.putExtra("binderId", binderId);
+            startActivity(deviceEnvIntent);
+        });
         firstTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
