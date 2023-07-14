@@ -21,7 +21,7 @@
     <TextView
         android:id="@+id/alarm_reason"
         android:layout_width="0dp"
-        android:layout_weight="1"
+        android:layout_weight="2.5"
         android:layout_gravity="center_vertical"
 
         android:text="告警原因"
@@ -46,7 +46,7 @@
     <LinearLayout
         android:id="@+id/ln_btn"
         android:layout_width="0dp"
-        android:layout_weight="2"
+        android:layout_weight="1"
         android:gravity="center"
         android:layout_gravity="center_vertical"
 
