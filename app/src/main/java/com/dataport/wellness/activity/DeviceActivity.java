@@ -1,10 +1,13 @@
 package com.dataport.wellness.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -42,6 +45,9 @@ import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import java.util.ArrayList;
 import java.util.List;
 
+import q.rorbin.badgeview.Badge;
+import q.rorbin.badgeview.QBadgeView;
+
 public class DeviceActivity extends BaseActivity implements View.OnClickListener {
 
     private TabLayout firstTab, secondTab, thirdTab;
@@ -51,6 +57,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
     private LineChart lineChart;
     private TextView qs, jl;
     private TextView noBind;
+    private LinearLayout ln_env_device;
     private ImageView ivQr;
 
     private List<String> dateTabs = new ArrayList<>();
@@ -73,6 +80,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
         findViewById(R.id.ln_back1).setOnClickListener(v -> finish());
         rlSuccess = findViewById(R.id.rl_success);
         rlFail = findViewById(R.id.rl_fail);
+        ln_env_device=findViewById(R.id.ln_env_device);
         noBind = findViewById(R.id.tv_nobind);
         ivQr = findViewById(R.id.iv_qr);
         Intent intent = getIntent();
@@ -85,7 +93,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
 
         firstTab = findViewById(R.id.first_tab);
         //环境监测
-        findViewById(R.id.ln_env_device).setOnClickListener(v -> {
+        ln_env_device.setOnClickListener(v -> {
             Intent deviceEnvIntent = new Intent(DeviceActivity.this, DeviceEnvActivity.class);
             deviceEnvIntent.putExtra("binderId", binderId);
             startActivity(deviceEnvIntent);
@@ -228,10 +236,28 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                 getDeviceContentPage(dataTypeCode, TimeUtil.getInstance().getYesterdayTime(), TimeUtil.getInstance().getCurrentTime(), 2);
             }
         });
-
+        drawBadge(rlSuccess);
         getSignType(binderId);
     }
 
+    /**
+     * 绘制角标
+     * @param view
+     */
+    private void drawBadge(View view){
+        QBadgeView qBadgeView = new QBadgeView(this); qBadgeView.setBadgeBackgroundColor(Color.RED);
+        qBadgeView.bindTarget(view);
+        qBadgeView.setBadgeText("99+");
+        qBadgeView.setBadgeGravity(Gravity.END| Gravity.TOP);
+        qBadgeView.setGravityOffset(0,0,true);
+        qBadgeView.setBadgeTextSize(18, true);
+        qBadgeView.setBadgePadding(5, true);
+        qBadgeView.setOnDragStateChangedListener((dragState, badge, targetView) -> {
+            if (Badge.OnDragStateChangedListener.STATE_SUCCEED == dragState){
+                badge.hide(true);
+            }
+        });
+    }
     private void getSignType(long binderId) {
         EasyHttp.get(this)
                 .api(new SignTypeApi(binderId))

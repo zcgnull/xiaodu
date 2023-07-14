@@ -102,14 +102,14 @@ public class DeviceEnvActivity extends BaseActivity implements IBotIntentCallbac
                         DeviceEnvApi a=new DeviceEnvApi(1,1,1);
                         DeviceEnvApi.Bean b=a.new Bean();
                         DeviceEnvApi.Bean.DeviceEnvListDTO c=b.new DeviceEnvListDTO();
-                        c.setAlarmReason("河北省秦皇岛市海港区海怡学府，水浸告警");
+                        c.setAlarmReason("河北省秦皇岛市");
                         c.setId(111);
-                        c.setDeviceName("告警设备");
+                        c.setDeviceName("烟雾传感器");
                         c.setAlarmTime("2023-07-14 12:00:00");
                         DeviceEnvApi.Bean.DeviceEnvListDTO d=b.new DeviceEnvListDTO();
                         d.setAlarmReason("河北省秦皇岛市海港区海怡学府，水浸告警");
                         d.setId(111);
-                        d.setDeviceName("告警设备");
+                        d.setDeviceName("水浸传感器");
                         d.setAlarmTime("2023-07-14 12:00:00");
                         d.setReadTime("2024-03-03 12:00:00");
                         recordList.add(c);
