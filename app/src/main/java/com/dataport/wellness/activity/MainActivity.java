@@ -22,14 +22,15 @@ import com.baidu.duer.bot.directive.payload.JsonUtil;
 import com.baidu.duer.bot.event.payload.LinkClickedEventPayload;
 import com.baidu.duer.botsdk.BotIntent;
 import com.baidu.duer.botsdk.BotSdk;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.dataport.wellness.R;
 import com.dataport.wellness.activity.dialog.BaseDialog;
 import com.dataport.wellness.activity.dialog.MenuDialog;
+import com.dataport.wellness.api.health.QueryBinderApi;
+import com.dataport.wellness.api.health.TokenApi;
 import com.dataport.wellness.api.smalldu.DeviceInfoApi;
 import com.dataport.wellness.api.smalldu.DeviceTokenApi;
 import com.dataport.wellness.api.smalldu.GuideDataApi;
-import com.dataport.wellness.api.health.QueryBinderApi;
-import com.dataport.wellness.api.health.TokenApi;
 import com.dataport.wellness.api.smalldu.WeatherAddressApi;
 import com.dataport.wellness.botsdk.BotMessageListener;
 import com.dataport.wellness.botsdk.IBotIntentCallback;
@@ -277,6 +278,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                                 tvNoBind.setText(result.getData().getSteerDesc());
                                 GlideApp.with(MainActivity.this)
                                         .load(result.getData().getSteerImg())
+                                        .skipMemoryCache(true)//禁用内存缓存功能
+                                        .diskCacheStrategy(DiskCacheStrategy.NONE)//不缓存任何内容
                                         .into(ivQr);
                                 BotSdk.getInstance().speakRequest("您的设备还没有绑定，绑定步骤，" + result.getData().getSteerDesc());
                             } else if (steerType.equals("noAuth")) {
