@@ -208,6 +208,7 @@ public class ServiceDetailActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
+        this.tabList=null;
     }
 
 }

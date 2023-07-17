@@ -1,6 +1,5 @@
 package com.dataport.wellness.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,13 +13,9 @@ import com.baidu.duer.botsdk.BotIntent;
 import com.baidu.duer.botsdk.BotSdk;
 import com.dataport.wellness.R;
 import com.dataport.wellness.adapter.OnLineRecordAdapter;
-import com.dataport.wellness.adapter.OnlineAdapter;
-import com.dataport.wellness.api.health.AdviceDoctorApi;
 import com.dataport.wellness.api.health.CancelRecordApi;
 import com.dataport.wellness.api.health.IMLoginApi;
-import com.dataport.wellness.api.health.OnlineDoctorApi;
 import com.dataport.wellness.api.health.OnlineRecordApi;
-import com.dataport.wellness.api.health.StartRecordApi;
 import com.dataport.wellness.api.health.TurnOffApi;
 import com.dataport.wellness.api.health.TurnOnApi;
 import com.dataport.wellness.botsdk.BotMessageListener;
@@ -96,6 +91,7 @@ public class OnLineRecordActivity extends BaseActivity implements IBotIntentCall
     protected void onDestroy() {
         super.onDestroy();
         TUICallEngine.createInstance(OnLineRecordActivity.this).removeObserver(observer);
+        this.recordList=null;
     }
 
     private TUICallObserver observer = new TUICallObserver() {

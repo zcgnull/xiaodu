@@ -70,6 +70,7 @@ public class DeviceEnvActivity extends BaseActivity implements IBotIntentCallbac
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        this.recordList=null;
     }
 
     /**

@@ -238,7 +238,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                 getDeviceContentPage(dataTypeCode, TimeUtil.getInstance().getYesterdayTime(), TimeUtil.getInstance().getCurrentTime(), 2);
             }
         });
-        drawBadge(rlSuccess,100);
+//        drawBadge(rlSuccess,100);
         getSignType(binderId);
     }
 
