@@ -22,6 +22,7 @@ import com.baidu.duer.bot.directive.payload.JsonUtil;
 import com.baidu.duer.bot.event.payload.LinkClickedEventPayload;
 import com.baidu.duer.botsdk.BotIntent;
 import com.baidu.duer.botsdk.BotSdk;
+import com.baidu.duer.botsdk.IDialogStateListener;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.dataport.wellness.R;
 import com.dataport.wellness.activity.dialog.BaseDialog;
@@ -53,7 +54,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener, IBotIntentCallback {
+public class MainActivity extends BaseActivity implements View.OnClickListener, IBotIntentCallback, IDialogStateListener {
 
     private static final String TAG = "MainActivity";
     private LinearLayout lnBinder, lnService;
@@ -493,6 +494,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     protected void onResume() {
         super.onResume();
         BotMessageListener.getInstance().addCallback(this);
+        BotSdk.getInstance().setDialogStateListener(this);
         Log.d(TAG, "handleIntent: onResume");
         timeFlag = true;
         new Thread() {
@@ -526,6 +528,20 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         super.onDestroy();
         Log.d(TAG, "handleIntent: onDestroy");
         BotMessageListener.getInstance().removeCallback(this);
+        BotSdk.getInstance().setDialogStateListener(null);
         timeFlag = false;
+    }
+    /**
+     * 当前聆听状态回调，包含
+     * {@link IDialogStateListener.DialogState#IDLE} 空闲态
+     * {@link IDialogStateListener.DialogState#LISTENING} 聆听中
+     * {@link IDialogStateListener.DialogState#SPEAKING} 语音播报中
+     * {@link IDialogStateListener.DialogState#THINKING} 语义识别中
+     *
+     * @param dialogState
+     */
+    @Override
+    public void onDialogStateChanged(DialogState dialogState) {
+        Log.i("监听bot状态============",dialogState.name());
     }
 }
