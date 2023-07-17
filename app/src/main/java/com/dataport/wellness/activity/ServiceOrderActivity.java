@@ -78,6 +78,7 @@ public class ServiceOrderActivity extends BaseActivity implements IBotIntentCall
             intent.putExtra("productId", data.getProductId());
             intent.putExtra("providerId", data.getProviderId());
             intent.putExtra("distance", data.getDistance());
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
         });
 
@@ -172,6 +173,7 @@ public class ServiceOrderActivity extends BaseActivity implements IBotIntentCall
             activityIntent.putExtra("productId", serviceList.get(Integer.parseInt(intent.slots.get(0).value) - 1).getProductId());
             activityIntent.putExtra("providerId", serviceList.get(Integer.parseInt(intent.slots.get(0).value) - 1).getProviderId());
             activityIntent.putExtra("distance", serviceList.get(Integer.parseInt(intent.slots.get(0).value) - 1).getDistance());
+            activityIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(activityIntent);
         } else {
 //            BotSdk.getInstance().speak("我没有听清，请再说一遍",true);

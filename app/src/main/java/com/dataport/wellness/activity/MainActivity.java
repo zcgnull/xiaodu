@@ -333,12 +333,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             case R.id.ln_service:
                 intent = new Intent(this, ServiceOrderActivity.class);
                 intent.putExtra("location", location);
+                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
                 break;
             case R.id.ln_device:
                 intent = new Intent(this, DeviceActivity.class);
 //                intent = new Intent(this, SpeechActivity.class);
                 intent.putExtra("binderId", binderId);
+                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
                 break;
             case R.id.tv_place:
@@ -358,6 +360,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 intent = new Intent(this, OnLineActivity.class);
                 intent.putExtra("idCard", binderIdCard);
                 intent.putExtra("binderId", binderId);
+                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
                 break;
             case R.id.ln_doctor:
@@ -427,10 +430,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             if ("app_home_serveorder".equals(intent.slots.get(0).name)) {
                 activityIntent = new Intent(this, ServiceOrderActivity.class);
                 activityIntent.putExtra("location", location);
+                activityIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(activityIntent);
             } else if ("app_home_device".equals(intent.slots.get(0).name)) {
                 activityIntent = new Intent(this, DeviceActivity.class);
                 activityIntent.putExtra("binderId", binderId);
+                activityIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(activityIntent);
             } else if ("app_home_wellness".equals(intent.slots.get(0).name)) {
                 toModel(BotConstants.OPEN_WELL_NESS_URL);
@@ -441,6 +446,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 activityIntent = new Intent(this, OnLineActivity.class);
                 activityIntent.putExtra("idCard", binderIdCard);
                 activityIntent.putExtra("binderId", binderId);
+                activityIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(activityIntent);
             } else if ("app_home_contact".equals(intent.slots.get(0).name)) {
                 toModel(BotConstants.OPEN_CONTACTS_URL);

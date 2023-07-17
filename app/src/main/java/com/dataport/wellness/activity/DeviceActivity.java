@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.baidu.duer.bot.BotMessageProtocol;
 import com.baidu.duer.botsdk.BotSdk;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.dataport.wellness.R;
 import com.dataport.wellness.adapter.DeviceContentAdapter;
 import com.dataport.wellness.api.health.DeviceContentApi;
@@ -96,6 +97,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
         ln_env_device.setOnClickListener(v -> {
             Intent deviceEnvIntent = new Intent(DeviceActivity.this, DeviceEnvActivity.class);
             deviceEnvIntent.putExtra("binderId", binderId);
+            deviceEnvIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(deviceEnvIntent);
         });
         firstTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -236,7 +238,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                 getDeviceContentPage(dataTypeCode, TimeUtil.getInstance().getYesterdayTime(), TimeUtil.getInstance().getCurrentTime(), 2);
             }
         });
-        drawBadge(rlSuccess);
+        drawBadge(rlSuccess,100);
         getSignType(binderId);
     }
 
@@ -244,12 +246,12 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
      * 绘制角标
      * @param view
      */
-    private void drawBadge(View view){
+    private void drawBadge(View view,Integer count){
         QBadgeView qBadgeView = new QBadgeView(this); qBadgeView.setBadgeBackgroundColor(Color.RED);
         qBadgeView.bindTarget(view);
-        qBadgeView.setBadgeText("99+");
+        qBadgeView.setBadgeNumber(count);
         qBadgeView.setBadgeGravity(Gravity.END| Gravity.TOP);
-        qBadgeView.setGravityOffset(0,0,true);
+        qBadgeView.setGravityOffset(100,0,true);
         qBadgeView.setBadgeTextSize(18, true);
         qBadgeView.setBadgePadding(5, true);
         qBadgeView.setOnDragStateChangedListener((dragState, badge, targetView) -> {
@@ -310,6 +312,8 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                             noBind.setText(result.getData().getSteerDesc());
                             GlideApp.with(DeviceActivity.this)
                                     .load(result.getData().getSteerImg())
+                                    .skipMemoryCache(true)//禁用内存缓存功能
+                                    .diskCacheStrategy(DiskCacheStrategy.NONE)//不缓存任何内容
                                     .into(ivQr);
                         }
                     }
