@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -13,14 +12,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
 import com.dataport.wellness.R;
-import com.dataport.wellness.api.health.OnlineDoctorApi;
 import com.dataport.wellness.api.health.OnlineDoctorV2Api;
-import com.dataport.wellness.api.health.OnlineRecordApi;
-import com.dataport.wellness.api.old.QueryCommodityApi;
 import com.dataport.wellness.http.glide.GlideApp;
 
 import java.util.List;
@@ -73,6 +70,8 @@ public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         DrawableCrossFadeFactory factory = new DrawableCrossFadeFactory.Builder().setCrossFadeEnabled(true).build();
         GlideApp.with(context)
                 .load(list.get(position).getDoctorUrl())
+                .skipMemoryCache(true)//禁用内存缓存功能
+                .diskCacheStrategy(DiskCacheStrategy.NONE)//不缓存任何内容
                 .transition(DrawableTransitionOptions.withCrossFade(factory))
                 .transform(new RoundedCorners((int) context.getResources().getDimension(R.dimen.dp_10)))
                 .into(contentHolder.icon);

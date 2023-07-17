@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
@@ -60,6 +61,8 @@ public class ServiceContentAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         GlideApp.with(context)
                 .load(list.get(position).getPicture())
                 .transition(DrawableTransitionOptions.withCrossFade(factory))
+                .skipMemoryCache(true)//禁用内存缓存功能
+                .diskCacheStrategy(DiskCacheStrategy.NONE)//不缓存任何内容
                 .transform(new RoundedCorners((int) context.getResources().getDimension(R.dimen.dp_10)))
                 .into(contentHolder.icon);
         contentHolder.item.setOnClickListener(v -> listener.onItemClick(list.get(position), position));

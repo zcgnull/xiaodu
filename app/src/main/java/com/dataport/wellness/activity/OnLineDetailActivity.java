@@ -3,7 +3,6 @@ package com.dataport.wellness.activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -13,6 +12,7 @@ import androidx.annotation.Nullable;
 import com.baidu.duer.bot.BotMessageProtocol;
 import com.baidu.duer.botsdk.BotIntent;
 import com.baidu.duer.botsdk.BotSdk;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
@@ -20,12 +20,10 @@ import com.dataport.wellness.R;
 import com.dataport.wellness.api.health.AdviceDoctorApi;
 import com.dataport.wellness.api.health.IMLoginApi;
 import com.dataport.wellness.api.health.JudgeAdviceApi;
-import com.dataport.wellness.api.health.OnlineDoctorApi;
 import com.dataport.wellness.api.health.OnlineDoctorV2Api;
 import com.dataport.wellness.api.health.StartRecordApi;
 import com.dataport.wellness.api.health.TurnOffApi;
 import com.dataport.wellness.api.health.TurnOnApi;
-import com.dataport.wellness.api.old.ServiceTabApi;
 import com.dataport.wellness.botsdk.BotMessageListener;
 import com.dataport.wellness.botsdk.IBotIntentCallback;
 import com.dataport.wellness.http.HttpData;
@@ -33,9 +31,6 @@ import com.dataport.wellness.http.glide.GlideApp;
 import com.hjq.http.EasyHttp;
 import com.hjq.http.listener.HttpCallback;
 import com.sunfusheng.marqueeview.MarqueeView;
-import com.tencent.qcloud.tuicore.TUILogin;
-import com.tencent.qcloud.tuicore.interfaces.TUICallback;
-import com.tencent.qcloud.tuicore.interfaces.TUILoginListener;
 import com.tencent.qcloud.tuikit.TUICommonDefine;
 import com.tencent.qcloud.tuikit.tuicallengine.TUICallDefine;
 import com.tencent.qcloud.tuikit.tuicallengine.TUICallEngine;
@@ -120,6 +115,8 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
         DrawableCrossFadeFactory factory = new DrawableCrossFadeFactory.Builder().setCrossFadeEnabled(true).build();
         GlideApp.with(this)
                 .load(data.getDoctorUrl())
+                .skipMemoryCache(true)//禁用内存缓存功能
+                .diskCacheStrategy(DiskCacheStrategy.NONE)//不缓存任何内容
                 .transition(DrawableTransitionOptions.withCrossFade(factory))
                 .transform(new RoundedCorners((int) this.getResources().getDimension(R.dimen.dp_10)))
                 .into(head);

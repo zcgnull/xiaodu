@@ -1,11 +1,8 @@
 package com.dataport.wellness.activity;
 
-import static androidx.core.os.HandlerCompat.postDelayed;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -20,17 +17,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.baidu.duer.bot.BotMessageProtocol;
 import com.baidu.duer.botsdk.BotIntent;
 import com.baidu.duer.botsdk.BotSdk;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.dataport.wellness.R;
 import com.dataport.wellness.activity.dialog.BaseDialog;
 import com.dataport.wellness.activity.dialog.WaitDialog;
 import com.dataport.wellness.adapter.OnlineAdapter;
 import com.dataport.wellness.api.health.AdviceDoctorApi;
 import com.dataport.wellness.api.health.IMLoginApi;
-import com.dataport.wellness.api.health.IMParamApi;
 import com.dataport.wellness.api.health.JudgeAdviceApi;
 import com.dataport.wellness.api.health.OnlineDoctorV2Api;
-import com.dataport.wellness.api.health.OnlineAdviceNumApi;
-import com.dataport.wellness.api.health.OnlineDoctorApi;
 import com.dataport.wellness.api.health.StartRecordApi;
 import com.dataport.wellness.api.health.TurnOffApi;
 import com.dataport.wellness.api.health.TurnOnApi;
@@ -404,6 +399,8 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
                             noOnline.setText(result.getData().getSteerDesc());
                             GlideApp.with(OnLineActivity.this)
                                     .load(result.getData().getSteerImg())
+                                    .skipMemoryCache(true)//禁用内存缓存功能
+                                    .diskCacheStrategy(DiskCacheStrategy.NONE)//不缓存任何内容
                                     .into(ivQr);
                         }
                     }
