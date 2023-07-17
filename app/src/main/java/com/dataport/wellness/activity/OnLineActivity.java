@@ -530,6 +530,7 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        this.doctorList=null;
+        doctorList=null;
+        onlineAdapter=null;
     }
 }
