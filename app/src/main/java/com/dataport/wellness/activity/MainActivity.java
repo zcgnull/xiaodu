@@ -135,6 +135,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
             BotSdk.getInstance().speakRequest(messages.get(position));
         });
+        new Thread() {
+            @Override
+            public void run() {
+                while (timeFlag) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    Message msg = new Message();
+                    msg.what = 0;  //消息(一个整型值)
+                    handler.sendMessage(msg);// 每隔1秒发送一个msg给mHandler
+                }
+            }
+        }.start();
     }
 
     private void getDeviceInfo(String sn) {
@@ -503,21 +518,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         BotSdk.getInstance().setDialogStateListener(this);
         Log.d(TAG, "handleIntent: onResume");
         timeFlag = true;
-        new Thread() {
-            @Override
-            public void run() {
-                while (timeFlag) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    Message msg = new Message();
-                    msg.what = 0;  //消息(一个整型值)
-                    handler.sendMessage(msg);// 每隔1秒发送一个msg给mHandler
-                }
-            }
-        }.start();
+
 
     }
 
