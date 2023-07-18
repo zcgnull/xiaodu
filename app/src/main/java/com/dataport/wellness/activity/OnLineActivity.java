@@ -545,5 +545,6 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
         doctorList=null;
         onlineAdapter=null;
         doctor=null;
+        contentRv=null;
     }
 }
