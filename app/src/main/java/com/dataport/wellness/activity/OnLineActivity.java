@@ -530,7 +530,20 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        TUILogin.logout(new TUICallback() {
+            @Override
+            public void onSuccess() {
+                Log.i(TAG, "onSuccess: tui logout success");
+            }
+
+            @Override
+            public void onError(int errorCode, String errorMessage) {
+                Log.i(TAG, "onError: tui logout error:"+errorMessage);
+            }
+        });
+        TUICallEngine.destroyInstance();
         doctorList=null;
         onlineAdapter=null;
+        doctor=null;
     }
 }

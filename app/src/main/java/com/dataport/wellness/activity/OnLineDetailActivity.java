@@ -151,6 +151,7 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
         super.onDestroy();
         BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
         TUICallEngine.createInstance(OnLineDetailActivity.this).removeObserver(observer);
+        data=null;
     }
 
     private TUICallObserver observer = new TUICallObserver() {
