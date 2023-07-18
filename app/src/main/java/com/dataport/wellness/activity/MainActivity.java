@@ -67,6 +67,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private String location;
     private List<QueryBinderApi.Bean.ListDTO> binderList = new ArrayList<>();
     private boolean timeFlag = false;
+    private Message timeMsg = new Message();
+    private Thread timeThread =  new Thread() {
+        @Override
+        public void run() {
+            while (timeFlag) {
+                try {
+                    timeThread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                handler.sendMessage(timeMsg);// 每隔1秒发送一个msg给mHandler
+            }
+        }
+    };
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -135,6 +150,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
             BotSdk.getInstance().speakRequest(messages.get(position));
         });
+        
+        timeMsg.what = 0;  //消息(一个整型值)
+        timeThread.start();
     }
 
     private void getDeviceInfo(String sn) {
@@ -503,22 +521,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         BotSdk.getInstance().setDialogStateListener(this);
         Log.d(TAG, "handleIntent: onResume");
         timeFlag = true;
-        new Thread() {
-            @Override
-            public void run() {
-                while (timeFlag) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    Message msg = new Message();
-                    msg.what = 0;  //消息(一个整型值)
-                    handler.sendMessage(msg);// 每隔1秒发送一个msg给mHandler
-                }
-            }
-        }.start();
-
     }
 
     @Override
