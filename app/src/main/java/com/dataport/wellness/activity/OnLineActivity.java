@@ -538,13 +538,14 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
 
             @Override
             public void onError(int errorCode, String errorMessage) {
-                Log.i(TAG, "onError: tui logout error:"+errorMessage);
+                Log.i(TAG, "onError: tui logout error:" + errorMessage);
             }
         });
         TUICallEngine.destroyInstance();
-        doctorList=null;
-        onlineAdapter=null;
-        doctor=null;
-        contentRv=null;
+        doctorList = null;
+        onlineAdapter = null;
+        doctor = null;
+        contentRv = null;
+        mWaitDialog = null;
     }
 }
