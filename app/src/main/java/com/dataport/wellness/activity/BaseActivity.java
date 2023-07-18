@@ -9,8 +9,6 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.dataport.wellness.R;
-import com.dataport.wellness.http.HttpData;
 import com.hjq.http.listener.OnHttpListener;
 
 import java.net.InetAddress;
@@ -49,7 +47,7 @@ public class BaseActivity extends AppCompatActivity implements OnHttpListener<Ob
     public void showDialog() {
         if (mDialog == null) {
             mDialog = new ProgressDialog(this);
-            mDialog.setMessage("加载中。。。");
+            mDialog.setMessage("加载中...");
             mDialog.setCancelable(false);
             mDialog.setCanceledOnTouchOutside(false);
         }
