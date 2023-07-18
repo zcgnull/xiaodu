@@ -93,14 +93,14 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_online);
         initView();
-        GridLayoutManager contentManger = new GridLayoutManager(this, 2);
+        GridLayoutManager contentManger = new GridLayoutManager(getApplicationContext(), 2);
         contentManger.setOrientation(GridLayoutManager.VERTICAL);
         contentRv.setLayoutManager(contentManger);
-        onlineAdapter = new OnlineAdapter(this);
+        onlineAdapter = new OnlineAdapter(getApplicationContext());
         contentRv.setAdapter(onlineAdapter);
         onlineAdapter.setListener((data, pos) -> {
-            TUICallEngine.createInstance(OnLineActivity.this).removeObserver(observer);
-            Intent intent = new Intent(OnLineActivity.this, OnLineDetailActivity.class);
+            TUICallEngine.createInstance(getApplicationContext()).removeObserver(observer);
+            Intent intent = new Intent(getApplicationContext(), OnLineDetailActivity.class);
             intent.putExtra("data", data);
             intent.putExtra("binderId", binderId);
             startActivity(intent);
@@ -113,8 +113,8 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
         findViewById(R.id.ln_back_online).setOnClickListener(v -> finish());
         findViewById(R.id.ln_back1).setOnClickListener(v -> finish());
         findViewById(R.id.ln_record).setOnClickListener(v -> {
-            TUICallEngine.createInstance(OnLineActivity.this).removeObserver(observer);
-            Intent intent = new Intent(OnLineActivity.this, OnLineRecordActivity.class);
+            TUICallEngine.createInstance(getApplicationContext()).removeObserver(observer);
+            Intent intent = new Intent(getApplicationContext(), OnLineRecordActivity.class);
             intent.putExtra("binderId", binderId);
             startActivity(intent);
         });
@@ -192,7 +192,7 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
     }
 
     private void hangUp() {
-        TUICallEngine.createInstance(OnLineActivity.this).hangup(new TUICommonDefine.Callback() {
+        TUICallEngine.createInstance(getApplicationContext()).hangup(new TUICommonDefine.Callback() {
             @Override
             public void onSuccess() {
                 Log.i(TAG, "hangup!");
@@ -217,9 +217,9 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
                             if (result.getInfo().getIsExist().equals("1")) {
                                 delay = Integer.valueOf(result.getInfo().getRemainingDuration());
                                 if (type.equals("3")) {
-                                    TUICallKit.createInstance(OnLineActivity.this).call(doctorTimId, TUICallDefine.MediaType.Audio);
+                                    TUICallKit.createInstance(getApplicationContext()).call(doctorTimId, TUICallDefine.MediaType.Audio);
                                 } else {
-                                    TUICallKit.createInstance(OnLineActivity.this).call(doctorTimId, TUICallDefine.MediaType.Video);
+                                    TUICallKit.createInstance(getApplicationContext()).call(doctorTimId, TUICallDefine.MediaType.Video);
                                 }
                             } else {
                                 adviceDoctor(serviceCode, binderId, doctorId);
@@ -255,9 +255,9 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
                     public void onSucceed(HttpData result) {
                         if (result.getCode().equals("00000")) {
                             if (type.equals("3")) {
-                                TUICallKit.createInstance(OnLineActivity.this).call(doctorTimId, TUICallDefine.MediaType.Audio);
+                                TUICallKit.createInstance(getApplicationContext()).call(doctorTimId, TUICallDefine.MediaType.Audio);
                             } else {
-                                TUICallKit.createInstance(OnLineActivity.this).call(doctorTimId, TUICallDefine.MediaType.Video);
+                                TUICallKit.createInstance(getApplicationContext()).call(doctorTimId, TUICallDefine.MediaType.Video);
                             }
                         }
                     }
@@ -332,7 +332,7 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
 
     private void loginTUI(String userId, String userSig) {
         if (mWaitDialog == null) {
-            mWaitDialog = new WaitDialog.Builder(this)
+            mWaitDialog = new WaitDialog.Builder(getApplicationContext())
                     // 消息文本可以不用填写
                     .setMessage("音视频组件初始化中。。。")
                     .create();
@@ -359,7 +359,7 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
         TUILogin.addLoginListener(mLoginListener);
 
         //登录
-        TUILogin.login(this,
+        TUILogin.login(getApplicationContext(),
                 1400634482,     // 请替换为步骤一取到的 SDKAppID
                 userId,        // 请替换为您的 UserID
                 userSig,  // 您可以在控制台中计算一个 UserSig 并填在这个位置
@@ -374,7 +374,7 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
                     @Override
                     public void onError(int errorCode, String errorMessage) {
                         Log.e(TAG, "login failed, errorCode: " + errorCode + " msg:" + errorMessage);
-                        Toast.makeText(OnLineActivity.this, errorMessage + ",请退出重试！", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), errorMessage + ",请退出重试！", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -518,7 +518,7 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
         pageNum = 0;
         getOnlineDoctor(1);
         BotMessageListener.getInstance().addCallback(this);
-        TUICallEngine.createInstance(OnLineActivity.this).addObserver(observer);
+        TUICallEngine.createInstance(getApplicationContext()).addObserver(observer);
     }
 
     @Override
