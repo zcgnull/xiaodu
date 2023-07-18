@@ -332,7 +332,7 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
 
     private void loginTUI(String userId, String userSig) {
         if (mWaitDialog == null) {
-            mWaitDialog = new WaitDialog.Builder(getApplicationContext())
+            mWaitDialog = new WaitDialog.Builder(this)
                     // 消息文本可以不用填写
                     .setMessage("音视频组件初始化中。。。")
                     .create();
@@ -397,7 +397,7 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
                         if (result.getCode() == 0) {
                             rlFail.setVisibility(View.VISIBLE);
                             noOnline.setText(result.getData().getSteerDesc());
-                            GlideApp.with(OnLineActivity.this)
+                            GlideApp.with(getApplicationContext())
                                     .load(result.getData().getSteerImg())
                                     .skipMemoryCache(true)//禁用内存缓存功能
                                     .diskCacheStrategy(DiskCacheStrategy.NONE)//不缓存任何内容
