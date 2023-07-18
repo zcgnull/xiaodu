@@ -153,6 +153,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         
         timeMsg.what = 0;  //消息(一个整型值)
         timeThread.start();
+
     }
 
     private void getDeviceInfo(String sn) {
