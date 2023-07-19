@@ -47,7 +47,6 @@ import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.sunfusheng.marqueeview.MarqueeView;
 import com.tencent.qcloud.tuicore.TUILogin;
 import com.tencent.qcloud.tuicore.interfaces.TUICallback;
-import com.tencent.qcloud.tuicore.interfaces.TUILoginListener;
 import com.tencent.qcloud.tuikit.TUICommonDefine;
 import com.tencent.qcloud.tuikit.tuicallengine.TUICallDefine;
 import com.tencent.qcloud.tuikit.tuicallengine.TUICallEngine;
@@ -335,7 +334,7 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
 
     private void loginTUI(String userId, String userSig) {
         if (mWaitDialog == null) {
-            mWaitDialog = new WaitDialog.Builder(getApplicationContext())
+            mWaitDialog = new WaitDialog.Builder(this)
                     // 消息文本可以不用填写
                     .setMessage("音视频组件初始化中。。。")
                     .create();
