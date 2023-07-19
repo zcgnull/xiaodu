@@ -87,6 +87,7 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
     private int delay = 0;
 
     private BaseDialog mWaitDialog;
+    private TUILogin tuiLogin;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -341,25 +342,25 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
             mWaitDialog.show();
         }
         //设置对登录结果的监听器
-        TUILoginListener mLoginListener = new TUILoginListener() {
-            @Override
-            public void onKickedOffline() {
-                super.onKickedOffline();
-                Log.i(TAG, "You have been kicked off the line. Please login again!");
-                //logout();
-            }
-
-            @Override
-            public void onUserSigExpired() {
-                super.onUserSigExpired();
-                Log.i(TAG, "Your user signature information has expired");
-                //logout();
-            }
-        };
-        TUILogin.addLoginListener(mLoginListener);
+//        TUILoginListener mLoginListener = new TUILoginListener() {
+//            @Override
+//            public void onKickedOffline() {
+//                super.onKickedOffline();
+//                Log.i(TAG, "You have been kicked off the line. Please login again!");
+//                //logout();
+//            }
+//
+//            @Override
+//            public void onUserSigExpired() {
+//                super.onUserSigExpired();
+//                Log.i(TAG, "Your user signature information has expired");
+//                //logout();
+//            }
+//        };
+//        TUILogin.addLoginListener(mLoginListener);
 
         //登录
-        TUILogin.login(getApplicationContext(),
+        tuiLogin.login(getApplicationContext(),
                 1400634482,     // 请替换为步骤一取到的 SDKAppID
                 userId,        // 请替换为您的 UserID
                 userSig,  // 您可以在控制台中计算一个 UserSig 并填在这个位置
@@ -530,7 +531,7 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        TUILogin.logout(new TUICallback() {
+        tuiLogin.logout(new TUICallback() {
             @Override
             public void onSuccess() {
                 Log.i(TAG, "onSuccess: tui logout success");
@@ -542,6 +543,7 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
             }
         });
         TUICallEngine.destroyInstance();
+        tuiLogin = null;
         doctorList = null;
         onlineAdapter = null;
         doctor = null;
