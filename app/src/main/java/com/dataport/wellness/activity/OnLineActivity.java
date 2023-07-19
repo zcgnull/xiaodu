@@ -88,13 +88,15 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
 
     private BaseDialog mWaitDialog;
     private TUILogin tuiLogin;
+    private GridLayoutManager contentManger;
+    private List<String> messages = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_online);
         initView();
-        GridLayoutManager contentManger = new GridLayoutManager(getApplicationContext(), 2);
+        contentManger = new GridLayoutManager(getApplicationContext(), 2);
         contentManger.setOrientation(GridLayoutManager.VERTICAL);
         contentRv.setLayoutManager(contentManger);
         onlineAdapter = new OnlineAdapter(getApplicationContext());
@@ -137,7 +139,7 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
             pageNum += 1;
             getOnlineDoctor(2);
         });
-        List<String> messages = new ArrayList<>();
+
         messages.add("请试试对我说：“小度小度，语音咨询第1个”");
         messages.add("请试试对我说：“小度小度，视频咨询第1个”");
         messages.add("请试试对我说：“小度小度，咨询第1个”");
@@ -333,7 +335,7 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
 
     private void loginTUI(String userId, String userSig) {
         if (mWaitDialog == null) {
-            mWaitDialog = new WaitDialog.Builder(this)
+            mWaitDialog = new WaitDialog.Builder(getApplicationContext())
                     // 消息文本可以不用填写
                     .setMessage("音视频组件初始化中。。。")
                     .create();
@@ -549,5 +551,7 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
         doctor = null;
         contentRv = null;
         mWaitDialog = null;
+        contentManger = null;
+        messages = null;
     }
 }
