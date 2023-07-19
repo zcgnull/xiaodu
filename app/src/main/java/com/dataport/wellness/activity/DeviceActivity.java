@@ -52,7 +52,7 @@ import q.rorbin.badgeview.QBadgeView;
 public class DeviceActivity extends BaseActivity implements View.OnClickListener {
 
     private TabLayout firstTab, secondTab, thirdTab;
-        private RefreshLayout refreshLayout;
+    private RefreshLayout refreshLayout;
     private RecyclerView contentRv;
     private RelativeLayout noData, noDataLine, rlSuccess, rlFail;
     private LineChart lineChart;
@@ -72,6 +72,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
     private int pageNum = 0;
     private int pageSize = 10;
     private DeviceContentAdapter adapter;
+    private LineChartManager lineChartManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,7 +82,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
         findViewById(R.id.ln_back1).setOnClickListener(v -> finish());
         rlSuccess = findViewById(R.id.rl_success);
         rlFail = findViewById(R.id.rl_fail);
-        ln_env_device=findViewById(R.id.ln_env_device);
+        ln_env_device = findViewById(R.id.ln_env_device);
         noBind = findViewById(R.id.tv_nobind);
         ivQr = findViewById(R.id.iv_qr);
         Intent intent = getIntent();
@@ -201,10 +202,10 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
         }
 
         contentRv = findViewById(R.id.rv_content);
-        GridLayoutManager contentManger = new GridLayoutManager(this, 1);
+        GridLayoutManager contentManger = new GridLayoutManager(getApplicationContext(), 1);
         contentManger.setOrientation(GridLayoutManager.VERTICAL);
         contentRv.setLayoutManager(contentManger);
-        adapter = new DeviceContentAdapter(this);
+        adapter = new DeviceContentAdapter(getApplicationContext());
         contentRv.setAdapter(adapter);
         adapter.setListener((data, pos) -> {
             BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
@@ -244,22 +245,25 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
 
     /**
      * 绘制角标
+     *
      * @param view
      */
-    private void drawBadge(View view,Integer count){
-        QBadgeView qBadgeView = new QBadgeView(this); qBadgeView.setBadgeBackgroundColor(Color.RED);
+    private void drawBadge(View view, Integer count) {
+        QBadgeView qBadgeView = new QBadgeView(getApplicationContext());
+        qBadgeView.setBadgeBackgroundColor(Color.RED);
         qBadgeView.bindTarget(view);
         qBadgeView.setBadgeNumber(count);
-        qBadgeView.setBadgeGravity(Gravity.END| Gravity.TOP);
-        qBadgeView.setGravityOffset(100,0,true);
+        qBadgeView.setBadgeGravity(Gravity.END | Gravity.TOP);
+        qBadgeView.setGravityOffset(100, 0, true);
         qBadgeView.setBadgeTextSize(18, true);
         qBadgeView.setBadgePadding(5, true);
         qBadgeView.setOnDragStateChangedListener((dragState, badge, targetView) -> {
-            if (Badge.OnDragStateChangedListener.STATE_SUCCEED == dragState){
+            if (Badge.OnDragStateChangedListener.STATE_SUCCEED == dragState) {
                 badge.hide(true);
             }
         });
     }
+
     private void getSignType(long binderId) {
         EasyHttp.get(this)
                 .api(new SignTypeApi(binderId))
@@ -395,7 +399,8 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void showXYLineChart(List<DeviceContentApi.Bean.ListDTO> contentList) {
-        LineChartManager lineChartManager = new LineChartManager(lineChart);
+        lineChartManager = null;
+        lineChartManager = new LineChartManager(lineChart);
         //设置x轴的数据
         ArrayList<String> xValues = new ArrayList<>();
         for (DeviceContentApi.Bean.ListDTO bean : contentList) {
@@ -419,7 +424,8 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void showXTLineChart(List<DeviceContentApi.Bean.ListDTO> contentList) {
-        LineChartManager lineChartManager = new LineChartManager(lineChart);
+        lineChartManager = null;
+        lineChartManager = new LineChartManager(lineChart);
         //设置x轴的数据
         ArrayList<String> xValues = new ArrayList<>();
         for (DeviceContentApi.Bean.ListDTO bean : contentList) {
@@ -441,12 +447,19 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
     protected void onDestroy() {
         super.onDestroy();
         BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
-        dateTabs=null;
-        adapter=null;
-        equipmentTabs=null;
-        contentList=null;
-        rightList=null;
-        signTabs=null;
+        dateTabs = null;
+        adapter = null;
+        equipmentTabs = null;
+        contentList = null;
+        rightList = null;
+        signTabs = null;
+        lineChartManager = null;
+        firstTab.clearOnTabSelectedListeners();
+        firstTab.removeAllTabs();
+        secondTab.clearOnTabSelectedListeners();
+        secondTab.removeAllTabs();
+        thirdTab.clearOnTabSelectedListeners();
+        thirdTab.removeAllTabs();
     }
 
     @Override
