@@ -53,6 +53,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener, IBotIntentCallback, IDialogStateListener {
 
@@ -60,28 +62,22 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private LinearLayout lnBinder, lnService;
     private MarqueeView marqueeView;
     private TextView tvBinder, tvWeather, tvC, tvTime, tvDate, tvPlace, tvNoBind, tvNoAuth;
-    private RelativeLayout rlSuccess, rlFail, rlFailSecond,mainBg;
+    private RelativeLayout rlSuccess, rlFail, rlFailSecond, mainBg;
     private ImageView ivQr;
     private long binderId;
     private String binderIdCard;
     private String location;
     private List<QueryBinderApi.Bean.ListDTO> binderList = new ArrayList<>();
-    private boolean timeFlag = false;
-    private Message timeMsg = new Message();
-    private Thread timeThread =  new Thread() {
+
+    private Timer mTimer = new Timer();
+    private TimerTask mTimerTask = new TimerTask() {
         @Override
         public void run() {
-            while (timeFlag) {
-                try {
-                    timeThread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                handler.sendMessage(timeMsg);// 每隔1秒发送一个msg给mHandler
-            }
+            Message msg = handler.obtainMessage();
+            msg.what = 0;
+            handler.sendMessage(msg);
         }
     };
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -115,15 +111,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         marqueeView = findViewById(R.id.marqueeView);
 
         tvDate.setText(TimeUtil.getInstance().getMainDate());
-//        tvTime.setText(TimeUtil.getInstance().getMainTime());
 
-        //获取deviceId,apiAccesstoken,用于向后台获取设备sn
-//        if (getIntent().getStringExtra("device") != null) {
-//            JSONObject jsonObject = JSON.parseObject(getIntent().getStringExtra("device"));
-//            String deviceId = (String) jsonObject.get("deviceId");
-//            String apiAccesstoken = getIntent().getStringExtra("apiAccesstoken");
-//        }
-//        Log.d(TAG, "onCreate: " + Build.SERIAL);
         try {
             Field serialField = Build.class.getDeclaredField("SERIAL");
             // 将字段设置为可访问，以便反射调用
@@ -150,11 +138,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
             BotSdk.getInstance().speakRequest(messages.get(position));
         });
-        
-        timeMsg.what = 0;  //消息(一个整型值)
-        timeThread.start();
-
+        mTimer.schedule(mTimerTask, 1000, 1000);
     }
+
 
     private void getDeviceInfo(String sn) {
         try {
@@ -488,7 +474,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     }
 
-
     Handler handler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -497,7 +482,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 int hour = instance.get(Calendar.HOUR_OF_DAY);
                 int minute = instance.get(Calendar.MINUTE);
                 int second = instance.get(Calendar.SECOND);
-                if (minute < 10){
+                if (minute < 10) {
                     if (second < 10) {
                         tvTime.setText(hour + ":0" + minute + ":0" + second);
                     } else {
@@ -513,15 +498,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             }
         }
     };
-
-
+    
     @Override
     protected void onResume() {
         super.onResume();
         BotMessageListener.getInstance().addCallback(this);
         BotSdk.getInstance().setDialogStateListener(this);
         Log.d(TAG, "handleIntent: onResume");
-        timeFlag = true;
     }
 
     @Override
@@ -529,7 +512,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         super.onPause();
         BotMessageListener.getInstance().clearCallback();
         Log.d(TAG, "handleIntent: onPause");
-        timeFlag = false;
     }
 
     @Override
@@ -538,8 +520,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         Log.d(TAG, "handleIntent: onDestroy");
         BotMessageListener.getInstance().removeCallback(this);
         BotSdk.getInstance().setDialogStateListener(null);
-        timeFlag = false;
+        if (mTimer != null) {
+            mTimer.cancel();
+            mTimer = null;
+        }
     }
+
     /**
      * 当前聆听状态回调，包含
      * {@link IDialogStateListener.DialogState#IDLE} 空闲态
@@ -551,6 +537,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
      */
     @Override
     public void onDialogStateChanged(DialogState dialogState) {
-        Log.i("监听bot状态============",dialogState.name());
+        Log.i("监听bot状态============", dialogState.name());
     }
 }
