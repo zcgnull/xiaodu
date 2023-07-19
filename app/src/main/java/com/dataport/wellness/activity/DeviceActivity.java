@@ -441,6 +441,8 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
     protected void onDestroy() {
         super.onDestroy();
         BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
+        dateTabs=null;
+        adapter=null;
         equipmentTabs=null;
         contentList=null;
         rightList=null;
