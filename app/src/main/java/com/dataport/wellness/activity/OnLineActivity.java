@@ -544,6 +544,7 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
             }
         });
         TUICallEngine.destroyInstance();
+        observer=null;
         tuiLogin = null;
         doctorList = null;
         onlineAdapter = null;
@@ -552,5 +553,6 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
         mWaitDialog = null;
         contentManger = null;
         messages = null;
+        marqueeView=null;
     }
 }

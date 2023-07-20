@@ -92,6 +92,7 @@ public class OnLineRecordActivity extends BaseActivity implements IBotIntentCall
         super.onDestroy();
         TUICallEngine.createInstance(OnLineRecordActivity.this).removeObserver(observer);
         recordList=null;
+        observer=null;
     }
 
     private TUICallObserver observer = new TUICallObserver() {
