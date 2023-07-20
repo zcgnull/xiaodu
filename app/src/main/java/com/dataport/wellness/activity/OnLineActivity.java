@@ -90,6 +90,7 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
     private GridLayoutManager contentManger;
     private List<String> messages = new ArrayList<>();
 
+    private TUICallback tuiCallback;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -359,26 +360,27 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
 //            }
 //        };
 //        TUILogin.addLoginListener(mLoginListener);
+        tuiCallback= new TUICallback() {
+            @Override
+            public void onSuccess() {
+                Log.i(TAG, "login success");
+                isLogin = true;
+                mWaitDialog.dismiss();
+            }
 
+            @Override
+            public void onError(int errorCode, String errorMessage) {
+                Log.e(TAG, "login failed, errorCode: " + errorCode + " msg:" + errorMessage);
+                Toast.makeText(getApplicationContext(), errorMessage + ",请退出重试！", Toast.LENGTH_SHORT).show();
+            }
+        };
         //登录
         tuiLogin.login(getApplicationContext(),
                 1400634482,     // 请替换为步骤一取到的 SDKAppID
                 userId,        // 请替换为您的 UserID
                 userSig,  // 您可以在控制台中计算一个 UserSig 并填在这个位置
-                new TUICallback() {
-                    @Override
-                    public void onSuccess() {
-                        Log.i(TAG, "login success");
-                        isLogin = true;
-                        mWaitDialog.dismiss();
-                    }
-
-                    @Override
-                    public void onError(int errorCode, String errorMessage) {
-                        Log.e(TAG, "login failed, errorCode: " + errorCode + " msg:" + errorMessage);
-                        Toast.makeText(getApplicationContext(), errorMessage + ",请退出重试！", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                tuiCallback
+               );
     }
 
     private void getGuideData(String steerType) {
@@ -544,6 +546,7 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
             }
         });
         TUICallEngine.destroyInstance();
+        tuiCallback=null;
         observer=null;
         tuiLogin = null;
         doctorList = null;
