@@ -15,6 +15,7 @@ import com.dataport.wellness.R;
 import com.dataport.wellness.api.health.DeviceEnvApi;
 
 import java.util.List;
+
 //环境监测列表
 public class DeviceEnvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -48,14 +49,15 @@ public class DeviceEnvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ContentHolder contentHolder = (ContentHolder) holder;
-        contentHolder.deviceName.setText(list.get(position).getDeviceName());
-        contentHolder.alarmReason.setText(list.get(position).getAlarmReason());
+        contentHolder.deviceName.setText(list.get(position).getEquipmentName());
+        contentHolder.alarmAddress.setText(list.get(position).getAlarmAdress() + list.get(position).getInstallationPosition());
         contentHolder.alarmTime.setText(list.get(position).getAlarmTime());
-        if(null!=list.get(position).getReadTime()&&!"".equals(list.get(position).getReadTime())){
+        contentHolder.binderName.setText(list.get(position).getBinderName());
+        if (!"未处理".equals(list.get(position).getProcessState())) {
             contentHolder.btnFlagRead.setVisibility(View.GONE);
             contentHolder.readTime.setVisibility(View.VISIBLE);
-            contentHolder.readTime.setText(list.get(position).getReadTime());
-        }else{
+            contentHolder.readTime.setText(list.get(position).getProcessTime());
+        } else {
             contentHolder.btnFlagRead.setVisibility(View.VISIBLE);
             contentHolder.readTime.setVisibility(View.GONE);
         }
@@ -75,16 +77,20 @@ public class DeviceEnvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     public class ContentHolder extends RecyclerView.ViewHolder {
         public TextView deviceName;
-        public TextView alarmReason;
+
+        public TextView binderName;
+        public TextView alarmAddress;
         public TextView alarmTime;
         public TextView readTime;
         public Button btnFlagRead;
 
         public LinearLayout lnBtn;
+
         public ContentHolder(View itemView) {
             super(itemView);
             deviceName = itemView.findViewById(R.id.device_name);
-            alarmReason = itemView.findViewById(R.id.alarm_reason);
+            binderName = itemView.findViewById(R.id.binderName);
+            alarmAddress = itemView.findViewById(R.id.alarm_address);
             alarmTime = itemView.findViewById(R.id.alarm_time);
             readTime = itemView.findViewById(R.id.read_time);
             btnFlagRead = itemView.findViewById(R.id.btn_flag_read);

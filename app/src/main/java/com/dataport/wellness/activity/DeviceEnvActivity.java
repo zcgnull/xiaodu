@@ -51,11 +51,11 @@ public class DeviceEnvActivity extends BaseActivity implements IBotIntentCallbac
         refreshLayout = findViewById(R.id.refreshLayout);
         refreshLayout.setOnRefreshListener(refreshlayout -> {
             pageNum = 0;
-            getOnlineRecord(1);
+            getDeviceEnvList(1);
         });
         refreshLayout.setOnLoadMoreListener(refreshlayout -> {
             pageNum += 1;
-            getOnlineRecord(2);
+            getDeviceEnvList(2);
         });
         contentRv = findViewById(R.id.rv_content);
         GridLayoutManager contentManger = new GridLayoutManager(this, 1);
@@ -64,7 +64,7 @@ public class DeviceEnvActivity extends BaseActivity implements IBotIntentCallbac
         adapter = new DeviceEnvAdapter(this);
         contentRv.setAdapter(adapter);
         adapter.setFlagReadClickListener((data, pos) -> flagRead(data.getId()));//标记已读
-        getOnlineRecord(1);
+        getDeviceEnvList(1);
     }
 
     @Override
@@ -77,47 +77,56 @@ public class DeviceEnvActivity extends BaseActivity implements IBotIntentCallbac
      * 获取分页数据
      * @param type 1=刷新，2=加载
      */
-    private void getOnlineRecord(int type) {//type:1代表刷新2代表加载
-        EasyHttp.get(this)
-                .api(new DeviceEnvApi(binderId, pageNum, pageSize))
-                .request(new HttpCallback<HttpData<DeviceEnvApi.Bean>>(this) {
+    private void getDeviceEnvList(int type) {//type:1代表刷新2代表加载
+        DeviceEnvApi a=new DeviceEnvApi(1,1,1);
+        DeviceEnvApi.Bean b=a.new Bean();
+        DeviceEnvApi.Bean.DeviceEnvListDTO c=b.new DeviceEnvListDTO();
+        c.setAlarmAdress("河北省秦皇岛市");
+        c.setId(111);
+        c.setEquipmentName("烟雾传感器");
+        c.setInstallationPosition("卧室");
+        c.setBinderName("阎文成");
+        c.setProcessState("未处理");
+        c.setAlarmTime("2023-07-14 12:00:00");
 
-                    @Override
-                    public void onSucceed(HttpData<DeviceEnvApi.Bean> result) {
-                      /*  if (type == 1) {
-                            recordList.clear();
-                            refreshLayout.finishRefresh();
-                            if (null==result.getData().getDeviceEnvListDTOList()||result.getData().getDeviceEnvListDTOList().size() == 0) {
-                                noData.setVisibility(View.VISIBLE);
-                            } else {
-                                noData.setVisibility(View.GONE);
-                                recordList = result.getData().getDeviceEnvListDTOList();
-                            }
-                        } else {
-                            refreshLayout.finishLoadMore();
-                            if (null==result.getData().getDeviceEnvListDTOList()||result.getData().getDeviceEnvListDTOList().size() == 0) {
-                            } else {
-                                recordList.addAll(result.getData().getDeviceEnvListDTOList());
-                            }
-                        }*/
-                        DeviceEnvApi a=new DeviceEnvApi(1,1,1);
-                        DeviceEnvApi.Bean b=a.new Bean();
-                        DeviceEnvApi.Bean.DeviceEnvListDTO c=b.new DeviceEnvListDTO();
-                        c.setAlarmReason("河北省秦皇岛市");
-                        c.setId(111);
-                        c.setDeviceName("烟雾传感器");
-                        c.setAlarmTime("2023-07-14 12:00:00");
-                        DeviceEnvApi.Bean.DeviceEnvListDTO d=b.new DeviceEnvListDTO();
-                        d.setAlarmReason("河北省秦皇岛市海港区海怡学府，水浸告警");
-                        d.setId(111);
-                        d.setDeviceName("水浸传感器");
-                        d.setAlarmTime("2023-07-14 12:00:00");
-                        d.setReadTime("2024-03-03 12:00:00");
-                        recordList.add(c);
-                        recordList.add(d);
-                        adapter.setList(recordList);
-                    }
-                });
+        recordList.add(c);
+        adapter.setList(recordList);
+//        EasyHttp.get(this)
+//                .api(new DeviceEnvApi(binderId, pageNum, pageSize))
+//                .request(new HttpCallback<HttpData<DeviceEnvApi.Bean>>(this) {
+//
+//                    @Override
+//                    public void onSucceed(HttpData<DeviceEnvApi.Bean> result) {
+//                      /*  if (type == 1) {
+//                            recordList.clear();
+//                            refreshLayout.finishRefresh();
+//                            if (null==result.getData().getDeviceEnvListDTOList()||result.getData().getDeviceEnvListDTOList().size() == 0) {
+//                                noData.setVisibility(View.VISIBLE);
+//                            } else {
+//                                noData.setVisibility(View.GONE);
+//                                recordList = result.getData().getDeviceEnvListDTOList();
+//                            }
+//                        } else {
+//                            refreshLayout.finishLoadMore();
+//                            if (null==result.getData().getDeviceEnvListDTOList()||result.getData().getDeviceEnvListDTOList().size() == 0) {
+//                            } else {
+//                                recordList.addAll(result.getData().getDeviceEnvListDTOList());
+//                            }
+//                        }*/
+//                        DeviceEnvApi a=new DeviceEnvApi(1,1,1);
+//                        DeviceEnvApi.Bean b=a.new Bean();
+//                        DeviceEnvApi.Bean.DeviceEnvListDTO c=b.new DeviceEnvListDTO();
+//                        c.setAlarmAdress("河北省秦皇岛市");
+//                        c.setId(111);
+//                        c.setEquipmentName("烟雾传感器");
+//                        c.setInstallationPosition("卧室");
+//                        c.setBinderName("阎文成");
+//                        c.setAlarmTime("2023-07-14 12:00:00");
+//
+//                        recordList.add(c);
+//                        adapter.setList(recordList);
+//                    }
+//                });
     }
 
     /*标记已读*/
@@ -131,7 +140,7 @@ public class DeviceEnvActivity extends BaseActivity implements IBotIntentCallbac
                     public void onSucceed(HttpData result) {
                         if (result.getCode().equals("00000")) {
                             pageNum = 0;
-                            getOnlineRecord(1);
+                            getDeviceEnvList(1);
                         }
                     }
                 });
