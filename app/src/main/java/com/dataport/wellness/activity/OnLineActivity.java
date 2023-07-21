@@ -36,7 +36,6 @@ import com.dataport.wellness.http.HttpData;
 import com.dataport.wellness.http.HttpIntData;
 import com.dataport.wellness.http.glide.GlideApp;
 import com.dataport.wellness.utils.BotConstants;
-import com.google.android.material.tabs.TabLayout;
 import com.hjq.http.EasyHttp;
 import com.hjq.http.config.IRequestInterceptor;
 import com.hjq.http.listener.HttpCallback;
@@ -63,7 +62,6 @@ import java.util.concurrent.TimeUnit;
 public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
 
     private static final String TAG = "OnLineActivity";
-    private TabLayout tabLayout;
     private RecyclerView contentRv;
     private RefreshLayout refreshLayout;
     private RelativeLayout noData, rlSuccess, rlFail;
@@ -128,7 +126,6 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
         rlFail = findViewById(R.id.rl_fail);
         noOnline = findViewById(R.id.tv_no_online);
         ivQr = findViewById(R.id.iv_qr);
-        tabLayout = findViewById(R.id.first_tab);
         contentRv = findViewById(R.id.rv_content);
         refreshLayout = findViewById(R.id.refreshLayout);
         refreshLayout.setOnRefreshListener(refreshlayout -> {
@@ -296,7 +293,7 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
                             }
                             onlineAdapter.setList(doctorList);
                             if (!isLogin && doctorList.size() > 0) {
-                                getIMLogin(binderId, doctorList.get(0).getId());
+                               getIMLogin(binderId, doctorList.get(0).getId());
                             }
                         }
                     }
@@ -546,6 +543,7 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
             }
         });
         TUICallEngine.destroyInstance();
+        ivQr=null;
         tuiCallback=null;
         observer=null;
         tuiLogin = null;
@@ -557,5 +555,7 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
         contentManger = null;
         messages = null;
         marqueeView=null;
+        doctorTimId=null;
+        binderTimId=null;
     }
 }
