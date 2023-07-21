@@ -57,7 +57,7 @@ public class DeviceEnvApi implements IRequestApi, IRequestServer {
         }
 
         public class DeviceEnvListDTO implements Serializable {
-            private int id;
+            private Long id;
             private String binderName;//绑定人姓名
             private String binderPhone;//绑定人手机号
             private String equipmentName;//设备名称
@@ -72,11 +72,11 @@ public class DeviceEnvApi implements IRequestApi, IRequestServer {
             private String processName;//处理人
             private String processWayOverview;//处理方式描述
 
-            public int getId() {
+            public Long getId() {
                 return id;
             }
 
-            public void setId(int id) {
+            public void setId(Long id) {
                 this.id = id;
             }
 

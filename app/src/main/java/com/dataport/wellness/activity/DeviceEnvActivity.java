@@ -2,7 +2,6 @@ package com.dataport.wellness.activity;
 
 import android.os.Bundle;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -11,8 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.baidu.duer.botsdk.BotIntent;
 import com.dataport.wellness.R;
 import com.dataport.wellness.adapter.DeviceEnvAdapter;
-import com.dataport.wellness.api.health.CancelRecordApi;
 import com.dataport.wellness.api.health.DeviceEnvApi;
+import com.dataport.wellness.api.health.DeviceEnvProcessApi;
 import com.dataport.wellness.botsdk.BotMessageListener;
 import com.dataport.wellness.botsdk.IBotIntentCallback;
 import com.dataport.wellness.http.HttpData;
@@ -82,7 +81,7 @@ public class DeviceEnvActivity extends BaseActivity implements IBotIntentCallbac
         DeviceEnvApi.Bean b=a.new Bean();
         DeviceEnvApi.Bean.DeviceEnvListDTO c=b.new DeviceEnvListDTO();
         c.setAlarmAdress("河北省秦皇岛市");
-        c.setId(111);
+        c.setId(111L);
         c.setEquipmentName("烟雾传感器");
         c.setInstallationPosition("卧室");
         c.setBinderName("阎文成");
@@ -130,10 +129,9 @@ public class DeviceEnvActivity extends BaseActivity implements IBotIntentCallbac
     }
 
     /*标记已读*/
-    private void flagRead(int adviceId) {
-        Toast.makeText(this,"我被点击",Toast.LENGTH_LONG).show();
+    private void flagRead(Long id) {
         EasyHttp.post(this)
-                .api(new CancelRecordApi(adviceId))
+                .api(new DeviceEnvProcessApi(id))
                 .request(new HttpCallback<HttpData>(this) {
 
                     @Override
