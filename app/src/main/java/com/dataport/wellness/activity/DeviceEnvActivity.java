@@ -71,7 +71,7 @@ public class DeviceEnvActivity extends BaseActivity implements IBotIntentCallbac
                 "4",
                 "",
                 "",
-                data.getRecordId(),
+                 data.getRecordId(),
                 "2"));//标记已读
         getDeviceEnvList(1);
     }
