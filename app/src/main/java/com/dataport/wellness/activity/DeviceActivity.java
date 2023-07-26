@@ -59,6 +59,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
     private TextView qs, jl;
     private TextView noBind;
     private LinearLayout ln_env_device;
+    private LinearLayout ln_env_device1;
     private ImageView ivQr;
 
     private List<String> dateTabs = new ArrayList<>();
@@ -67,6 +68,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
     private List<DeviceContentApi.Bean.ListDTO> contentList = new ArrayList<>();
     private List<DeviceContentPageApi.Bean.RecordListDTO> rightList = new ArrayList<>();
     private long binderId;
+    private Long userId;
     private int equipmentBindId = 0;
     private String dataTypeCode = "1";
     private int pageNum = 0;
@@ -83,10 +85,12 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
         rlSuccess = findViewById(R.id.rl_success);
         rlFail = findViewById(R.id.rl_fail);
         ln_env_device = findViewById(R.id.ln_env_device);
+        ln_env_device1=findViewById(R.id.ln_env_device1);
         noBind = findViewById(R.id.tv_nobind);
         ivQr = findViewById(R.id.iv_qr);
         Intent intent = getIntent();
         binderId = intent.getLongExtra("binderId", 0);
+        userId= intent.getLongExtra("userId", 0);
         noData = findViewById(R.id.rl_no_data);
         noDataLine = findViewById(R.id.rl_no_data_line);
         lineChart = findViewById(R.id.line_chart);
@@ -97,7 +101,13 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
         //环境监测
         ln_env_device.setOnClickListener(v -> {
             Intent deviceEnvIntent = new Intent(DeviceActivity.this, DeviceEnvActivity.class);
-            deviceEnvIntent.putExtra("binderId", binderId);
+            deviceEnvIntent.putExtra("userId", userId);
+            deviceEnvIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(deviceEnvIntent);
+        });
+        ln_env_device1.setOnClickListener(v -> {
+            Intent deviceEnvIntent = new Intent(DeviceActivity.this, DeviceEnvActivity.class);
+            deviceEnvIntent.putExtra("userId", userId);
             deviceEnvIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(deviceEnvIntent);
         });
@@ -239,7 +249,8 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                 getDeviceContentPage(dataTypeCode, TimeUtil.getInstance().getYesterdayTime(), TimeUtil.getInstance().getCurrentTime(), 2);
             }
         });
-//        drawBadge(rlSuccess,100);
+        drawBadge(rlSuccess,100);
+        drawBadge(rlFail,100);
         getSignType(binderId);
     }
 

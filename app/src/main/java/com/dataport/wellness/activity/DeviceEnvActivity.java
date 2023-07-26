@@ -21,7 +21,9 @@ import com.hjq.http.EasyHttp;
 import com.hjq.http.listener.HttpCallback;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -34,11 +36,11 @@ public class DeviceEnvActivity extends BaseActivity implements IBotIntentCallbac
     private RelativeLayout noData;
     private RecyclerView contentRv;
 
-    private long binderId;
+    private Long userId;
     private int pageNum = 0;
     private int pageSize = 10;
 
-    private List<DeviceEnvApi.Bean.DeviceEnvListDTO> recordList = new ArrayList<>();
+    private List<DeviceEnvApi.Bean.DeviceEnvListDTO> warnList = new ArrayList<>();
     private DeviceEnvAdapter adapter;
 
     @Override
@@ -46,7 +48,7 @@ public class DeviceEnvActivity extends BaseActivity implements IBotIntentCallbac
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device_env_list);
-        binderId = getIntent().getLongExtra("binderId", 0);
+        userId = getIntent().getLongExtra("userId", 0);
         findViewById(R.id.ln_back).setOnClickListener(v -> finish());
         noData = findViewById(R.id.rl_no_data);
         refreshLayout = findViewById(R.id.refreshLayout);
@@ -64,53 +66,64 @@ public class DeviceEnvActivity extends BaseActivity implements IBotIntentCallbac
         contentRv.setLayoutManager(contentManger);
         adapter = new DeviceEnvAdapter(this);
         contentRv.setAdapter(adapter);
-        adapter.setFlagReadClickListener((data, pos) -> flagRead(data.getRecordId()));//标记已读
+        adapter.setFlagReadClickListener((data, pos) -> flagRead(
+                "小度智能屏",BotConstants.SN,
+                "4",
+                "",
+                "",
+                data.getRecordId(),
+                "2"));//标记已读
         getDeviceEnvList(1);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        recordList=null;
+        warnList = null;
     }
 
     /**
      * 获取分页数据
+     *
      * @param type 1=刷新，2=加载
      */
     private void getDeviceEnvList(int type) {//type:1代表刷新2代表加载
         EasyHttp.get(this)
-                .api(new DeviceEnvApi(binderId, pageNum, pageSize, BotConstants.SN))
+                .api(new DeviceEnvApi(userId, pageNum, pageSize, BotConstants.SN))
                 .request(new HttpCallback<HttpData<DeviceEnvApi.Bean>>(this) {
 
                     @Override
                     public void onSucceed(HttpData<DeviceEnvApi.Bean> result) {
                         if (type == 1) {
-                            recordList.clear();
+                            warnList.clear();
                             refreshLayout.finishRefresh();
-                            if (null==result.getData().getDeviceEnvListDTOList()||result.getData().getDeviceEnvListDTOList().size() == 0) {
+                            if (null == result.getData().getWarnList() || result.getData().getWarnList().size() == 0) {
                                 noData.setVisibility(View.VISIBLE);
                             } else {
                                 noData.setVisibility(View.GONE);
-                                recordList = result.getData().getDeviceEnvListDTOList();
+                                warnList = result.getData().getWarnList();
                             }
                         } else {
                             refreshLayout.finishLoadMore();
-                            if (null==result.getData().getDeviceEnvListDTOList()||result.getData().getDeviceEnvListDTOList().size() == 0) {
+                            if (null == result.getData().getWarnList() || result.getData().getWarnList().size() == 0) {
                             } else {
-                                recordList.addAll(result.getData().getDeviceEnvListDTOList());
+                                warnList.addAll(result.getData().getWarnList());
                             }
                         }
 
-                        adapter.setList(recordList);
+                        adapter.setList(warnList);
                     }
                 });
     }
 
     /*标记已读*/
-    private void flagRead(Long id) {
+    private void flagRead(String processEnd, String processEquipmentNo, String processWay, String processWayOverview, String processName , Long recordId, String processState) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date curDate = new Date(System.currentTimeMillis());//获取当前时间
+        String processTime  = formatter.format(curDate);
+        DeviceEnvProcessApi deviceEnvProcessApi = new DeviceEnvProcessApi(processEnd, processEquipmentNo, processWay, processWayOverview, processName, processTime, recordId, processState);
         EasyHttp.post(this)
-                .api(new DeviceEnvProcessApi(id))
+                .api(deviceEnvProcessApi)
                 .request(new HttpCallback<HttpData>(this) {
 
                     @Override

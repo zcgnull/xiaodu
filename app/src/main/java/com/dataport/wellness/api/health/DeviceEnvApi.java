@@ -15,7 +15,7 @@ public class DeviceEnvApi implements IRequestApi, IRequestServer {
     @NonNull
     @Override
     public String getApi() {
-        return "/api/jkgl/hjjc/xiaoDuWarn/queryPage";
+        return "api/jkgl/hjjc/xiaoDuWarn/queryPage";
     }
 
     @NonNull
@@ -39,15 +39,15 @@ public class DeviceEnvApi implements IRequestApi, IRequestServer {
     public class Bean implements Serializable {
 
 
-        private List<DeviceEnvListDTO> deviceEnvListDTOList;
+        private List<DeviceEnvListDTO> warnList;
         private int totalElements;
 
-        public List<DeviceEnvListDTO> getDeviceEnvListDTOList() {
-            return deviceEnvListDTOList;
+        public List<DeviceEnvListDTO> getWarnList() {
+            return warnList;
         }
 
-        public void setDeviceEnvListDTOList(List<DeviceEnvListDTO> deviceEnvListDTOList) {
-            this.deviceEnvListDTOList = deviceEnvListDTOList;
+        public void setWarnList(List<DeviceEnvListDTO> warnList) {
+            this.warnList = warnList;
         }
 
         public int getTotalElements() {
@@ -65,8 +65,9 @@ public class DeviceEnvApi implements IRequestApi, IRequestServer {
             private String equipmentName;//设备名称
             private String alarmType;//报警类型
             private String alarmTypeName;//报警类型名称
-            private String alarmAdress;//报警地址
+            private String address;//报警地址
             private String installationPosition;//安装位置
+            private String installationPositionName;//安装位置描述
             private String alarmTime;//报警时间
             private String processState;//处理状态（1未处理 2已处理 3误报）
             private String processStateName;//处理状态描述
@@ -132,12 +133,20 @@ public class DeviceEnvApi implements IRequestApi, IRequestServer {
                 this.alarmType = alarmType;
             }
 
-            public String getAlarmAdress() {
-                return alarmAdress;
+            public String getAddress() {
+                return address;
             }
 
-            public void setAlarmAdress(String alarmAdress) {
-                this.alarmAdress = alarmAdress;
+            public void setAddress(String address) {
+                this.address = address;
+            }
+
+            public String getInstallationPositionName() {
+                return installationPositionName;
+            }
+
+            public void setInstallationPositionName(String installationPositionName) {
+                this.installationPositionName = installationPositionName;
             }
 
             public String getInstallationPosition() {

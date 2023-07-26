@@ -50,7 +50,7 @@ public class DeviceEnvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ContentHolder contentHolder = (ContentHolder) holder;
         contentHolder.deviceName.setText(list.get(position).getEquipmentName());
-        contentHolder.alarmAddress.setText(list.get(position).getAlarmAdress() + list.get(position).getInstallationPosition());
+        contentHolder.alarmAddress.setText(list.get(position).getAddress() + list.get(position).getInstallationPositionName());
         contentHolder.alarmTime.setText(list.get(position).getAlarmTime());
         contentHolder.binderName.setText(list.get(position).getBinderName());
         contentHolder.processState.setText(list.get(position).getProcessStateName());
