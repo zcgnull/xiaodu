@@ -53,7 +53,8 @@ public class DeviceEnvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         contentHolder.alarmAddress.setText(list.get(position).getAlarmAdress() + list.get(position).getInstallationPosition());
         contentHolder.alarmTime.setText(list.get(position).getAlarmTime());
         contentHolder.binderName.setText(list.get(position).getBinderName());
-        if (!"未处理".equals(list.get(position).getProcessState())) {
+        contentHolder.processState.setText(list.get(position).getProcessStateName());
+        if (!"1".equals(list.get(position).getProcessState())) {
             contentHolder.btnFlagRead.setVisibility(View.GONE);
             contentHolder.readTime.setVisibility(View.VISIBLE);
             contentHolder.readTime.setText(list.get(position).getProcessTime());
@@ -82,12 +83,14 @@ public class DeviceEnvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         public TextView alarmAddress;
         public TextView alarmTime;
         public TextView readTime;
+        public TextView processState;
         public Button btnFlagRead;
 
         public LinearLayout lnBtn;
 
         public ContentHolder(View itemView) {
             super(itemView);
+            processState=itemView.findViewById(R.id.process_state);
             deviceName = itemView.findViewById(R.id.device_name);
             binderName = itemView.findViewById(R.id.binderName);
             alarmAddress = itemView.findViewById(R.id.alarm_address);

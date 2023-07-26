@@ -15,7 +15,7 @@ public class DeviceEnvApi implements IRequestApi, IRequestServer {
     @NonNull
     @Override
     public String getApi() {
-        return "api/jkgl/service/xiaodu/queryAdviceUerRecordPage";
+        return "/api/jkgl/hjjc/xiaoDuWarn/queryPage";
     }
 
     @NonNull
@@ -27,11 +27,13 @@ public class DeviceEnvApi implements IRequestApi, IRequestServer {
     private Integer pageNo;//页码 一开始
     private Integer pageSize;//每页条数
     private long userId;
+    private String equipmentNo;
 
-    public DeviceEnvApi(long userId, Integer pageNo, Integer pageSize) {
+    public DeviceEnvApi(long userId, Integer pageNo, Integer pageSize,String equipmentNo) {
         this.pageNo = pageNo;
         this.pageSize = pageSize;
         this.userId = userId;
+        this.equipmentNo=equipmentNo;
     }
 
     public class Bean implements Serializable {
@@ -57,27 +59,45 @@ public class DeviceEnvApi implements IRequestApi, IRequestServer {
         }
 
         public class DeviceEnvListDTO implements Serializable {
-            private Long id;
+            private Long recordId;//记录id
             private String binderName;//绑定人姓名
             private String binderPhone;//绑定人手机号
             private String equipmentName;//设备名称
             private String alarmType;//报警类型
+            private String alarmTypeName;//报警类型名称
             private String alarmAdress;//报警地址
             private String installationPosition;//安装位置
             private String alarmTime;//报警时间
-            private String processState;//处理状态
+            private String processState;//处理状态（1未处理 2已处理 3误报）
+            private String processStateName;//处理状态描述
             private String processTime;//处理时间
             private String processEnd;//处理端
             private String processWay;//处理方式
             private String processName;//处理人
             private String processWayOverview;//处理方式描述
 
-            public Long getId() {
-                return id;
+            public String getAlarmTypeName() {
+                return alarmTypeName;
             }
 
-            public void setId(Long id) {
-                this.id = id;
+            public void setAlarmTypeName(String alarmTypeName) {
+                this.alarmTypeName = alarmTypeName;
+            }
+
+            public String getProcessStateName() {
+                return processStateName;
+            }
+
+            public void setProcessStateName(String processStateName) {
+                this.processStateName = processStateName;
+            }
+
+            public Long getRecordId() {
+                return recordId;
+            }
+
+            public void setRecordId(Long recordId) {
+                this.recordId = recordId;
             }
 
             public String getBinderName() {

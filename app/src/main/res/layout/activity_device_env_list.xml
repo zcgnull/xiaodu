@@ -101,7 +101,16 @@
             android:textColor="@color/black"
             android:layout_height="match_parent"/>
 
-
+        <TextView
+            android:id="@+id/process_state"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="处理状态"
+            android:gravity="center"
+            android:padding="@dimen/dp_10"
+            android:textSize="@dimen/sp_20"
+            android:textColor="@color/black"
+            android:layout_height="match_parent"/>
 
         <TextView
             android:layout_width="0dp"

@@ -1,6 +1,7 @@
 package com.dataport.wellness.activity;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.Nullable;
@@ -15,6 +16,7 @@ import com.dataport.wellness.api.health.DeviceEnvProcessApi;
 import com.dataport.wellness.botsdk.BotMessageListener;
 import com.dataport.wellness.botsdk.IBotIntentCallback;
 import com.dataport.wellness.http.HttpData;
+import com.dataport.wellness.utils.BotConstants;
 import com.hjq.http.EasyHttp;
 import com.hjq.http.listener.HttpCallback;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
@@ -62,7 +64,7 @@ public class DeviceEnvActivity extends BaseActivity implements IBotIntentCallbac
         contentRv.setLayoutManager(contentManger);
         adapter = new DeviceEnvAdapter(this);
         contentRv.setAdapter(adapter);
-        adapter.setFlagReadClickListener((data, pos) -> flagRead(data.getId()));//标记已读
+        adapter.setFlagReadClickListener((data, pos) -> flagRead(data.getRecordId()));//标记已读
         getDeviceEnvList(1);
     }
 
@@ -77,55 +79,32 @@ public class DeviceEnvActivity extends BaseActivity implements IBotIntentCallbac
      * @param type 1=刷新，2=加载
      */
     private void getDeviceEnvList(int type) {//type:1代表刷新2代表加载
-        DeviceEnvApi a=new DeviceEnvApi(1,1,1);
-        DeviceEnvApi.Bean b=a.new Bean();
-        DeviceEnvApi.Bean.DeviceEnvListDTO c=b.new DeviceEnvListDTO();
-        c.setAlarmAdress("河北省秦皇岛市");
-        c.setId(111L);
-        c.setEquipmentName("烟雾传感器");
-        c.setInstallationPosition("卧室");
-        c.setBinderName("阎文成");
-        c.setProcessState("未处理");
-        c.setAlarmTime("2023-07-14 12:00:00");
+        EasyHttp.get(this)
+                .api(new DeviceEnvApi(binderId, pageNum, pageSize, BotConstants.SN))
+                .request(new HttpCallback<HttpData<DeviceEnvApi.Bean>>(this) {
 
-        recordList.add(c);
-        adapter.setList(recordList);
-//        EasyHttp.get(this)
-//                .api(new DeviceEnvApi(binderId, pageNum, pageSize))
-//                .request(new HttpCallback<HttpData<DeviceEnvApi.Bean>>(this) {
-//
-//                    @Override
-//                    public void onSucceed(HttpData<DeviceEnvApi.Bean> result) {
-//                      /*  if (type == 1) {
-//                            recordList.clear();
-//                            refreshLayout.finishRefresh();
-//                            if (null==result.getData().getDeviceEnvListDTOList()||result.getData().getDeviceEnvListDTOList().size() == 0) {
-//                                noData.setVisibility(View.VISIBLE);
-//                            } else {
-//                                noData.setVisibility(View.GONE);
-//                                recordList = result.getData().getDeviceEnvListDTOList();
-//                            }
-//                        } else {
-//                            refreshLayout.finishLoadMore();
-//                            if (null==result.getData().getDeviceEnvListDTOList()||result.getData().getDeviceEnvListDTOList().size() == 0) {
-//                            } else {
-//                                recordList.addAll(result.getData().getDeviceEnvListDTOList());
-//                            }
-//                        }*/
-//                        DeviceEnvApi a=new DeviceEnvApi(1,1,1);
-//                        DeviceEnvApi.Bean b=a.new Bean();
-//                        DeviceEnvApi.Bean.DeviceEnvListDTO c=b.new DeviceEnvListDTO();
-//                        c.setAlarmAdress("河北省秦皇岛市");
-//                        c.setId(111);
-//                        c.setEquipmentName("烟雾传感器");
-//                        c.setInstallationPosition("卧室");
-//                        c.setBinderName("阎文成");
-//                        c.setAlarmTime("2023-07-14 12:00:00");
-//
-//                        recordList.add(c);
-//                        adapter.setList(recordList);
-//                    }
-//                });
+                    @Override
+                    public void onSucceed(HttpData<DeviceEnvApi.Bean> result) {
+                        if (type == 1) {
+                            recordList.clear();
+                            refreshLayout.finishRefresh();
+                            if (null==result.getData().getDeviceEnvListDTOList()||result.getData().getDeviceEnvListDTOList().size() == 0) {
+                                noData.setVisibility(View.VISIBLE);
+                            } else {
+                                noData.setVisibility(View.GONE);
+                                recordList = result.getData().getDeviceEnvListDTOList();
+                            }
+                        } else {
+                            refreshLayout.finishLoadMore();
+                            if (null==result.getData().getDeviceEnvListDTOList()||result.getData().getDeviceEnvListDTOList().size() == 0) {
+                            } else {
+                                recordList.addAll(result.getData().getDeviceEnvListDTOList());
+                            }
+                        }
+
+                        adapter.setList(recordList);
+                    }
+                });
     }
 
     /*标记已读*/
