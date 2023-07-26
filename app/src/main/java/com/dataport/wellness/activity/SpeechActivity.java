@@ -2,7 +2,6 @@ package com.dataport.wellness.activity;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -98,7 +97,7 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
         contentRv = findViewById(R.id.rv_speech);
         ivVoice = findViewById(R.id.iv_voice);
         GlideApp.with(this).asGif().load(R.mipmap.voice).into(ivVoice);
-        sn = getIntent().getStringExtra("serialNumber");
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         contentRv.setLayoutManager(linearLayoutManager);
@@ -107,7 +106,7 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
         refreshLayout = findViewById(R.id.refreshLayout);
         refreshLayout.setOnRefreshListener(refreshLayout -> {
             pageNum += 1;
-            getMessage(2, sn, msgType);
+            getMessage(2, BotConstants.SN, msgType);
         });
         findViewById(R.id.iv_setting).setOnClickListener(new View.OnClickListener() {
             @Override
