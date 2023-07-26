@@ -8,10 +8,13 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baidu.duer.bot.BotMessageProtocol;
 import com.baidu.duer.botsdk.BotIntent;
 import com.baidu.duer.botsdk.BotSdk;
@@ -22,15 +25,25 @@ import com.dataport.wellness.api.old.ServiceTabApi;
 import com.dataport.wellness.api.old.ServiceTabBean;
 import com.dataport.wellness.botsdk.BotMessageListener;
 import com.dataport.wellness.botsdk.IBotIntentCallback;
+import com.dataport.wellness.http.HttpIntData;
+import com.dataport.wellness.utils.AuthenticationUtil;
+import com.dataport.wellness.utils.BotConstants;
+import com.dataport.wellness.utils.GlobalConstants;
 import com.google.android.material.tabs.TabLayout;
 import com.hjq.http.EasyHttp;
+import com.hjq.http.body.JsonBody;
+import com.hjq.http.config.IRequestInterceptor;
 import com.hjq.http.listener.HttpCallback;
+import com.hjq.http.model.HttpHeaders;
+import com.hjq.http.model.HttpParams;
+import com.hjq.http.request.HttpRequest;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.sunfusheng.marqueeview.MarqueeView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ServiceOrderActivity extends BaseActivity implements IBotIntentCallback {
 
@@ -59,11 +72,11 @@ public class ServiceOrderActivity extends BaseActivity implements IBotIntentCall
         setContentView(R.layout.activity_service_order);
         findViewById(R.id.ln_back).setOnClickListener(v -> finish());
         Intent getIntent = getIntent();
-        if (null != getIntent.getStringExtra("location")){
+        if (null != getIntent.getStringExtra("location")) {
             String[] location = getIntent.getStringExtra("location").split(",");
             longitude = location[0];
             latitude = location[1];
-            Log.d(TAG, "onCreate: "+longitude+","+latitude);
+            Log.d(TAG, "onCreate: " + longitude + "," + latitude);
         }
         noData = findViewById(R.id.rl_no_data);
         marqueeView = findViewById(R.id.marqueeView);
@@ -192,13 +205,30 @@ public class ServiceOrderActivity extends BaseActivity implements IBotIntentCall
     }
 
     private void queryTab() {
-        EasyHttp.get(this)
-                .api(new ServiceTabApi(""))
-                .request(new HttpCallback<List<ServiceTabBean>>(this) {
+        String sign = "";
+        JSONObject requestJson;
+        Map<String, Object> mapJson = new HashMap<>();
+        mapJson.put("timeStamp", String.valueOf(System.currentTimeMillis()));
+        mapJson.put("appId", "2023070316252737");
+        mapJson.put("signType", "MD5");
+        mapJson.put("nonceStr", AuthenticationUtil.getRandomCode());
+        JSONObject json = new JSONObject(mapJson);
+        try {
+            sign = AuthenticationUtil.generateSignature(json,
+                    "adb8cd70158a4587a3526c3c525e285a", GlobalConstants.SignType.MD5);
+            mapJson.put("sign", sign);
+            requestJson = new JSONObject(mapJson);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        EasyHttp.post(this)
+                .api(new ServiceTabApi())
+                .body(new JsonBody(JSON.toJSONString(requestJson)))
+                .request(new HttpCallback<HttpIntData<List<ServiceTabBean>>>(this) {
 
                     @Override
-                    public void onSucceed(List<ServiceTabBean> result) {
-                        tabList = result;
+                    public void onSucceed(HttpIntData<List<ServiceTabBean>> result) {
+                        tabList = result.getData();
                         ServiceTabBean data = new ServiceTabBean("0", "全部", null);
                         tabList.add(0, data);
                         for (ServiceTabBean bean : tabList) {
@@ -214,27 +244,50 @@ public class ServiceOrderActivity extends BaseActivity implements IBotIntentCall
     }
 
     private void queryCommodity(String id, int type) {//type:1代表刷新2代表加载
-        EasyHttp.get(this)
-                .api(new QueryCommodityApi(id, "ASC", latitude, longitude, pageNum, pageSize))
-                .request(new HttpCallback<QueryCommodityApi.Bean>(this) {
+        String sign = "";
+        JSONObject requestJson;
+        Map<String, Object> mapJson = new HashMap<>();
+        mapJson.put("timeStamp", String.valueOf(System.currentTimeMillis()));
+        mapJson.put("appId", "2023070316252737");
+        mapJson.put("signType", "MD5");
+        mapJson.put("nonceStr", AuthenticationUtil.getRandomCode());
+        mapJson.put("value", id);
+        mapJson.put("sort", "ASC");
+        mapJson.put("latitude", latitude);
+        mapJson.put("longitude", longitude);
+        mapJson.put("pageNo", pageNum);
+        mapJson.put("pageSize", pageSize);
+        JSONObject json = new JSONObject(mapJson);
+        try {
+            sign = AuthenticationUtil.generateSignature(json,
+                    "adb8cd70158a4587a3526c3c525e285a", GlobalConstants.SignType.MD5);
+            mapJson.put("sign", sign);
+            requestJson = new JSONObject(mapJson);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        EasyHttp.post(this)
+                .api(new QueryCommodityApi())
+                .body(new JsonBody(JSON.toJSONString(requestJson)))
+                .request(new HttpCallback<HttpIntData<QueryCommodityApi.Bean>>(this) {
 
                     @Override
-                    public void onSucceed(QueryCommodityApi.Bean result) {
+                    public void onSucceed(HttpIntData<QueryCommodityApi.Bean> result) {
                         if (type == 1) {
                             serviceList.clear();
                             refreshLayout.finishRefresh();
-                            if (result.getList().size() == 0) {
+                            if (result.getData().getList().size() == 0) {
                                 noData.setVisibility(View.VISIBLE);
                             } else {
                                 noData.setVisibility(View.GONE);
-                                serviceList.addAll(result.getList());
+                                serviceList.addAll(result.getData().getList());
                             }
                         } else {
                             refreshLayout.finishLoadMore();
-                            if (result.getList().size() == 0) {
+                            if (result.getData().getList().size() == 0) {
 //                                Toast.makeText(ServiceOrderActivity.this, "暂无更多数据", Toast.LENGTH_SHORT).show();
                             } else {
-                                serviceList.addAll(result.getList());
+                                serviceList.addAll(result.getData().getList());
 
                             }
                         }

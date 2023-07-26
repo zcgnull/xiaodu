@@ -69,6 +69,13 @@ public class TimeUtil {
         return "不支持获取";
     }
 
+    //十位时间戳字符串转年月
+    public String dateToDate(Long time) {
+        SimpleDateFormat sdr = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        String times = sdr.format(new Date(time));
+        return times;
+    }
+
     /**
      * 获取昨天时间
      *

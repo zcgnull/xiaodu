@@ -61,7 +61,7 @@ import java.util.concurrent.TimeUnit;
 
 public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
 
-    private static final String TAG = "OnLineActivity";
+    private String TAG = "OnLineActivity";
     private RecyclerView contentRv;
     private RefreshLayout refreshLayout;
     private RelativeLayout noData, rlSuccess, rlFail;
@@ -73,7 +73,6 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
     private OnlineDoctorV2Api.Bean.DoctorListDTO doctor;
     private int pageNum = 0;
     private int pageSize = 10;
-    private String businessType = "";
     private String idCard;
     private long binderId;
     private boolean isLogin = false;
@@ -82,7 +81,6 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
     private String type = "";
     private String handleType = "";
     private int delay = 0;
-
     private BaseDialog mWaitDialog;
     private TUILogin tuiLogin;
     private GridLayoutManager contentManger;
@@ -410,7 +408,6 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
 
     @Override
     public void handleIntent(BotIntent intent, String customData) {
-        Intent activityIntent;
         String intentResult = getString(R.string.result_intent) + intent.name + ",slots:" + intent.slots;
         Log.d(TAG, "handleIntent: " + intentResult);
         Log.d(TAG, "handleIntentType: " + handleType);
@@ -470,10 +467,6 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
                             doctor = null;
                         }
                     }
-//                    activityIntent = new Intent(OnLineActivity.this, OnLineDetailActivity.class);
-//                    activityIntent.putExtra("data", doctorList.get(Integer.parseInt(intent.slots.get(0).value) - 1));
-//                    activityIntent.putExtra("binderId", binderId);
-//                    startActivity(activityIntent);
                 }
             } else {
                 BotSdk.getInstance().speakRequest("抱歉！没有第" + intent.slots.get(0).value + "个医生");

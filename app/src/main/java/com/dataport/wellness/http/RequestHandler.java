@@ -148,7 +148,7 @@ public final class RequestHandler implements IRequestHandler {
 //            return e;
 //        }
 
-        if (e instanceof SocketTimeoutException) {
+          if (e instanceof SocketTimeoutException) {
             return new TimeoutException(mApplication.getString(R.string.http_server_out_time), e);
         }
 

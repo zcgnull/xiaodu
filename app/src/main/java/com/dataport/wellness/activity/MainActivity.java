@@ -56,10 +56,9 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener, IBotIntentCallback, IDialogStateListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener, IBotIntentCallback {
 
     private static final String TAG = "MainActivity";
-    private LinearLayout lnBinder, lnService;
     private MarqueeView marqueeView;
     private TextView tvBinder, tvWeather, tvC, tvTime, tvDate, tvPlace, tvNoBind, tvNoAuth;
     private RelativeLayout rlSuccess, rlFail, rlFailSecond, mainBg;
@@ -67,8 +66,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private long binderId;
     private String binderIdCard;
     private String location;
+    private String serialNumber;
     private List<QueryBinderApi.Bean.ListDTO> binderList = new ArrayList<>();
-
     private Timer mTimer = new Timer();
     private TimerTask mTimerTask = new TimerTask() {
         @Override
@@ -117,7 +116,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             // 将字段设置为可访问，以便反射调用
             serialField.setAccessible(true);
             // 获取SERIAL字段的值
-            String serialNumber = (String) serialField.get(null);
+            serialNumber = (String) serialField.get(null);
             // 输出SERIAL号
             Log.d("Serial Number", "Serial Number: " + serialNumber);
             getDeviceInfo(serialNumber);
@@ -157,17 +156,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                                 Log.d(TAG, "SharedPreferencesToken: " + token);
                                 BotConstants.JK_URL = result.getData().getHealthUrl();
                                 BotConstants.YZ_URL = result.getData().getOldUrl();
-                                if (null == token) {
-                                    long tenantId = result.getData().isInWarehouse() ? result.getData().getTenantId() : 1;
-                                    getDeviceToken(String.valueOf(tenantId), result.getData().isInWarehouse(), result.getData().getSn());
-                                } else {
-                                    BotConstants.DEVICE_TOKEN = token;
-                                    if (!result.getData().isInWarehouse()) {//未授权
-                                        getGuideData("noAuth");
-                                    } else {
-                                        getToken(result.getData().getSn());
-                                    }
-                                }
+//                                if (null == token) {
+//                                    long tenantId = result.getData().isInWarehouse() ? result.getData().getTenantId() : 1;
+//                                    getDeviceToken(String.valueOf(tenantId), result.getData().isInWarehouse(), result.getData().getSn());
+//                                } else {
+//                                    BotConstants.DEVICE_TOKEN = token;
+//                                    if (!result.getData().isInWarehouse()) {//未授权
+//                                        getGuideData("noAuth");
+//                                    } else {
+//                                        getToken(result.getData().getSn());
+//                                    }
+//                                }
+                                long tenantId = result.getData().isInWarehouse() ? result.getData().getTenantId() : 1;
+                                getDeviceToken(String.valueOf(tenantId), result.getData().isInWarehouse(), result.getData().getSn());
                             } else {
                                 Toast.makeText(MainActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
                             }
@@ -342,8 +343,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 startActivity(intent);
                 break;
             case R.id.ln_device:
-                intent = new Intent(this, DeviceActivity.class);
-//                intent = new Intent(this, SpeechActivity.class);
+//                intent = new Intent(this, DeviceActivity.class);
+                intent = new Intent(this, SpeechActivity.class);
+                intent.putExtra("serialNumber", serialNumber);
                 intent.putExtra("binderId", binderId);
                 intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
@@ -503,7 +505,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     protected void onResume() {
         super.onResume();
         BotMessageListener.getInstance().addCallback(this);
-        BotSdk.getInstance().setDialogStateListener(this);
         Log.d(TAG, "handleIntent: onResume");
     }
 
@@ -526,17 +527,5 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         }
     }
 
-    /**
-     * 当前聆听状态回调，包含
-     * {@link IDialogStateListener.DialogState#IDLE} 空闲态
-     * {@link IDialogStateListener.DialogState#LISTENING} 聆听中
-     * {@link IDialogStateListener.DialogState#SPEAKING} 语音播报中
-     * {@link IDialogStateListener.DialogState#THINKING} 语义识别中
-     *
-     * @param dialogState
-     */
-    @Override
-    public void onDialogStateChanged(DialogState dialogState) {
-        Log.i("监听bot状态============", dialogState.name());
-    }
+
 }

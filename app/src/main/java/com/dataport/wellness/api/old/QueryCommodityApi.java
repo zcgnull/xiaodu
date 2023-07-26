@@ -13,7 +13,7 @@ public class QueryCommodityApi implements IRequestApi, IRequestServer {
 
     @Override
     public String getApi() {
-        return "biz/ne/mjzx/b/a/queryCommodity";
+        return "openiot/queryCommodity";
     }
 
     @NonNull
@@ -22,20 +22,7 @@ public class QueryCommodityApi implements IRequestApi, IRequestServer {
         return BotConstants.YZ_URL;
     }
 
-    private String value; // 服务分类主键(非必传)
-    private String sort;//排序方式(DESC(由远到近) 或 ASC(由近到远)  大小写无所谓)
-    private String latitude;//纬度  坐标系为gcj02(腾讯的,注意和百度系列应该有误差,且经纬度顺序可能不同)
-    private String longitude;//经度
-    private Integer pageNo;//页码 一开始
-    private Integer pageSize;//每页条数
-
-    public QueryCommodityApi(String value, String sort, String latitude, String longitude, Integer pageNo, Integer pageSize) {
-        this.value = value;
-        this.sort = sort;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.pageNo = pageNo;
-        this.pageSize = pageSize;
+    public QueryCommodityApi() {
     }
 
     public class Bean implements Serializable {

@@ -78,34 +78,6 @@
             </LinearLayout>
         </RelativeLayout>
 
-
-        <RelativeLayout
-            android:id="@+id/rl_tab"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/rl_top"
-            android:paddingLeft="20dp"
-            android:visibility="gone"
-            android:paddingRight="20dp">
-
-            <!--        <androidx.recyclerview.widget.RecyclerView-->
-            <!--            android:id="@+id/rv_home_tab"-->
-            <!--            android:layout_width="wrap_content"-->
-            <!--            android:layout_height="wrap_content"-->
-            <!--            android:layout_centerInParent="true"/>-->
-
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/first_tab"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:tabGravity="center"
-                app:tabIndicatorHeight="0dp"
-                app:tabMaxWidth="230dp"
-                app:tabMinWidth="120dp"
-                app:tabMode="scrollable"
-                app:tabRippleColor="@null" />
-        </RelativeLayout>
-
         <com.scwang.smart.refresh.layout.SmartRefreshLayout
             android:id="@+id/refreshLayout"
             android:layout_width="match_parent"

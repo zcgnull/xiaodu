@@ -12,6 +12,8 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baidu.duer.bot.BotMessageProtocol;
 import com.baidu.duer.botsdk.BotSdk;
 import com.bumptech.glide.Glide;
@@ -21,9 +23,13 @@ import com.dataport.wellness.R;
 import com.dataport.wellness.adapter.ServicePriceAdapter;
 import com.dataport.wellness.api.old.QueryServiceDetailApi;
 import com.dataport.wellness.base.ImgBean;
+import com.dataport.wellness.http.HttpIntData;
+import com.dataport.wellness.utils.AuthenticationUtil;
+import com.dataport.wellness.utils.GlobalConstants;
 import com.dataport.wellness.utils.RichTextUtil;
 import com.google.android.material.tabs.TabLayout;
 import com.hjq.http.EasyHttp;
+import com.hjq.http.body.JsonBody;
 import com.hjq.http.listener.HttpCallback;
 import com.sunfusheng.marqueeview.MarqueeView;
 import com.youth.banner.Banner;
@@ -32,7 +38,9 @@ import com.youth.banner.holder.BannerImageHolder;
 import com.youth.banner.indicator.CircleIndicator;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ServiceDetailActivity extends BaseActivity {
 
@@ -108,22 +116,41 @@ public class ServiceDetailActivity extends BaseActivity {
     }
 
     private void queryDetail(String productId, String providerId) {
-        EasyHttp.get(this)
-                .api(new QueryServiceDetailApi(productId, providerId))
-                .request(new HttpCallback<QueryServiceDetailApi.Bean>(this) {
+        String sign = "";
+        JSONObject requestJson;
+        Map<String, Object> mapJson = new HashMap<>();
+        mapJson.put("timeStamp", String.valueOf(System.currentTimeMillis()));
+        mapJson.put("appId", "2023070316252737");
+        mapJson.put("signType", "MD5");
+        mapJson.put("nonceStr", AuthenticationUtil.getRandomCode());
+        mapJson.put("productId", productId);
+        mapJson.put("providerId", providerId);
+        JSONObject json = new JSONObject(mapJson);
+        try {
+            sign = AuthenticationUtil.generateSignature(json,
+                    "adb8cd70158a4587a3526c3c525e285a", GlobalConstants.SignType.MD5);
+            mapJson.put("sign", sign);
+            requestJson = new JSONObject(mapJson);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        EasyHttp.post(this)
+                .api(new QueryServiceDetailApi())
+                .body(new JsonBody(JSON.toJSONString(requestJson)))
+                .request(new HttpCallback<HttpIntData<QueryServiceDetailApi.Bean>>(this) {
 
                     @Override
-                    public void onSucceed(QueryServiceDetailApi.Bean result) {
-                        name.setText(result.getProductName());
-                        price.setText("价格：￥" + result.getPrice());
-                        company.setText(result.getProviderName());
-                        setBanner(result.getCarouselPicture(), banner);
+                    public void onSucceed(HttpIntData<QueryServiceDetailApi.Bean> result) {
+                        name.setText(result.getData().getProductName());
+                        price.setText("价格：￥" + result.getData().getPrice());
+                        company.setText(result.getData().getProviderName());
+                        setBanner(result.getData().getCarouselPicture(), banner);
 //                        RichText.initCacheDir(ServiceDetailActivity.this);
 //                        RichText.fromHtml(result.getProductDetail())
 //                                .autoFix(false)
 //                                .cache(CacheType.none)
 //                                .into(richText);
-                        tabList = result.getOtherItems();
+                        tabList = result.getData().getOtherItems();
                         for (QueryServiceDetailApi.Bean.OtherItemsDTO bean : tabList) {
                             TabLayout.Tab tab = tabLayout.newTab();
                             View tabView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.item_service_tab, null);
@@ -133,35 +160,35 @@ public class ServiceDetailActivity extends BaseActivity {
                             tabLayout.addTab(tab);
                         }
 
-                        if (result.getSurchargeItems().size() > 0) {//附加费
+                        if (result.getData().getSurchargeItems().size() > 0) {//附加费
                             lnPrice.setVisibility(View.VISIBLE);
-                            priceAdapter.setList(result.getSurchargeItems());
+                            priceAdapter.setList(result.getData().getSurchargeItems());
                         }
-                        String content = RichTextUtil.getRichTextStr(result.getProductDetail());//详情
+                        String content = RichTextUtil.getRichTextStr(result.getData().getProductDetail());//详情
                         if (!content.equals("")) {
                             richText.setVisibility(View.VISIBLE);
                             richText.setText(content);
-                            if (result.getSurchargeItems().size() > 0) {//附加费
+                            if (result.getData().getSurchargeItems().size() > 0) {//附加费
                                 speck = name.getText().toString() + "," + price.getText().toString() + "," + "本服务有额外的附加费用，服务人员服务前可能收取。" + content;
                             } else {
                                 speck = name.getText().toString() + "," + price.getText().toString() + "," + content;
                             }
                             BotSdk.getInstance().speakRequest(speck);
                         } else {
-                            if (result.getSurchargeItems().size() > 0) {//附加费
+                            if (result.getData().getSurchargeItems().size() > 0) {//附加费
                                 speck = name.getText().toString() + "," + price.getText().toString() + "," + "本服务有额外的附加费用，服务人员服务前可能收取。";
                             } else {
                                 speck = name.getText().toString() + "," + price.getText().toString();
                             }
                             BotSdk.getInstance().speakRequest(speck);
                         }
-                        List<String> imgs = RichTextUtil.getRichTextImgListUtil(result.getProductDetail());//详情图片
+                        List<String> imgs = RichTextUtil.getRichTextImgListUtil(result.getData().getProductDetail());//详情图片
                         if (imgs.size() > 0) {
                             richBanner.setVisibility(View.VISIBLE);
                             setBanner(imgs, richBanner);
                         }
 
-                        if (result.getSurchargeItems().size() == 0 && content.equals("") && imgs.size() == 0) {
+                        if (result.getData().getSurchargeItems().size() == 0 && content.equals("") && imgs.size() == 0) {
                             noData.setVisibility(View.VISIBLE);
                         }
                     }

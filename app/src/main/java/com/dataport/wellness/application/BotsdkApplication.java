@@ -17,6 +17,7 @@ import com.dataport.wellness.http.glide.GlideApp;
 import com.dataport.wellness.utils.BotConstants;
 import com.dataport.wellness.utils.ContextUtil;
 import com.hjq.http.EasyConfig;
+import com.hjq.http.EasyHttp;
 import com.hjq.http.config.IRequestInterceptor;
 import com.hjq.http.model.HttpHeaders;
 import com.hjq.http.model.HttpParams;
@@ -81,7 +82,6 @@ public class BotsdkApplication extends Application {
                 .setHandler(new RequestHandler(this))
                 // 设置请求重试次数
                 .setRetryCount(3)
-
                 // 添加全局请求参数
                 //.addParam("token", "6666666")
                 // 添加全局请求头
@@ -101,6 +101,7 @@ public class BotsdkApplication extends Application {
                         headers.put("Authorization", "Bearer " + BotConstants.HTTP_TOKEN);
                     }
                 })
+
                 // 启用配置
                 .into();
 

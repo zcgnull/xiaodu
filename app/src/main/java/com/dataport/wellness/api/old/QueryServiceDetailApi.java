@@ -15,7 +15,7 @@ public class QueryServiceDetailApi implements IRequestApi , IRequestServer {
     @NonNull
     @Override
     public String getApi() {
-        return "biz/ne/mjzx/b/a/queryDetailInfo";
+        return "openiot/queryDetailInfo";
     }
 
     @NonNull
@@ -24,12 +24,7 @@ public class QueryServiceDetailApi implements IRequestApi , IRequestServer {
         return BotConstants.YZ_URL;
     }
 
-    private String productId;
-    private String providerId;
-
-    public QueryServiceDetailApi(String productId, String providerId) {
-        this.productId = productId;
-        this.providerId = providerId;
+    public QueryServiceDetailApi() {
     }
 
     public class Bean implements Serializable {

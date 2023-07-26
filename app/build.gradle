@@ -97,7 +97,8 @@ dependencies {
     //曲线图
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0-alpha'
 
-//    implementation project(':tuicallkit')
+    implementation "org.java-websocket:Java-WebSocket:1.5.2"
+
 
 
 }
