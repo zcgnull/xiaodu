@@ -9,7 +9,6 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,7 +21,6 @@ import com.baidu.duer.bot.directive.payload.JsonUtil;
 import com.baidu.duer.bot.event.payload.LinkClickedEventPayload;
 import com.baidu.duer.botsdk.BotIntent;
 import com.baidu.duer.botsdk.BotSdk;
-import com.baidu.duer.botsdk.IDialogStateListener;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.dataport.wellness.R;
 import com.dataport.wellness.activity.dialog.BaseDialog;
@@ -66,7 +64,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private long binderId;
     private String binderIdCard;
     private String location;
-    private String serialNumber;
     private List<QueryBinderApi.Bean.ListDTO> binderList = new ArrayList<>();
     private Timer mTimer = new Timer();
     private TimerTask mTimerTask = new TimerTask() {
@@ -116,10 +113,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             // 将字段设置为可访问，以便反射调用
             serialField.setAccessible(true);
             // 获取SERIAL字段的值
-            serialNumber = (String) serialField.get(null);
+            BotConstants.SN = (String) serialField.get(null);
             // 输出SERIAL号
-            Log.d("Serial Number", "Serial Number: " + serialNumber);
-            getDeviceInfo(serialNumber);
+
+            getDeviceInfo(BotConstants.SN );
 //            getDeviceInfo("950745EAV663360209E9");
 //            getDeviceInfo("8T22041A2926DFA5");
         } catch (NoSuchFieldException | IllegalAccessException e) {
@@ -345,7 +342,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             case R.id.ln_device:
 //                intent = new Intent(this, DeviceActivity.class);
                 intent = new Intent(this, SpeechActivity.class);
-                intent.putExtra("serialNumber", serialNumber);
                 intent.putExtra("binderId", binderId);
                 intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);

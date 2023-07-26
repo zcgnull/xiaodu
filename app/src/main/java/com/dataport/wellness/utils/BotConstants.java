@@ -10,7 +10,7 @@ public class BotConstants {
     public static String HTTP_TOKEN = "";
     public static String DEVICE_TOKEN = "";
     public static String TENANT_ID = "1";
-
+    public static String SN;
     public static final String LOG_TAG_AUDIO = "AudioRecorder";
     public static final String LOG_TAG_CAMERA = "CameraDemo";
     public static final String LOG_TAG_BOTSDK = "BotSDKDemo";
