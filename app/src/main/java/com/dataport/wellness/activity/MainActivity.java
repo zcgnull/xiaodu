@@ -62,6 +62,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private RelativeLayout rlSuccess, rlFail, rlFailSecond, mainBg;
     private ImageView ivQr;
     private long binderId;
+
+    private Long userId;
     private String binderIdCard;
     private String location;
     private List<QueryBinderApi.Bean.ListDTO> binderList = new ArrayList<>();
@@ -114,6 +116,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             serialField.setAccessible(true);
             // 获取SERIAL字段的值
             BotConstants.SN = (String) serialField.get(null);
+            BotConstants.SN="950745EAV663360209E9";
             // 输出SERIAL号
 
             getDeviceInfo(BotConstants.SN );
@@ -232,6 +235,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                                 rlSuccess.setVisibility(View.VISIBLE);
                                 tvBinder.setText(binderList.get(0).getBinderName() + "(" + binderList.get(0).getRelation() + ")");
                                 binderId = binderList.get(0).getBinderId();
+                                userId=binderList.get(0).getUserId();
                                 binderIdCard = binderList.get(0).getBinderIdcard();
                                 String getAddress = binderList.get(0).getBinderProvince() + binderList.get(0).getBinderCity() + binderList.get(0).getBinderDistrict() + binderList.get(0).getBinderAddress();
                                 String address = binderList.get(0).getBinderCity() + binderList.get(0).getBinderDistrict();
@@ -340,9 +344,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 startActivity(intent);
                 break;
             case R.id.ln_device:
-//                intent = new Intent(this, DeviceActivity.class);
-                intent = new Intent(this, SpeechActivity.class);
+                intent = new Intent(this, DeviceActivity.class);
+//                intent = new Intent(this, SpeechActivity.class);
                 intent.putExtra("binderId", binderId);
+                intent.putExtra("userId",userId);
                 intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
                 break;

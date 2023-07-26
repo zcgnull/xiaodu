@@ -41,6 +41,7 @@ public class QueryBinderApi implements IRequestApi, IRequestServer {
         }
 
         public class ListDTO implements Serializable{
+            private Long userId;
             private long binderId;
             private String relation;
             private String binderPicture;
@@ -54,6 +55,14 @@ public class QueryBinderApi implements IRequestApi, IRequestServer {
             private String binderPhone;
             private String binderName;
             private String binderIdcard;
+
+            public Long getUserId() {
+                return userId;
+            }
+
+            public void setUserId(Long userId) {
+                this.userId = userId;
+            }
 
             public long getBinderId() {
                 return binderId;
