@@ -15,6 +15,19 @@
         <item name="android:navigationBarColor">@color/transparent</item>
     </style>
 
+    <!-- 默认按钮样式 -->
+    <style name="ButtonStyle" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:paddingStart">@dimen/dp_20</item>
+        <item name="android:paddingEnd">@dimen/dp_20</item>
+        <item name="android:paddingTop">@dimen/dp_10</item>
+        <item name="android:paddingBottom">@dimen/dp_10</item>
+        <item name="android:textSize">@dimen/sp_20</item>
+        <item name="android:textColor">@color/white90</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/button_circle_selector</item>
+        <item name="android:foreground">@null</item>
+    </style>
+
         <!-- 对话框默认主题 -->
     <style name="BaseDialogTheme" parent="Theme.AppCompat.DayNight.Dialog.Alert"><!-- @android:style/Theme.Dialog -->
         <!-- 无边框 -->

@@ -6,13 +6,13 @@
             ring(圆环)
     -->
     <!--    指定了形状内部的填充颜色-->
-    <solid android:color="#E4F3FF"/>
+    <solid android:color="@color/white"/>
     <!--    指定了形状边线的粗细与颜色-->
         <stroke
-            android:width="1dp"
+            android:width="2dp"
             android:color="#DDDDDD"/>
 
     <!--指定了形状四个圆角的半径-->
     <corners
-        android:radius="10dp"/>
+        android:radius="2dp"/>
 </shape>

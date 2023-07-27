@@ -25,6 +25,7 @@ import com.dataport.wellness.api.old.QueryServiceDetailApi;
 import com.dataport.wellness.base.ImgBean;
 import com.dataport.wellness.http.HttpIntData;
 import com.dataport.wellness.utils.AuthenticationUtil;
+import com.dataport.wellness.utils.BotConstants;
 import com.dataport.wellness.utils.GlobalConstants;
 import com.dataport.wellness.utils.RichTextUtil;
 import com.google.android.material.tabs.TabLayout;
@@ -120,7 +121,7 @@ public class ServiceDetailActivity extends BaseActivity {
         JSONObject requestJson;
         Map<String, Object> mapJson = new HashMap<>();
         mapJson.put("timeStamp", String.valueOf(System.currentTimeMillis()));
-        mapJson.put("appId", "2023070316252737");
+        mapJson.put("appId", BotConstants.YL_APPID);
         mapJson.put("signType", "MD5");
         mapJson.put("nonceStr", AuthenticationUtil.getRandomCode());
         mapJson.put("productId", productId);
@@ -128,7 +129,7 @@ public class ServiceDetailActivity extends BaseActivity {
         JSONObject json = new JSONObject(mapJson);
         try {
             sign = AuthenticationUtil.generateSignature(json,
-                    "adb8cd70158a4587a3526c3c525e285a", GlobalConstants.SignType.MD5);
+                    BotConstants.YL_KEY, GlobalConstants.SignType.MD5);
             mapJson.put("sign", sign);
             requestJson = new JSONObject(mapJson);
         } catch (Exception e) {

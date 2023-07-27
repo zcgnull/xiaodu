@@ -21,7 +21,6 @@
         android:layout_height="228px"
         android:layout_marginStart="50px"
         android:layout_marginTop="143px"
-        android:background="@mipmap/portal_order"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -31,7 +30,6 @@
         android:layout_height="228px"
         android:layout_marginStart="48px"
         android:layout_marginTop="143px"
-        android:background="@mipmap/portal_device"
         app:layout_constraintStart_toEndOf="@+id/orderBtn"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -42,7 +40,6 @@
         android:layout_height="228px"
         android:layout_marginStart="48px"
         android:layout_marginTop="143px"
-        android:background="@mipmap/portal_servicer"
         app:layout_constraintStart_toEndOf="@+id/deviceBtn"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -52,7 +49,6 @@
         android:layout_height="228px"
         android:layout_marginStart="50px"
         android:layout_marginTop="40px"
-        android:background="@mipmap/portal_doctor"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/orderBtn" />
 
@@ -62,7 +58,6 @@
         android:layout_height="228px"
         android:layout_marginStart="48px"
         android:layout_marginTop="40px"
-        android:background="@mipmap/portal_consultant"
         app:layout_constraintStart_toEndOf="@+id/doctorBtn"
         app:layout_constraintTop_toBottomOf="@+id/deviceBtn" />
 
@@ -72,7 +67,6 @@
         android:layout_height="228px"
         android:layout_marginStart="48px"
         android:layout_marginTop="40px"
-        android:background="@mipmap/portal_chat"
         app:layout_constraintStart_toEndOf="@+id/consultantBtn"
         app:layout_constraintTop_toBottomOf="@+id/servicerBtn" />
 
