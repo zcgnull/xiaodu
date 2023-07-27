@@ -113,6 +113,8 @@ public class DeviceEnvActivity extends BaseActivity implements IBotIntentCallbac
                             }
 
                             adapter.setList(warnList);
+                        }else{
+                            noData.setVisibility(View.VISIBLE);
                         }
                     }
                 });
