@@ -23,6 +23,7 @@ import com.dataport.wellness.R;
 import com.dataport.wellness.adapter.DeviceContentAdapter;
 import com.dataport.wellness.api.health.DeviceContentApi;
 import com.dataport.wellness.api.health.DeviceContentPageApi;
+import com.dataport.wellness.api.health.DeviceEnvCountApi;
 import com.dataport.wellness.api.health.EquipmentListApi;
 import com.dataport.wellness.api.health.SignTypeApi;
 import com.dataport.wellness.api.smalldu.GuideDataApi;
@@ -249,8 +250,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                 getDeviceContentPage(dataTypeCode, TimeUtil.getInstance().getYesterdayTime(), TimeUtil.getInstance().getCurrentTime(), 2);
             }
         });
-        drawBadge(rlSuccess,100);
-        drawBadge(rlFail,100);
+
         getSignType(binderId);
     }
 
@@ -275,6 +275,24 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
         });
     }
 
+    /**
+     * 获取用户未处理报警数量
+     * @param userId 用户主键
+     */
+    private void getDeviceEnvCount(Long userId){
+        EasyHttp.get(this)
+                .api(new DeviceEnvCountApi(userId))
+                .request(new HttpCallback<HttpData<DeviceEnvCountApi.Bean>>(this){
+                    @Override
+                    public void onSucceed(HttpData<DeviceEnvCountApi.Bean> result) {
+                        if (result.getCode().equals("00000")) {
+                            drawBadge(rlSuccess, result.getData().getNum());
+                            drawBadge(rlFail, result.getData().getNum());
+                        }
+
+                    }
+                });
+    }
     private void getSignType(long binderId) {
         EasyHttp.get(this)
                 .api(new SignTypeApi(binderId))
@@ -380,6 +398,12 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                         }
                     }
                 });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getDeviceEnvCount(userId);
     }
 
     private void getDeviceContentPage(String dataTypeCode, String beginDate, String endDate, int type) {//type:1代表刷新2代表加载
