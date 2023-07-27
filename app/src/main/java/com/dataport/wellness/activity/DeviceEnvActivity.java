@@ -94,24 +94,26 @@ public class DeviceEnvActivity extends BaseActivity implements IBotIntentCallbac
 
                     @Override
                     public void onSucceed(HttpData<DeviceEnvApi.Bean> result) {
-                        if (type == 1) {
-                            warnList.clear();
-                            refreshLayout.finishRefresh();
-                            if (null == result.getData().getWarnList() || result.getData().getWarnList().size() == 0) {
-                                noData.setVisibility(View.VISIBLE);
+                        if(result.getCode().equals("00000")) {
+                            if (type == 1) {
+                                warnList.clear();
+                                refreshLayout.finishRefresh();
+                                if (null == result.getData().getWarnList() || result.getData().getWarnList().size() == 0) {
+                                    noData.setVisibility(View.VISIBLE);
+                                } else {
+                                    noData.setVisibility(View.GONE);
+                                    warnList = result.getData().getWarnList();
+                                }
                             } else {
-                                noData.setVisibility(View.GONE);
-                                warnList = result.getData().getWarnList();
+                                refreshLayout.finishLoadMore();
+                                if (null == result.getData().getWarnList() || result.getData().getWarnList().size() == 0) {
+                                } else {
+                                    warnList.addAll(result.getData().getWarnList());
+                                }
                             }
-                        } else {
-                            refreshLayout.finishLoadMore();
-                            if (null == result.getData().getWarnList() || result.getData().getWarnList().size() == 0) {
-                            } else {
-                                warnList.addAll(result.getData().getWarnList());
-                            }
-                        }
 
-                        adapter.setList(warnList);
+                            adapter.setList(warnList);
+                        }
                     }
                 });
     }

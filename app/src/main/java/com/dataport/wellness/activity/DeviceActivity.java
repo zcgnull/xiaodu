@@ -413,22 +413,25 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
 
                     @Override
                     public void onSucceed(HttpData<DeviceContentPageApi.Bean> result) {
-                        if (type == 1) {
-                            rightList.clear();
-                            refreshLayout.finishRefresh();
-                            if (result.getData().getRecordList().size() == 0) {
-                                noData.setVisibility(View.VISIBLE);
+                        if(result.getCode().equals("00000")) {
+                            if (type == 1) {
+                                rightList.clear();
+                                refreshLayout.finishRefresh();
+                                if (result.getData().getRecordList().size() == 0) {
+                                    noData.setVisibility(View.VISIBLE);
+                                } else {
+                                    noData.setVisibility(View.GONE);
+                                    rightList.addAll(result.getData().getRecordList());
+                                }
                             } else {
-                                noData.setVisibility(View.GONE);
-                                rightList.addAll(result.getData().getRecordList());
+                                refreshLayout.finishLoadMore();
+                                if (result.getData().getRecordList().size() > 0) {
+                                    rightList.addAll(result.getData().getRecordList());
+                                }
                             }
-                        } else {
-                            refreshLayout.finishLoadMore();
-                            if (result.getData().getRecordList().size() > 0) {
-                                rightList.addAll(result.getData().getRecordList());
-                            }
+                            adapter.setList(rightList);
                         }
-                        adapter.setList(rightList);
+
                     }
                 });
     }
