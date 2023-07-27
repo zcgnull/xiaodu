@@ -29,6 +29,7 @@ import com.baidu.speech.asr.SpeechConstant;
 import com.dataport.wellness.R;
 import com.dataport.wellness.activity.dialog.BaseDialog;
 import com.dataport.wellness.activity.dialog.MessageDialog;
+import com.dataport.wellness.activity.dialog.SettingDialog;
 import com.dataport.wellness.adapter.SpeechAdapter;
 import com.dataport.wellness.api.smalldu.MessageApi;
 import com.dataport.wellness.api.smalldu.MessageTypeApi;
@@ -77,10 +78,18 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
     private ImageView ivVoice;
     private List<MessageBean> msgList = new ArrayList<>();
     private List<MessageTypeApi.Bean> msgTypeList = new ArrayList<>();
-    private String sn;
     private String msgType;
     private boolean isAnswering = false;
     private boolean webSocketStatus = true;
+    private int settingPos = 0;
+
+    private Runnable scrollRunnable = new Runnable() {
+        @Override
+
+        public void run() {
+            contentRv.scrollToPosition(msgList.size() - 1);
+        }
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -108,10 +117,24 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
             pageNum += 1;
             getMessage(2, BotConstants.SN, msgType);
         });
-        findViewById(R.id.iv_setting).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
+        findViewById(R.id.iv_setting).setOnClickListener(v -> {
+            if (!isAnswering){
+                List<String> data = new ArrayList<>();
+                for (int i = 0; i < msgTypeList.size(); i++) {
+                    data.add(msgTypeList.get(i).getLabel());
+                }
+                new SettingDialog.Builder(SpeechActivity.this)
+                        .setList(data)  //设置下拉框内容
+                        .setPosition(settingPos)  //设置初始 问答模型
+                        .setGeek(false)  //设置是否使用 极客模式
+                        .setWidthAndHeight(0.5f, 0.5f) //百分比
+                        .setListener((dialog, position, geekModel, QAModel) -> {
+                            //监听  position 选择的位置 geekModel 是否使用 极客模式 QAModel 问答模型
+                            Log.d("zcg", "点击了确认" + position + geekModel + QAModel);
+                            settingPos = position;
+                            msgType = msgTypeList.get(position).getValue();
+                        })
+                        .show();
             }
         });
         initWebSocket();
@@ -175,7 +198,7 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
             BotSdk.getInstance().speakRequest(messageBean.getContent());
             runOnUiThread(() -> {
                 adapter.setList(msgList);
-                contentRv.scrollToPosition(msgList.size() - 1);
+                contentRv.postDelayed(scrollRunnable, 500);
             });
         }
     }
@@ -233,7 +256,7 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
                         if (result.getCode() == 0) {
                             msgTypeList = result.getData();
                             msgType = result.getData().get(0).getValue();
-                            getMessage(1, sn, msgType);
+                            getMessage(1, BotConstants.SN, msgType);
                         } else {
                             Toast.makeText(getApplicationContext(), "获取绘画模型失败，请退出重试", Toast.LENGTH_LONG).show();
                         }
@@ -243,17 +266,17 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
 
     private void showCloseDialog() {
         webSocketStatus = false;
-        sendTv.setText("对话超时、是否继续,可以对我说：“小度小度，继续”，或者可以对我说：“小度小度，取消”");
+        sendTv.setText("对话超时，是否继续？可以对我说：“小度小度，继续”，或者可以对我说：“小度小度，取消”");
         ivVoice.setVisibility(View.GONE);
         asr.send(SpeechConstant.ASR_STOP, null, null, 0, 0);
         BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
-        BotSdk.getInstance().speakRequest("对话超时、是否继续,可以对我说：“小度小度，继续”，或者可以对我说：“小度小度，取消”");
+        BotSdk.getInstance().speakRequest("对话超时，是否继续？可以对我说：“小度小度，继续”，或者可以对我说：“小度小度，取消”");
         // 消息对话框
         new MessageDialog.Builder(this)
                 // 标题可以不用填写
                 .setTitle("提示")
                 // 内容必须要填写
-                .setMessage("对话超时、是否继续")
+                .setMessage("对话超时，是否继续？")
                 // 确定按钮文本
                 .setConfirm("继续")
                 // 设置 null 表示不显示取消按钮
@@ -294,7 +317,7 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
      * 初始化websocket
      */
     public void initWebSocket() {
-        URI uri = URI.create(BotConstants.WEB_SOCKET_URL + "websocket/wenxin?userId=" + sn);
+        URI uri = URI.create(BotConstants.WEB_SOCKET_URL + "websocket/wenxin?userId=" + BotConstants.SN);
         //创建websocket
         client = new JWebSocketClient(uri) {
             @Override
@@ -574,8 +597,7 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
     @Override
     public void onDialogStateChanged(DialogState dialogState) {
         Log.i("监听bot状态============", dialogState.name());
-        if (dialogState.name().equals("TTS_FINISH")) {
-            // TODO: 2023/7/25
+        if (dialogState.name().equals("TTS_FINISH") && webSocketStatus) {
             asrStart();
         }
     }

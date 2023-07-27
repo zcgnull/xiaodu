@@ -94,37 +94,45 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginLeft="20dp"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:gravity="center"
+            android:background="@drawable/speech_bg"
+            android:padding="@dimen/dp_10"
             android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/iv_bottom"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
                 android:src="@mipmap/portal_duer" />
 
+            <View
+                android:layout_width="@dimen/dp_1"
+                android:background="#DDDDDD"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_height="match_parent"/>
+
             <RelativeLayout
-                android:layout_width="500dp"
-                android:background="#E4F3FF"
-                android:layout_marginLeft="@dimen/dp_20"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="@dimen/dp_10"
                 android:padding="@dimen/dp_10"
                 android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/tv_send"
+                <ScrollView
                     android:layout_width="match_parent"
-                    android:text="你可以对我说：“小度小度，我要咨询”"
                     android:layout_marginRight="@dimen/dp_140"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:id="@+id/tv_send"
+                        android:layout_width="match_parent"
+                        android:text="你可以对我说：“小度小度，我要咨询”"
+                        android:layout_height="match_parent"/>
+                </ScrollView>
 
                 <ImageView
                     android:id="@+id/iv_voice"
                     android:layout_width="80dp"
                     android:scaleType="fitXY"
-                    android:layout_height="120dp"
+                    android:layout_height="match_parent"
                     android:visibility="gone"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"

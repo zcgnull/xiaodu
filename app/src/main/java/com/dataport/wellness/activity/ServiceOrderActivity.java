@@ -209,13 +209,13 @@ public class ServiceOrderActivity extends BaseActivity implements IBotIntentCall
         JSONObject requestJson;
         Map<String, Object> mapJson = new HashMap<>();
         mapJson.put("timeStamp", String.valueOf(System.currentTimeMillis()));
-        mapJson.put("appId", "2023070316252737");
+        mapJson.put("appId", BotConstants.YL_APPID);
         mapJson.put("signType", "MD5");
         mapJson.put("nonceStr", AuthenticationUtil.getRandomCode());
         JSONObject json = new JSONObject(mapJson);
         try {
             sign = AuthenticationUtil.generateSignature(json,
-                    "adb8cd70158a4587a3526c3c525e285a", GlobalConstants.SignType.MD5);
+                    BotConstants.YL_KEY, GlobalConstants.SignType.MD5);
             mapJson.put("sign", sign);
             requestJson = new JSONObject(mapJson);
         } catch (Exception e) {
@@ -248,7 +248,7 @@ public class ServiceOrderActivity extends BaseActivity implements IBotIntentCall
         JSONObject requestJson;
         Map<String, Object> mapJson = new HashMap<>();
         mapJson.put("timeStamp", String.valueOf(System.currentTimeMillis()));
-        mapJson.put("appId", "2023070316252737");
+        mapJson.put("appId", BotConstants.YL_APPID);
         mapJson.put("signType", "MD5");
         mapJson.put("nonceStr", AuthenticationUtil.getRandomCode());
         mapJson.put("value", id);
@@ -260,7 +260,7 @@ public class ServiceOrderActivity extends BaseActivity implements IBotIntentCall
         JSONObject json = new JSONObject(mapJson);
         try {
             sign = AuthenticationUtil.generateSignature(json,
-                    "adb8cd70158a4587a3526c3c525e285a", GlobalConstants.SignType.MD5);
+                    BotConstants.YL_KEY, GlobalConstants.SignType.MD5);
             mapJson.put("sign", sign);
             requestJson = new JSONObject(mapJson);
         } catch (Exception e) {

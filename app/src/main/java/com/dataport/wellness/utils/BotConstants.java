@@ -22,13 +22,18 @@ public class BotConstants {
 //    public static final String JK_URL = "http://172.20.3.51:9110/";
     //养老信息后台地址
     public static String YZ_URL = "";
+//    public static final String YL_APPID = "2023070316252737";
+    public static final String YL_APPID = "2023072717252111";
+//    public static final String YL_KEY = "adb8cd70158a4587a3526c3c525e285a";
+    public static final String YL_KEY = "e80fc0668ad141009153e38c0072aad3";
     //小度服务端
-//    public static final String XD_URL = "http://10.20.1.13:48080/";
+    public static final String XD_URL = "http://10.20.1.13:48080/";
 //    public static final String XD_URL = "http://10.20.0.158:48080/";
-    public static final String XD_URL = "http://172.20.3.112:8080/";
+//    public static final String XD_URL = "http://172.20.3.112:8080/";
 //    public static final String XD_URL = "https://dueros.dataport.com.cn/";
     //websocket地址
-    public static final String WEB_SOCKET_URL = "ws://172.20.3.112:8080/";
+//    public static final String WEB_SOCKET_URL = "ws://172.20.3.112:8080/";
+    public static final String WEB_SOCKET_URL = "ws://10.20.1.13:48080/";
 
     /**
      * BotID和签名key ,可以在自己的技能控制台看到相关信息：https://dueros.baidu.com/dbp/main/console

@@ -59,9 +59,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private static final String TAG = "MainActivity";
     private MarqueeView marqueeView;
     private TextView tvBinder, tvWeather, tvC, tvTime, tvDate, tvPlace, tvNoBind, tvNoAuth;
-    private RelativeLayout rlSuccess, rlFail, rlFailSecond, mainBg;
+    private RelativeLayout rlSuccess, rlFail, rlFailSecond, mainBg, ln_speech;
     private ImageView ivQr;
     private long binderId;
+    private boolean consultingShow = false;
 
     private Long userId;
     private String binderIdCard;
@@ -99,6 +100,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         findViewById(R.id.ln_use_medical).setOnClickListener(this);
         findViewById(R.id.ln_doctor).setOnClickListener(this);
         findViewById(R.id.ln_video).setOnClickListener(this);
+        ln_speech = findViewById(R.id.ln_speech);
+        ln_speech.setOnClickListener(this);
         tvWeather = findViewById(R.id.tv_weather);
         tvC = findViewById(R.id.tv_c);
         tvTime = findViewById(R.id.tv_time);
@@ -119,7 +122,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //            BotConstants.SN="950745EAV663360209E9";
 //            BotConstants.SN="8T22041A2926DFA5";
 
-            getDeviceInfo(BotConstants.SN );
+            getDeviceInfo(BotConstants.SN);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             Toast.makeText(this, "获取本机SN失败", Toast.LENGTH_LONG).show();
         }
@@ -138,7 +141,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mTimer.schedule(mTimerTask, 1000, 1000);
     }
 
-
     private void getDeviceInfo(String sn) {
         try {
             EasyHttp.get(this)
@@ -154,19 +156,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                                 Log.d(TAG, "SharedPreferencesToken: " + token);
                                 BotConstants.JK_URL = result.getData().getHealthUrl();
                                 BotConstants.YZ_URL = result.getData().getOldUrl();
-//                                if (null == token) {
-//                                    long tenantId = result.getData().isInWarehouse() ? result.getData().getTenantId() : 1;
-//                                    getDeviceToken(String.valueOf(tenantId), result.getData().isInWarehouse(), result.getData().getSn());
-//                                } else {
-//                                    BotConstants.DEVICE_TOKEN = token;
-//                                    if (!result.getData().isInWarehouse()) {//未授权
-//                                        getGuideData("noAuth");
-//                                    } else {
-//                                        getToken(result.getData().getSn());
-//                                    }
-//                                }
-                                long tenantId = result.getData().isInWarehouse() ? result.getData().getTenantId() : 1;
-                                getDeviceToken(String.valueOf(tenantId), result.getData().isInWarehouse(), result.getData().getSn());
+                                consultingShow = result.getData().isConsultingShow();
+                                if (consultingShow) {
+                                    ln_speech.setVisibility(View.VISIBLE);
+                                }
+                                if (null == token) {
+                                    long tenantId = result.getData().isInWarehouse() ? result.getData().getTenantId() : 1;
+                                    getDeviceToken(String.valueOf(tenantId), result.getData().isInWarehouse(), result.getData().getSn());
+                                } else {
+                                    BotConstants.DEVICE_TOKEN = token;
+                                    if (!result.getData().isInWarehouse()) {//未授权
+                                        getGuideData("noAuth");
+                                    } else {
+                                        getToken(result.getData().getSn());
+                                    }
+                                }
                             } else {
                                 Toast.makeText(MainActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
                             }
@@ -233,7 +237,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                                 rlSuccess.setVisibility(View.VISIBLE);
                                 tvBinder.setText(binderList.get(0).getBinderName() + "(" + binderList.get(0).getRelation() + ")");
                                 binderId = binderList.get(0).getBinderId();
-                                userId=binderList.get(0).getUserId();
+                                userId = binderList.get(0).getUserId();
                                 binderIdCard = binderList.get(0).getBinderIdcard();
                                 String getAddress = binderList.get(0).getBinderProvince() + binderList.get(0).getBinderCity() + binderList.get(0).getBinderDistrict() + binderList.get(0).getBinderAddress();
                                 String address = binderList.get(0).getBinderCity() + binderList.get(0).getBinderDistrict();
@@ -343,10 +347,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 break;
             case R.id.ln_device:
                 intent = new Intent(this, DeviceActivity.class);
-//                intent = new Intent(this, SpeechActivity.class);
                 intent.putExtra("binderId", binderId);
-                intent.putExtra("userId",userId);
+                intent.putExtra("userId", userId);
                 intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
+                break;
+            case R.id.ln_speech:
+                intent = new Intent(this, SpeechActivity.class);
                 startActivity(intent);
                 break;
             case R.id.tv_place:
@@ -379,7 +386,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 String speck = marqueeView.getMessages().get(marqueeView.getPosition()).toString();
                 BotSdk.getInstance().speakRequest(speck);
                 break;
-
         }
     }
 
@@ -499,7 +505,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             }
         }
     };
-    
+
     @Override
     protected void onResume() {
         super.onResume();

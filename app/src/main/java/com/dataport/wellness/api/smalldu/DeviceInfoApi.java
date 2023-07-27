@@ -47,6 +47,16 @@ public class DeviceInfoApi  implements IRequestApi, IRequestServer {
         private String oldUrl;
         private String healthUrl;
 
+        private boolean consultingShow;
+
+        public boolean isConsultingShow() {
+            return consultingShow;
+        }
+
+        public void setConsultingShow(boolean consultingShow) {
+            this.consultingShow = consultingShow;
+        }
+
         public String getOldUrl() {
             return oldUrl;
         }
