@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.dataport.wellness.utils.BotConstants;
 import com.hjq.http.config.IRequestApi;
 import com.hjq.http.config.IRequestServer;
+import com.hjq.http.model.CacheMode;
 
 import java.io.Serializable;
 
@@ -20,7 +21,11 @@ public class MessageTypeApi implements IRequestApi, IRequestServer {
     public String getHost() {
         return BotConstants.XD_URL;
     }
-
+    @NonNull
+    @Override
+    public CacheMode getCacheMode() {
+        return CacheMode.NO_CACHE;
+    }
     public MessageTypeApi() {
     }
 

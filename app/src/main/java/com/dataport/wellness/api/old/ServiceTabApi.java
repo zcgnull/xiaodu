@@ -9,6 +9,7 @@ import com.dataport.wellness.utils.BotConstants;
 import com.dataport.wellness.utils.GlobalConstants;
 import com.hjq.http.config.IRequestApi;
 import com.hjq.http.config.IRequestServer;
+import com.hjq.http.model.CacheMode;
 
 import org.json.JSONArray;
 
@@ -31,7 +32,11 @@ public class ServiceTabApi implements IRequestApi, IRequestServer {
     public String getHost() {
         return BotConstants.YZ_URL;
     }
-
+    @NonNull
+    @Override
+    public CacheMode getCacheMode() {
+        return CacheMode.NO_CACHE;
+    }
 
     public ServiceTabApi() {
     }

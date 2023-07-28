@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.dataport.wellness.utils.BotConstants;
 import com.hjq.http.config.IRequestApi;
 import com.hjq.http.config.IRequestServer;
+import com.hjq.http.model.CacheMode;
 
 import java.io.Serializable;
 import java.util.List;
@@ -23,7 +24,11 @@ public class DeviceEnvApi implements IRequestApi, IRequestServer {
     public String getHost() {
         return BotConstants.JK_URL;
     }
-
+    @NonNull
+    @Override
+    public CacheMode getCacheMode() {
+        return CacheMode.NO_CACHE;
+    }
     private Integer pageNo;//页码 一开始
     private Integer pageSize;//每页条数
     private long userId;

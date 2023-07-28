@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.dataport.wellness.utils.BotConstants;
 import com.hjq.http.config.IRequestApi;
 import com.hjq.http.config.IRequestServer;
+import com.hjq.http.model.CacheMode;
 
 import java.io.Serializable;
 import java.util.List;
@@ -21,7 +22,11 @@ public class SignTypeApi implements IRequestApi, IRequestServer {
     public String getHost() {
         return BotConstants.JK_URL;
     }
-
+    @NonNull
+    @Override
+    public CacheMode getCacheMode() {
+        return CacheMode.NO_CACHE;
+    }
     private long binderId;
 
     public SignTypeApi(long binderId) {

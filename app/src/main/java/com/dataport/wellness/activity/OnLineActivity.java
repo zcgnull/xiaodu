@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -95,7 +96,7 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
         contentManger = new GridLayoutManager(getApplicationContext(), 2);
         contentManger.setOrientation(GridLayoutManager.VERTICAL);
         contentRv.setLayoutManager(contentManger);
-        onlineAdapter = new OnlineAdapter(getApplicationContext());
+        onlineAdapter = new OnlineAdapter(this);
         contentRv.setAdapter(onlineAdapter);
         onlineAdapter.setListener((data, pos) -> {
             TUICallEngine.createInstance(getApplicationContext()).removeObserver(observer);

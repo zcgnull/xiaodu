@@ -6,6 +6,7 @@ import com.dataport.wellness.utils.BotConstants;
 import com.hjq.http.config.IRequestApi;
 import com.hjq.http.config.IRequestServer;
 import com.hjq.http.model.BodyType;
+import com.hjq.http.model.CacheMode;
 
 /**
  * 环境监测告警数据处理
@@ -24,6 +25,12 @@ public class DeviceEnvProcessApi implements IRequestApi, IRequestServer {
     @Override
     public String getHost() {
         return BotConstants.JK_URL;
+    }
+
+    @NonNull
+    @Override
+    public CacheMode getCacheMode() {
+        return CacheMode.NO_CACHE;
     }
 
     private String processEnd;//处理端

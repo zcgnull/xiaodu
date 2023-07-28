@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.dataport.wellness.utils.BotConstants;
 import com.hjq.http.config.IRequestApi;
 import com.hjq.http.config.IRequestServer;
+import com.hjq.http.model.CacheMode;
 
 import java.io.Serializable;
 
@@ -19,6 +20,12 @@ public class GuideDataApi implements IRequestApi, IRequestServer {
     @Override
     public String getHost() {
         return BotConstants.XD_URL;
+    }
+
+    @NonNull
+    @Override
+    public CacheMode getCacheMode() {
+        return CacheMode.NO_CACHE;
     }
 
     //noBind(1, "设备未绑定"),
