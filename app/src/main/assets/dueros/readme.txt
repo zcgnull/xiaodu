@@ -1,0 +1,1 @@
+将下载下来的DBP-localVerify.license文件放到项目的：assets/dueros/ 目录下，编译出来的APK方可在设备上离线打开。
