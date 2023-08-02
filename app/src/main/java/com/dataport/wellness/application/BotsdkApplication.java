@@ -75,7 +75,7 @@ public class BotsdkApplication extends Application {
 
         EasyConfig.with(okHttpClient)
                 // 是否打印日志
-                .setLogEnabled(false)
+                .setLogEnabled(true)
 
                 // 设置服务器配置（必须设置）
                 .setServer(new RequestServer())

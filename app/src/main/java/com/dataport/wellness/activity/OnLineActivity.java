@@ -21,6 +21,7 @@ import com.baidu.duer.botsdk.BotSdk;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.dataport.wellness.R;
 import com.dataport.wellness.activity.dialog.BaseDialog;
+import com.dataport.wellness.activity.dialog.LoadingDialog;
 import com.dataport.wellness.activity.dialog.WaitDialog;
 import com.dataport.wellness.adapter.OnlineAdapter;
 import com.dataport.wellness.api.health.AdviceDoctorApi;
@@ -82,7 +83,7 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
     private String type = "";
     private String handleType = "";
     private int delay = 0;
-    private BaseDialog mWaitDialog;
+    private LoadingDialog mWaitDialog;
     private TUILogin tuiLogin;
     private GridLayoutManager contentManger;
     private List<String> messages = new ArrayList<>();
@@ -331,10 +332,10 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
 
     private void loginTUI(String userId, String userSig) {
         if (mWaitDialog == null) {
-            mWaitDialog = new WaitDialog.Builder(this)
+            mWaitDialog = new LoadingDialog(this)
                     // 消息文本可以不用填写
-                    .setMessage("音视频组件初始化中。。。")
-                    .create();
+                    .setMsg("音视频组件初始化中...")
+                    .setTextSize(15);
         }
         if (!mWaitDialog.isShowing()) {
             mWaitDialog.show();

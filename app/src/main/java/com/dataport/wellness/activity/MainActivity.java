@@ -172,6 +172,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                                     }
                                 }
                             } else {
+                                Log.d(TAG, "code = "+ result.getCode() + " message = " + result.getMessage());
                                 Toast.makeText(MainActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }

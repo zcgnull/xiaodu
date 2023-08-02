@@ -3,12 +3,15 @@ package com.dataport.wellness.activity;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.dataport.wellness.R;
+import com.dataport.wellness.activity.dialog.LoadingDialog;
 import com.hjq.http.listener.OnHttpListener;
 
 import java.net.InetAddress;
@@ -24,7 +27,7 @@ import okhttp3.Call;
 public class BaseActivity extends AppCompatActivity implements OnHttpListener<Object> {
 
     /** 加载对话框 */
-    private ProgressDialog mDialog;
+    private LoadingDialog mDialog;
     /** 对话框数量 */
     private int mDialogTotal;
 
@@ -46,10 +49,11 @@ public class BaseActivity extends AppCompatActivity implements OnHttpListener<Ob
      */
     public void showDialog() {
         if (mDialog == null) {
-            mDialog = new ProgressDialog(this);
-            mDialog.setMessage("加载中...");
-            mDialog.setCancelable(false);
-            mDialog.setCanceledOnTouchOutside(false);
+            Log.d("zcg", "创建加载中");
+            mDialog = new LoadingDialog(this)
+            .setAnimation(R.raw.loading)
+            .setMsg("加载中...");
+
         }
         if (!mDialog.isShowing()) {
             mDialog.show();
@@ -74,6 +78,7 @@ public class BaseActivity extends AppCompatActivity implements OnHttpListener<Ob
     @Override
     public void onStart(Call call) {
         showDialog();
+
     }
 
     @Override
@@ -91,6 +96,16 @@ public class BaseActivity extends AppCompatActivity implements OnHttpListener<Ob
     @Override
     public void onEnd(Call call) {
         hideDialog();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (isShowDialog()) {
+            hideDialog();
+        }
+        Log.d("zcg", "销毁对话框");
+        mDialog = null;
     }
 
     public static void setAndroidNativeLightStatusBar(Activity activity, boolean dark) {
