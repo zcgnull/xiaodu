@@ -13,11 +13,10 @@
         android:visibility="visible"
         android:layout_height="wrap_content">
 
-
         <ImageView
             android:id="@+id/icon1"
-            android:layout_width="@dimen/dp_35"
-            android:layout_height="@dimen/dp_35"
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
             android:src="@mipmap/icon_1" />
 
         <LinearLayout
@@ -53,8 +52,8 @@
 
         <ImageView
             android:id="@+id/icon2"
-            android:layout_width="@dimen/dp_35"
-            android:layout_height="@dimen/dp_35"
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
             android:layout_alignParentRight="true"
             android:src="@mipmap/icon_2" />
 

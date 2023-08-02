@@ -8,7 +8,6 @@ import com.hjq.http.config.IRequestServer;
 import com.hjq.http.model.CacheMode;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class DeviceInfoApi  implements IRequestApi, IRequestServer {
 
@@ -37,29 +36,35 @@ public class DeviceInfoApi  implements IRequestApi, IRequestServer {
     public class Bean implements Serializable {
 
         private String sn;
+        private int tenantId;
+        private boolean inWarehouse;
+        private String oldUrl;
+        private String healthUrl;
+        private boolean consultingShow;
+        private BaiduSpeechConfigDTO baiduSpeechConfig;
 
-        public long getTenantId() {
+        public String getSn() {
+            return sn;
+        }
+
+        public void setSn(String sn) {
+            this.sn = sn;
+        }
+
+        public int getTenantId() {
             return tenantId;
         }
 
-        public void setTenantId(long tenantId) {
+        public void setTenantId(int tenantId) {
             this.tenantId = tenantId;
         }
 
-        private long tenantId;
-        private boolean inWarehouse;
-
-        private String oldUrl;
-        private String healthUrl;
-
-        private boolean consultingShow;
-
-        public boolean isConsultingShow() {
-            return consultingShow;
+        public boolean isInWarehouse() {
+            return inWarehouse;
         }
 
-        public void setConsultingShow(boolean consultingShow) {
-            this.consultingShow = consultingShow;
+        public void setInWarehouse(boolean inWarehouse) {
+            this.inWarehouse = inWarehouse;
         }
 
         public String getOldUrl() {
@@ -78,22 +83,59 @@ public class DeviceInfoApi  implements IRequestApi, IRequestServer {
             this.healthUrl = healthUrl;
         }
 
-        public String getSn() {
-            return sn;
+        public boolean isConsultingShow() {
+            return consultingShow;
         }
 
-        public void setSn(String sn) {
-            this.sn = sn;
+        public void setConsultingShow(boolean consultingShow) {
+            this.consultingShow = consultingShow;
         }
 
-
-
-        public boolean isInWarehouse() {
-            return inWarehouse;
+        public BaiduSpeechConfigDTO getBaiduSpeechConfig() {
+            return baiduSpeechConfig;
         }
 
-        public void setInWarehouse(boolean inWarehouse) {
-            this.inWarehouse = inWarehouse;
+        public void setBaiduSpeechConfig(BaiduSpeechConfigDTO baiduSpeechConfig) {
+            this.baiduSpeechConfig = baiduSpeechConfig;
+        }
+
+        public class BaiduSpeechConfigDTO {
+            private String appKey;
+            private String secretKey;
+            private String appId;
+            private String appName;
+
+            public String getAppKey() {
+                return appKey;
+            }
+
+            public void setAppKey(String appKey) {
+                this.appKey = appKey;
+            }
+
+            public String getSecretKey() {
+                return secretKey;
+            }
+
+            public void setSecretKey(String secretKey) {
+                this.secretKey = secretKey;
+            }
+
+            public String getAppId() {
+                return appId;
+            }
+
+            public void setAppId(String appId) {
+                this.appId = appId;
+            }
+
+            public String getAppName() {
+                return appName;
+            }
+
+            public void setAppName(String appName) {
+                this.appName = appName;
+            }
         }
     }
 }

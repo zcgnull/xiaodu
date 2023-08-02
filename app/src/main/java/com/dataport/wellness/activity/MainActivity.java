@@ -156,21 +156,26 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                                 Log.d(TAG, "SharedPreferencesToken: " + token);
                                 BotConstants.JK_URL = result.getData().getHealthUrl();
                                 BotConstants.YZ_URL = result.getData().getOldUrl();
+                                BotConstants.BaiduSpeechAppId = result.getData().getBaiduSpeechConfig().getAppId();
+                                BotConstants.BaiduSpeechSecretKey = result.getData().getBaiduSpeechConfig().getSecretKey();
+                                BotConstants.BaiduSpeechAppKey = result.getData().getBaiduSpeechConfig().getAppKey();
                                 consultingShow = result.getData().isConsultingShow();
                                 if (consultingShow) {
                                     ln_speech.setVisibility(View.VISIBLE);
                                 }
-                                if (null == token) {
-                                    long tenantId = result.getData().isInWarehouse() ? result.getData().getTenantId() : 1;
-                                    getDeviceToken(String.valueOf(tenantId), result.getData().isInWarehouse(), result.getData().getSn());
-                                } else {
-                                    BotConstants.DEVICE_TOKEN = token;
-                                    if (!result.getData().isInWarehouse()) {//未授权
-                                        getGuideData("noAuth");
-                                    } else {
-                                        getToken(result.getData().getSn());
-                                    }
-                                }
+//                                if (null == token) {
+//                                    long tenantId = result.getData().isInWarehouse() ? result.getData().getTenantId() : 1;
+//                                    getDeviceToken(String.valueOf(tenantId), result.getData().isInWarehouse(), result.getData().getSn());
+//                                } else {
+//                                    BotConstants.DEVICE_TOKEN = token;
+//                                    if (!result.getData().isInWarehouse()) {//未授权
+//                                        getGuideData("noAuth");
+//                                    } else {
+//                                        getToken(result.getData().getSn());
+//                                    }
+//                                }
+                                long tenantId = result.getData().isInWarehouse() ? result.getData().getTenantId() : 1;
+                                getDeviceToken(String.valueOf(tenantId), result.getData().isInWarehouse(), result.getData().getSn());
                             } else {
                                 Log.d(TAG, "code = "+ result.getCode() + " message = " + result.getMessage());
                                 Toast.makeText(MainActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
@@ -463,6 +468,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 startActivity(activityIntent);
             } else if ("app_home_contact".equals(intent.slots.get(0).name)) {
                 toModel(BotConstants.OPEN_CONTACTS_URL);
+            } else if ("app_home_health_consultation".equals(intent.slots.get(0).name)) {
+                if (consultingShow){
+                    activityIntent = new Intent(this, SpeechActivity.class);
+                    startActivity(activityIntent);
+                } else {
+                    BotSdk.getInstance().speakRequest("您当前账号没有开通健康咨询服务");
+                }
             } else {
                 BotSdk.getInstance().speakRequest("我没有听清，请再说一遍");
             }
@@ -526,7 +538,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         super.onDestroy();
         Log.d(TAG, "handleIntent: onDestroy");
         BotMessageListener.getInstance().removeCallback(this);
-        BotSdk.getInstance().setDialogStateListener(null);
+//        BotSdk.getInstance().setDialogStateListener(null);
         if (mTimer != null) {
             mTimer.cancel();
             mTimer = null;

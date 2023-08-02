@@ -17,7 +17,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
 import com.dataport.wellness.R;
-import com.dataport.wellness.api.health.OnlineDoctorV2Api;
+import com.dataport.wellness.been.OnlineDoctorListBean;
 import com.dataport.wellness.http.glide.GlideApp;
 
 import java.util.List;
@@ -25,7 +25,7 @@ import java.util.List;
 public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     private Context context;
-    private List<OnlineDoctorV2Api.Bean.DoctorListDTO> list;
+    private List<OnlineDoctorListBean> list;
     private OnItemClickListener listener;
     private yyClickListener yyClickListener;
     private spClickListener spClickListener;
@@ -34,7 +34,7 @@ public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         this.context = context;
     }
 
-    public void setList(List<OnlineDoctorV2Api.Bean.DoctorListDTO> list) {
+    public void setList(List<OnlineDoctorListBean> list) {
         this.list = list;
         notifyDataSetChanged();
     }
@@ -91,15 +91,15 @@ public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     public interface OnItemClickListener{
-        void onItemClick(OnlineDoctorV2Api.Bean.DoctorListDTO data, int pos);
+        void onItemClick(OnlineDoctorListBean data, int pos);
     }
 
     public interface yyClickListener {
-        void onyyClickListener(OnlineDoctorV2Api.Bean.DoctorListDTO data, int pos);
+        void onyyClickListener(OnlineDoctorListBean data, int pos);
     }
 
     public interface spClickListener {
-        void onspClickListener(OnlineDoctorV2Api.Bean.DoctorListDTO data, int pos);
+        void onspClickListener(OnlineDoctorListBean data, int pos);
     }
 
     @Override

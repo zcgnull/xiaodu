@@ -20,10 +20,10 @@ import com.dataport.wellness.R;
 import com.dataport.wellness.api.health.AdviceDoctorApi;
 import com.dataport.wellness.api.health.IMLoginApi;
 import com.dataport.wellness.api.health.JudgeAdviceApi;
-import com.dataport.wellness.api.health.OnlineDoctorV2Api;
 import com.dataport.wellness.api.health.StartRecordApi;
 import com.dataport.wellness.api.health.TurnOffApi;
 import com.dataport.wellness.api.health.TurnOnApi;
+import com.dataport.wellness.been.OnlineDoctorListBean;
 import com.dataport.wellness.botsdk.BotMessageListener;
 import com.dataport.wellness.botsdk.IBotIntentCallback;
 import com.dataport.wellness.http.HttpData;
@@ -47,7 +47,7 @@ import java.util.concurrent.TimeUnit;
 public class OnLineDetailActivity extends BaseActivity implements IBotIntentCallback {
 
     private static final String TAG = "OnLineDetailActivity";
-    private OnlineDoctorV2Api.Bean.DoctorListDTO data;
+    private OnlineDoctorListBean data;
     private long binderId;
     private String doctorTimId;
     private String binderTimId;
@@ -66,7 +66,7 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
         setContentView(R.layout.activity_online_detail);
         findViewById(R.id.ln_back).setOnClickListener(v -> finish());
         binderId = getIntent().getLongExtra("binderId", 0);
-        data = (OnlineDoctorV2Api.Bean.DoctorListDTO) getIntent().getSerializableExtra("data");
+        data = (OnlineDoctorListBean) getIntent().getSerializableExtra("data");
         getIMLogin(binderId, data.getId());
         initView();
         initData();

@@ -7,7 +7,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,7 +44,6 @@ import com.dataport.wellness.botsdk.IBotIntentCallback;
 import com.dataport.wellness.http.HttpIntData;
 import com.dataport.wellness.http.JWebSocketClient;
 import com.dataport.wellness.http.glide.GlideApp;
-import com.dataport.wellness.utils.AuthUtil;
 import com.dataport.wellness.utils.AutoCheck;
 import com.dataport.wellness.utils.BotConstants;
 import com.google.gson.Gson;
@@ -61,6 +62,7 @@ import org.json.JSONObject;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -75,13 +77,19 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
     private SpeechAdapter adapter;
     private JWebSocketClient client;
     private TextView sendTv;
-    private ImageView ivVoice;
+    private EditText sendEt;
+    private ImageView ivVoice, ivStatus;
+    private LinearLayout lnVoice, lnText;
     private List<MessageBean> msgList = new ArrayList<>();
     private List<MessageTypeApi.Bean> msgTypeList = new ArrayList<>();
     private String msgType;
     private boolean isAnswering = false;
     private boolean webSocketStatus = true;
+    private boolean isJK = true;
+    private boolean isIdentify = false;
     private int settingPos = 0;
+    private MessageDialog.Builder closeDialog;
+    private SettingDialog.Builder settingDialog;
 
     private Runnable scrollRunnable = new Runnable() {
         @Override
@@ -105,8 +113,13 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
         sendTv = findViewById(R.id.tv_send);
         contentRv = findViewById(R.id.rv_speech);
         ivVoice = findViewById(R.id.iv_voice);
-        GlideApp.with(this).asGif().load(R.mipmap.voice).into(ivVoice);
+        ivStatus = findViewById(R.id.iv_status);
+        sendEt = findViewById(R.id.et_send);
+        lnVoice = findViewById(R.id.ln_bottom);
+        lnText = findViewById(R.id.ln_bottom_text);
 
+        GlideApp.with(this).asGif().load(R.mipmap.voice).into(ivVoice);
+        GlideApp.with(this).asGif().load(R.mipmap.voice).into(ivStatus);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         contentRv.setLayoutManager(linearLayoutManager);
@@ -118,23 +131,39 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
             getMessage(2, BotConstants.SN, msgType);
         });
         findViewById(R.id.iv_setting).setOnClickListener(v -> {
-            if (!isAnswering){
+            if (!isAnswering && !isIdentify) {
                 List<String> data = new ArrayList<>();
                 for (int i = 0; i < msgTypeList.size(); i++) {
                     data.add(msgTypeList.get(i).getLabel());
                 }
-                new SettingDialog.Builder(SpeechActivity.this)
-                        .setList(data)  //设置下拉框内容
-                        .setPosition(settingPos)  //设置初始 问答模型
-                        .setGeek(false)  //设置是否使用 极客模式
-                        .setWidthAndHeight(0.5f, 0.5f) //百分比
-                        .setListener((dialog, position, geekModel, QAModel) -> {
-                            //监听  position 选择的位置 geekModel 是否使用 极客模式 QAModel 问答模型
-                            Log.d("zcg", "点击了确认" + position + geekModel + QAModel);
-                            settingPos = position;
-                            msgType = msgTypeList.get(position).getValue();
-                        })
-                        .show();
+                if (null != settingDialog) {
+                    settingDialog.show();
+                } else {
+                    settingDialog = new SettingDialog.Builder(SpeechActivity.this);
+                    settingDialog.setList(data)  //设置下拉框内容
+                            .setPosition(settingPos)  //设置初始 问答模型
+                            .setGeek(isJK)  //设置是否使用 极客模式
+                            .setWidthAndHeight(0.5f, 0.5f) //百分比
+                            .setListener((dialog, position, geekModel, QAModel) -> {
+                                //监听  position 选择的位置 geekModel 是否使用 极客模式 QAModel 问答模型
+                                Log.d("zcg", "点击了确认" + position + geekModel + QAModel);
+                                settingPos = position;
+                                msgType = msgTypeList.get(position).getValue();
+                                isJK = geekModel;
+                                checkSendStatus();
+                            })
+                            .show();
+                }
+            }
+        });
+        findViewById(R.id.btn_send).setOnClickListener(v -> {
+            if (!isAnswering && !isIdentify) {
+                sendTextWeb();
+            }
+        });
+        findViewById(R.id.iv_mic).setOnClickListener(v -> {
+            if (!isAnswering && !isIdentify) {
+                asrStart();
             }
         });
         initWebSocket();
@@ -147,23 +176,50 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
      * 发送消息
      */
     private void sendWebSocket(String params) {
-        isAnswering = true;
         String sendMsg = "";
         EventBean eventBean = GsonFactory.getSingletonGson().fromJson(params, EventBean.class);
         sendMsg = eventBean.getBest_result();
-        sendTv.setText(sendMsg);
+        if (isJK) {
+            isAnswering = true;
+            sendTv.setText(sendMsg);
+            WebSocketSendBean sendBean = new WebSocketSendBean();
+            WebSocketSendBean.BodyDTO bodyDTO = new WebSocketSendBean.BodyDTO();
+            bodyDTO.setMessage(sendMsg);
+            sendBean.setBody(bodyDTO);
+            sendBean.setType(msgType);
+            String sendJson = new Gson().toJson(sendBean);
+            sendMsg(sendJson);
+            MessageBean userMsg = new MessageBean();
+            userMsg.setRole("user");
+            userMsg.setContent(sendMsg);
+            userMsg.setCreated(System.currentTimeMillis() / 1000);
+            MessageBean waitingMsg = new MessageBean();
+            waitingMsg.setRole("assistant");
+            waitingMsg.setContent("回答中...");
+            waitingMsg.setCreated(System.currentTimeMillis() / 1000);
+            msgList.add(userMsg);
+            msgList.add(waitingMsg);
+            adapter.setList(msgList);
+            contentRv.scrollToPosition(msgList.size() - 1);
+        } else {
+            sendEt.setText(sendMsg);
+        }
+    }
 
+    private void sendTextWeb() {
+        if (sendEt.getText().toString().trim().equals(""))
+            return;
+        isAnswering = true;
         WebSocketSendBean sendBean = new WebSocketSendBean();
         WebSocketSendBean.BodyDTO bodyDTO = new WebSocketSendBean.BodyDTO();
-        bodyDTO.setMessage(sendMsg);
+        bodyDTO.setMessage(sendEt.getText().toString().trim());
         sendBean.setBody(bodyDTO);
         sendBean.setType(msgType);
         String sendJson = new Gson().toJson(sendBean);
         sendMsg(sendJson);
-
         MessageBean userMsg = new MessageBean();
         userMsg.setRole("user");
-        userMsg.setContent(sendMsg);
+        userMsg.setContent(sendEt.getText().toString().trim());
         userMsg.setCreated(System.currentTimeMillis() / 1000);
         MessageBean waitingMsg = new MessageBean();
         waitingMsg.setRole("assistant");
@@ -179,7 +235,11 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
         String sendMsg = "";
         EventBean eventBean = GsonFactory.getSingletonGson().fromJson(params, EventBean.class);
         sendMsg = eventBean.getBest_result();
-        sendTv.setText(sendMsg);
+        if (isJK) {
+            sendTv.setText(sendMsg);
+        } else {
+            sendEt.setText(sendMsg);
+        }
     }
 
     /**
@@ -188,7 +248,11 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
     private void getWebSocket(String params) {
         webSocketStatus = true;
         WebSocketGetBean getBean = GsonFactory.getSingletonGson().fromJson(params, WebSocketGetBean.class);
-        runOnUiThread(() -> sendTv.setText("你可以对我说：“小度小度，我要咨询”"));
+        runOnUiThread(() -> {
+            sendTv.setText("你可以对我说：“小度小度，我要咨询”");
+            sendEt.setText("");
+            sendEt.setHint("输入文字后发送");
+        });
         if (!getBean.getType().equals("AUTH_TOKEN_RESPONSE")) {
             isAnswering = false;
             msgList.remove(msgList.size() - 1);
@@ -200,6 +264,16 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
                 adapter.setList(msgList);
                 contentRv.postDelayed(scrollRunnable, 500);
             });
+        }
+    }
+
+    private void checkSendStatus() {
+        if (isJK) {
+            lnVoice.setVisibility(View.VISIBLE);
+            lnText.setVisibility(View.GONE);
+        } else {
+            lnText.setVisibility(View.VISIBLE);
+            lnVoice.setVisibility(View.GONE);
         }
     }
 
@@ -258,7 +332,7 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
                             msgType = result.getData().get(0).getValue();
                             getMessage(1, BotConstants.SN, msgType);
                         } else {
-                            Toast.makeText(getApplicationContext(), "获取绘画模型失败，请退出重试", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "获取会话模型失败，请退出重试", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -271,36 +345,39 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
         asr.send(SpeechConstant.ASR_STOP, null, null, 0, 0);
         BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
         BotSdk.getInstance().speakRequest("对话超时，是否继续？可以对我说：“小度小度，继续”，或者可以对我说：“小度小度，取消”");
-        // 消息对话框
-        new MessageDialog.Builder(this)
-                // 标题可以不用填写
-                .setTitle("提示")
-                // 内容必须要填写
-                .setMessage("对话超时，是否继续？")
-                // 确定按钮文本
-                .setConfirm("继续")
-                // 设置 null 表示不显示取消按钮
-                .setCancel("取消")
-                .setCanceledOnTouchOutside(false)
-                .setListener(new MessageDialog.OnListener() {
+        if (null != closeDialog) {
+            closeDialog.show();
+        } else {
+            closeDialog = new MessageDialog.Builder(this);
+            closeDialog.setTitle("提示")
+                    .setMessage("对话超时，是否继续？")
+                    .setConfirm("继续")
+                    .setCancel("取消")
+                    .setCanceledOnTouchOutside(false)
+                    .setListener(new MessageDialog.OnListener() {
 
-                    @Override
-                    public void onConfirm(BaseDialog dialog) {
-                        reconnectWs();//websocket重连
-                    }
+                        @Override
+                        public void onConfirm(BaseDialog dialog) {
+                            reconnectWs();//websocket重连
+                        }
 
-                    @Override
-                    public void onCancel(BaseDialog dialog) {
-                        finish();
-                    }
-                })
-                .show();
+                        @Override
+                        public void onCancel(BaseDialog dialog) {
+                            finish();
+                        }
+                    }).show();
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         Log.e(TAG, "`````````````````````````onDestroy");
+        adapter = null;
+        msgList = null;
+        msgTypeList = null;
+        closeDialog = null;
+        settingDialog = null;
         closeConnect();
         asr.send(SpeechConstant.ASR_STOP, null, null, 0, 0);
         asr.send(SpeechConstant.ASR_CANCEL, "{}", null, 0, 0);
@@ -351,7 +428,7 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
         String token = BotConstants.DEVICE_TOKEN.replace("Bearer ", "");
         client.addHeader("Sec-WebSocket-Protocol", token);
         //设置超时时间
-//        client.setConnectionLostTimeout(110 * 1000);
+        client.setConnectionLostTimeout(Integer.MAX_VALUE);
         //连接websocket
         new Thread() {
             @Override
@@ -456,14 +533,28 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
         String logTxt = "name: " + name;
         if (webSocketStatus) {
             if (name.equals(SpeechConstant.CALLBACK_EVENT_ASR_READY)) {
-                sendTv.setText("语音识别中...");
-                ivVoice.setVisibility(View.VISIBLE);
+                isIdentify = true;
+                if (isJK) {
+                    sendTv.setText("语音识别中...");
+                    ivVoice.setVisibility(View.VISIBLE);
+                } else {
+                    sendEt.setHint("语音识别中...");
+                    ivStatus.setVisibility(View.VISIBLE);
+                }
             }
             if (name.equals(SpeechConstant.CALLBACK_EVENT_ASR_EXIT)) {
-                if (!isAnswering) {
-                    sendTv.setText("你可以对我说：“小度小度，我要咨询”");
+                isIdentify = false;
+                if (isJK) {
+                    if (!isAnswering) {
+                        sendTv.setText("你可以对我说：“小度小度，我要咨询”");
+                    }
+                    ivVoice.setVisibility(View.GONE);
+                } else {
+                    if (!isAnswering) {
+                        sendEt.setHint("输入文字后发送");
+                    }
+                    ivStatus.setVisibility(View.GONE);
                 }
-                ivVoice.setVisibility(View.GONE);
             }
             if (name.equals(SpeechConstant.CALLBACK_EVENT_ASR_PARTIAL)) {
                 // 引擎就绪，可以说话，一般在收到此事件后通过UI通知用户可以说话了
@@ -500,36 +591,13 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
     }
 
     private void asrStart() {
-        final String[] stLog = {""};
-        Map<String, Object> params = AuthUtil.getParam();
-        String event = null;
-        event = SpeechConstant.ASR_START; // 替换成测试的event
+        Map<String, Object> params = new LinkedHashMap<>();
         // 基于SDK集成2.1 设置识别参数
+        params.put(SpeechConstant.APP_ID, BotConstants.BaiduSpeechAppId); // 添加appId
+        params.put(SpeechConstant.APP_KEY, BotConstants.BaiduSpeechAppKey); // 添加apiKey
+        params.put(SpeechConstant.SECRET, BotConstants.BaiduSpeechSecretKey); // 添加secretKey
         params.put(SpeechConstant.ACCEPT_AUDIO_VOLUME, false);
-        // params.put(SpeechConstant.NLU, "enable");
-        // params.put(SpeechConstant.BDS_ASR_ENABLE_LONG_SPEECH, true);//长语音  优先级高于VAD_ENDPOINT_TIMEOUT
-        // params.put(SpeechConstant.VAD_ENDPOINT_TIMEOUT, 0); // 长语音
-
-        // params.put(SpeechConstant.IN_FILE, "res:///com/baidu/android/voicedemo/16k_test.pcm");
-//         params.put(SpeechConstant.VAD, SpeechConstant.VAD_DNN);
         params.put(SpeechConstant.VAD, "10");
-        // params.put(SpeechConstant.PID, 1537); // 中文输入法模型，有逗号
-
-        /* 语音自训练平台特有参数 */
-        // params.put(SpeechConstant.PID, 8002);
-        // 语音自训练平台特殊pid，8002：模型类似开放平台 1537  具体是8001还是8002，看自训练平台页面上的显示
-        // params.put(SpeechConstant.LMID,1068);
-        // 语音自训练平台已上线的模型ID，https://ai.baidu.com/smartasr/model
-        // 注意模型ID必须在你的appId所在的百度账号下
-        /* 语音自训练平台特有参数 */
-
-        /* 测试InputStream*/
-        // InFileStream.setContext(this);
-        // params.put(SpeechConstant.IN_FILE,
-        // "#com.baidu.aip.asrwakeup3.core.inputstream.InFileStream.createMyPipedInputStream()");
-
-        // 请先使用如‘在线识别’界面测试和生成识别参数。 params同ActivityRecog类中myRecognizer.start(params);
-        // 复制此段可以自动检测错误
         (new AutoCheck(getApplicationContext(), new Handler() {
             public void handleMessage(Message msg) {
                 if (msg.what == 100) {
@@ -543,7 +611,7 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
         }, false)).checkAsr(params);
         String json = null; // 可以替换成自己的json
         json = new JSONObject(params).toString(); // 这里可以替换成你需要测试的json
-        asr.send(event, json, null, 0, 0);
+        asr.send(SpeechConstant.ASR_START, json, null, 0, 0);
         Log.i(TAG, "输入参数:" + json);
     }
 
@@ -572,7 +640,25 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
 
     @Override
     public void handleIntent(BotIntent intent, String customData) {
-
+        String intentResult = getString(R.string.result_intent) + intent.name + ",slots:" + intent.slots;
+        Log.d(TAG, "handleIntent: " + intentResult);
+        if (isJK) {
+            if ("app_health_consultation_ask".equals(intent.name)) {
+                asrStart();
+            } else if ("ai.dueros.common.cancel_intent".equals(intent.name)) {
+                if (null != closeDialog && closeDialog.isShowing()) {
+                    closeDialog.dismiss();
+                    finish();
+                }
+            } else if ("ai.dueros.common.continue_intent".equals(intent.name)) {
+                if (null != closeDialog && closeDialog.isShowing()) {
+                    closeDialog.dismiss();
+                    reconnectWs();//websocket重连
+                }
+            } else {
+                BotSdk.getInstance().speakRequest("我没有听清，请再说一遍");
+            }
+        }
     }
 
     @Override
@@ -597,8 +683,11 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
     @Override
     public void onDialogStateChanged(DialogState dialogState) {
         Log.i("监听bot状态============", dialogState.name());
-        if (dialogState.name().equals("TTS_FINISH") && webSocketStatus) {
+        if (dialogState.name().equals("TTS_FINISH") && webSocketStatus && isJK) {
             asrStart();
+        } else if (dialogState.name().equals("LISTENING")) {
+            asr.send(SpeechConstant.ASR_STOP, null, null, 0, 0);
+            asr.send(SpeechConstant.ASR_CANCEL, "{}", null, 0, 0);
         }
     }
 

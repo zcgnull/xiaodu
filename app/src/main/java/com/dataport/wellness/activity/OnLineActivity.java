@@ -32,6 +32,8 @@ import com.dataport.wellness.api.health.StartRecordApi;
 import com.dataport.wellness.api.health.TurnOffApi;
 import com.dataport.wellness.api.health.TurnOnApi;
 import com.dataport.wellness.api.smalldu.GuideDataApi;
+import com.dataport.wellness.been.OnLineDoctorBean;
+import com.dataport.wellness.been.OnlineDoctorListBean;
 import com.dataport.wellness.botsdk.BotMessageListener;
 import com.dataport.wellness.botsdk.IBotIntentCallback;
 import com.dataport.wellness.http.HttpData;
@@ -71,8 +73,8 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
     private TextView noOnline;
     private ImageView ivQr;
     private OnlineAdapter onlineAdapter;
-    private List<OnlineDoctorV2Api.Bean.DoctorListDTO> doctorList = new ArrayList<>();
-    private OnlineDoctorV2Api.Bean.DoctorListDTO doctor;
+    private List<OnlineDoctorListBean> doctorList = new ArrayList<>();
+    private OnlineDoctorListBean doctor;
     private int pageNum = 0;
     private int pageSize = 10;
     private String idCard;
@@ -267,10 +269,10 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
     private void getOnlineDoctor(int type) {//type:1代表刷新2代表加载
         EasyHttp.get(this)
                 .api(new OnlineDoctorV2Api(idCard, pageNum, pageSize))
-                .request(new HttpCallback<HttpData<OnlineDoctorV2Api.Bean>>(this) {
+                .request(new HttpCallback<HttpData<OnLineDoctorBean>>(this) {
 
                     @Override
-                    public void onSucceed(HttpData<OnlineDoctorV2Api.Bean> result) {
+                    public void onSucceed(HttpData<OnLineDoctorBean> result) {
                         if (result.getData().getPublicReamin() == 0 && result.getData().getVioceReamin() == 0 && result.getData().getVideoReamin() == 0) {
                             getGuideData("noServiceCount");
                         } else {

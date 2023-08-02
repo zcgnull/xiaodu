@@ -11,6 +11,9 @@ public class BotConstants {
     public static String DEVICE_TOKEN = "";
     public static String TENANT_ID = "1";
     public static String SN;
+    public static String BaiduSpeechAppKey;
+    public static String BaiduSpeechSecretKey;
+    public static String BaiduSpeechAppId;
     public static final String LOG_TAG_AUDIO = "AudioRecorder";
     public static final String LOG_TAG_CAMERA = "CameraDemo";
     public static final String LOG_TAG_BOTSDK = "BotSDKDemo";
@@ -34,6 +37,7 @@ public class BotConstants {
     //websocket地址
     public static final String WEB_SOCKET_URL = "ws://172.20.3.112:8080/";
 //    public static final String WEB_SOCKET_URL = "ws://10.20.1.13:48080/";
+//    public static final String WEB_SOCKET_URL = "wss://dueros.dataport.com.cn/";
 
     /**
      * BotID和签名key ,可以在自己的技能控制台看到相关信息：https://dueros.baidu.com/dbp/main/console
