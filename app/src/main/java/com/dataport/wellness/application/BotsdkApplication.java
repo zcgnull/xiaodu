@@ -17,7 +17,6 @@ import com.dataport.wellness.http.glide.GlideApp;
 import com.dataport.wellness.utils.BotConstants;
 import com.dataport.wellness.utils.ContextUtil;
 import com.hjq.http.EasyConfig;
-import com.hjq.http.EasyHttp;
 import com.hjq.http.config.IRequestInterceptor;
 import com.hjq.http.model.HttpHeaders;
 import com.hjq.http.model.HttpParams;

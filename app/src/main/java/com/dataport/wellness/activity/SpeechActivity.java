@@ -1,11 +1,13 @@
 package com.dataport.wellness.activity;
 
 import android.Manifest;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -33,6 +35,7 @@ import com.dataport.wellness.activity.dialog.BaseDialog;
 import com.dataport.wellness.activity.dialog.MessageDialog;
 import com.dataport.wellness.activity.dialog.SettingDialog;
 import com.dataport.wellness.adapter.SpeechAdapter;
+import com.dataport.wellness.api.health.SignTypeApi;
 import com.dataport.wellness.api.smalldu.MessageApi;
 import com.dataport.wellness.api.smalldu.MessageTypeApi;
 import com.dataport.wellness.been.EventBean;
@@ -46,6 +49,7 @@ import com.dataport.wellness.http.JWebSocketClient;
 import com.dataport.wellness.http.glide.GlideApp;
 import com.dataport.wellness.utils.AutoCheck;
 import com.dataport.wellness.utils.BotConstants;
+import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 import com.hjq.gson.factory.GsonFactory;
 import com.hjq.http.EasyHttp;
@@ -87,9 +91,12 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
     private boolean webSocketStatus = true;
     private boolean isJK = true;
     private boolean isIdentify = false;
+    private boolean canStart = true;
     private int settingPos = 0;
     private MessageDialog.Builder closeDialog;
     private SettingDialog.Builder settingDialog;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
 
     private Runnable scrollRunnable = new Runnable() {
         @Override
@@ -103,9 +110,12 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_speech);
+        sharedPreferences = getSharedPreferences("XD", MODE_PRIVATE);
+        editor = sharedPreferences.edit();
         initView();
         initPermission();
-        initSpeech();
+        asr = EventManagerFactory.create(this, "asr");
+        asr.registerListener(this);
     }
 
     private void initView() {
@@ -133,8 +143,8 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
         findViewById(R.id.iv_setting).setOnClickListener(v -> {
             if (!isAnswering && !isIdentify) {
                 List<String> data = new ArrayList<>();
-                for (int i = 0; i < msgTypeList.size(); i++) {
-                    data.add(msgTypeList.get(i).getLabel());
+                for (MessageTypeApi.Bean bean : msgTypeList) {
+                    data.add(bean.getLabel());
                 }
                 if (null != settingDialog) {
                     settingDialog.show();
@@ -150,7 +160,10 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
                                 settingPos = position;
                                 msgType = msgTypeList.get(position).getValue();
                                 isJK = geekModel;
-                                checkSendStatus();
+                                editor.putString("msgType", msgType);
+                                editor.putBoolean("isJK", isJK);
+                                editor.commit();
+                                getMessage(1, BotConstants.SN, msgType);
                             })
                             .show();
                 }
@@ -271,6 +284,7 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
         if (isJK) {
             lnVoice.setVisibility(View.VISIBLE);
             lnText.setVisibility(View.GONE);
+            asrStart();
         } else {
             lnText.setVisibility(View.VISIBLE);
             lnVoice.setVisibility(View.GONE);
@@ -293,14 +307,10 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
                     public void onSucceed(HttpIntData<MessageApi.Bean> result) {
                         if (type == 1) {
                             msgList.clear();
-                            if (result.getData().getList().size() == 0) {
-//                                noData.setVisibility(View.VISIBLE);
-                            } else {
-//                                noData.setVisibility(View.GONE);
-                                msgList.addAll(result.getData().getList());
-                            }
+                            msgList.addAll(result.getData().getList());
                             adapter.setList(msgList);
                             contentRv.scrollToPosition(adapter.getItemCount() - 1);
+                            checkSendStatus();
                         } else {
                             refreshLayout.finishRefresh();
                             if (result.getData().getList().size() == 0) {
@@ -329,7 +339,22 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
                     public void onSucceed(HttpIntData<List<MessageTypeApi.Bean>> result) {
                         if (result.getCode() == 0) {
                             msgTypeList = result.getData();
-                            msgType = result.getData().get(0).getValue();
+                            isJK = sharedPreferences.getBoolean("isJK", true);
+                            String type = sharedPreferences.getString("msgType", result.getData().get(0).getValue());
+                            String typeDef = sharedPreferences.getString("msgTypeDef", result.getData().get(0).getValue());
+                            if (!typeDef.equals(result.getData().get(0).getValue())) {
+                                msgType = result.getData().get(0).getValue();
+                            } else {
+                                msgType = type;
+                                for (int i = 0; i < msgTypeList.size(); i++) {
+                                    if (msgType.equals(msgTypeList.get(i).getValue())){
+                                        settingPos = i;
+                                    }
+                                }
+                            }
+                            editor.putString("msgType", msgType);
+                            editor.putString("msgTypeDef", result.getData().get(0).getValue());
+                            editor.commit();
                             getMessage(1, BotConstants.SN, msgType);
                         } else {
                             Toast.makeText(getApplicationContext(), "获取会话模型失败，请退出重试", Toast.LENGTH_LONG).show();
@@ -373,6 +398,8 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
     protected void onDestroy() {
         super.onDestroy();
         Log.e(TAG, "`````````````````````````onDestroy");
+        editor.clear();
+        sharedPreferences = null;
         adapter = null;
         msgList = null;
         msgTypeList = null;
@@ -522,12 +549,6 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
 //    };
 
     //    -------------------------------------语音识别------------------------------------------------
-    private void initSpeech() {
-        asr = EventManagerFactory.create(this, "asr");
-        asr.registerListener(this);
-        asrStart();
-    }
-
     @Override
     public void onEvent(String name, String params, byte[] data, int offset, int length) {
         String logTxt = "name: " + name;
@@ -644,6 +665,7 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
         Log.d(TAG, "handleIntent: " + intentResult);
         if (isJK) {
             if ("app_health_consultation_ask".equals(intent.name)) {
+                canStart = true;
                 asrStart();
             } else if ("ai.dueros.common.cancel_intent".equals(intent.name)) {
                 if (null != closeDialog && closeDialog.isShowing()) {
@@ -683,9 +705,10 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
     @Override
     public void onDialogStateChanged(DialogState dialogState) {
         Log.i("监听bot状态============", dialogState.name());
-        if (dialogState.name().equals("TTS_FINISH") && webSocketStatus && isJK) {
+        if (dialogState.name().equals("TTS_FINISH") && webSocketStatus && isJK && canStart) {
             asrStart();
         } else if (dialogState.name().equals("LISTENING")) {
+            canStart = false;
             asr.send(SpeechConstant.ASR_STOP, null, null, 0, 0);
             asr.send(SpeechConstant.ASR_CANCEL, "{}", null, 0, 0);
         }
