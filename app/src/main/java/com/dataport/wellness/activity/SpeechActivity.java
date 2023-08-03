@@ -100,7 +100,6 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
 
     private Runnable scrollRunnable = new Runnable() {
         @Override
-
         public void run() {
             contentRv.scrollToPosition(msgList.size() - 1);
         }
@@ -172,7 +171,6 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
         });
         findViewById(R.id.btn_send).setOnClickListener(v -> {
             if (!isAnswering && !isIdentify) {
-                BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
                 sendTextWeb();
             }
         });
@@ -225,6 +223,7 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
     private void sendTextWeb() {
         if (sendEt.getText().toString().trim().equals(""))
             return;
+        BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
         isAnswering = true;
         WebSocketSendBean sendBean = new WebSocketSendBean();
         WebSocketSendBean.BodyDTO bodyDTO = new WebSocketSendBean.BodyDTO();
