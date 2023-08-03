@@ -21,6 +21,8 @@ import com.baidu.duer.bot.directive.payload.JsonUtil;
 import com.baidu.duer.bot.event.payload.LinkClickedEventPayload;
 import com.baidu.duer.botsdk.BotIntent;
 import com.baidu.duer.botsdk.BotSdk;
+import com.baidu.duer.botsdk.IDialogStateListener;
+import com.baidu.speech.asr.SpeechConstant;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.dataport.wellness.R;
 import com.dataport.wellness.activity.dialog.BaseDialog;
@@ -54,7 +56,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener, IBotIntentCallback {
+public class MainActivity extends BaseActivity implements View.OnClickListener, IBotIntentCallback, IDialogStateListener {
 
     private static final String TAG = "MainActivity";
     private MarqueeView marqueeView;
@@ -523,6 +525,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     protected void onResume() {
         super.onResume();
         BotMessageListener.getInstance().addCallback(this);
+        BotSdk.getInstance().setDialogStateListener(this);
         Log.d(TAG, "handleIntent: onResume");
     }
 
@@ -537,8 +540,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     protected void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "handleIntent: onDestroy");
-        BotMessageListener.getInstance().removeCallback(this);
-//        BotSdk.getInstance().setDialogStateListener(null);
         if (mTimer != null) {
             mTimer.cancel();
             mTimer = null;
@@ -546,4 +547,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
 
+    public void onDialogStateChanged(DialogState dialogState) {
+        Log.i("监听bot状态============", dialogState.name());
+    }
 }

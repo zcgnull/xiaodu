@@ -414,7 +414,7 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
         asr.unregisterListener(this);
         asr = null;
         BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
-        BotMessageListener.getInstance().removeCallback(this);
+        BotMessageListener.getInstance().clearCallback();
         BotSdk.getInstance().setDialogStateListener(null);
     }
 
