@@ -142,6 +142,7 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
         });
         findViewById(R.id.iv_setting).setOnClickListener(v -> {
             if (!isAnswering && !isIdentify) {
+                BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
                 List<String> data = new ArrayList<>();
                 for (MessageTypeApi.Bean bean : msgTypeList) {
                     data.add(bean.getLabel());
@@ -171,11 +172,13 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
         });
         findViewById(R.id.btn_send).setOnClickListener(v -> {
             if (!isAnswering && !isIdentify) {
+                BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
                 sendTextWeb();
             }
         });
         findViewById(R.id.iv_mic).setOnClickListener(v -> {
             if (!isAnswering && !isIdentify) {
+                BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
                 asrStart();
             }
         });
