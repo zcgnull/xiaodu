@@ -22,6 +22,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.baidu.duer.bot.BotMessageProtocol;
 import com.baidu.duer.botsdk.BotIntent;
 import com.baidu.duer.botsdk.BotSdk;
@@ -82,7 +83,7 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
     private JWebSocketClient client;
     private TextView sendTv;
     private EditText sendEt;
-    private ImageView ivVoice, ivStatus;
+    private LottieAnimationView ivVoice, ivStatus;
     private LinearLayout lnVoice, lnText;
     private List<MessageBean> msgList = new ArrayList<>();
     private List<MessageTypeApi.Bean> msgTypeList = new ArrayList<>();
@@ -126,9 +127,8 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
         sendEt = findViewById(R.id.et_send);
         lnVoice = findViewById(R.id.ln_bottom);
         lnText = findViewById(R.id.ln_bottom_text);
-
-        GlideApp.with(this).asGif().load(R.mipmap.voice).into(ivVoice);
-        GlideApp.with(this).asGif().load(R.mipmap.voice).into(ivStatus);
+        ivVoice.setAnimation(R.raw.voice);
+        ivStatus.setAnimation(R.raw.voice);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         contentRv.setLayoutManager(linearLayoutManager);
