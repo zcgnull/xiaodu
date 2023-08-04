@@ -414,7 +414,6 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
         asr = null;
         BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
         BotMessageListener.getInstance().clearCallback();
-        BotSdk.getInstance().setDialogStateListener(null);
     }
 
     //    -------------------------------------websocket------------------------------------------------
