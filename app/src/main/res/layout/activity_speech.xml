@@ -138,14 +138,24 @@
                             android:text="你可以对我说：“小度小度，我要咨询”" />
                     </ScrollView>
 
-                    <ImageView
+<!--                    <ImageView-->
+<!--                        android:id="@+id/iv_voice"-->
+<!--                        android:layout_width="80dp"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:layout_alignParentRight="true"-->
+<!--                        android:layout_centerVertical="true"-->
+<!--                        android:scaleType="fitXY"-->
+<!--                        android:visibility="gone" />-->
+
+                    <com.airbnb.lottie.LottieAnimationView
                         android:id="@+id/iv_voice"
                         android:layout_width="80dp"
                         android:layout_height="match_parent"
+                        android:layout_gravity="center"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:scaleType="fitXY"
-                        android:visibility="gone" />
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true" />
                 </RelativeLayout>
 
             </LinearLayout>
@@ -189,12 +199,20 @@
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
-                        <ImageView
+<!--                        <ImageView-->
+<!--                            android:id="@+id/iv_status"-->
+<!--                            android:layout_width="80dp"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:scaleType="fitXY"-->
+<!--                            android:visibility="gone" />-->
+                        <com.airbnb.lottie.LottieAnimationView
                             android:id="@+id/iv_status"
                             android:layout_width="80dp"
                             android:layout_height="wrap_content"
-                            android:scaleType="fitXY"
-                            android:visibility="gone" />
+                            android:layout_gravity="center"
+                            app:lottie_autoPlay="true"
+                            android:visibility="gone"
+                            app:lottie_loop="true" />
 
                         <ImageView
                             android:id="@+id/iv_mic"
