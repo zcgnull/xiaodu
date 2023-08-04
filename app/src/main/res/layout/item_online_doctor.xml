@@ -17,7 +17,7 @@
             android:id="@+id/iv_doctor"
             android:layout_width="@dimen/dp_130"
             android:scaleType="fitXY"
-            android:src="@mipmap/ic_launcher_round"
+            android:src="@mipmap/ic_launcher"
             android:layout_height="@dimen/dp_150"/>
 
         <LinearLayout

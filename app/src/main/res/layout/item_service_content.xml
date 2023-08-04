@@ -17,7 +17,7 @@
         android:id="@+id/iv_service"
         android:layout_width="100dp"
         android:scaleType="fitXY"
-        android:src="@mipmap/ic_launcher_round"
+        android:src="@mipmap/ic_launcher"
         android:layout_height="120dp"></ImageView>
 
     <LinearLayout
