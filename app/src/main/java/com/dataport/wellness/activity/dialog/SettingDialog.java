@@ -111,7 +111,6 @@ public class SettingDialog {
             }
         }
 
-
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
             QAModel = String.valueOf(adapterView.getSelectedItem());
@@ -130,9 +129,6 @@ public class SettingDialog {
             super(context, R.layout.video_type_item_dropdown);
             setDropDownViewResource(R.layout.video_type_item_dropdown);
         }
-
-
-
     }
 
     public interface OnListener<T> {

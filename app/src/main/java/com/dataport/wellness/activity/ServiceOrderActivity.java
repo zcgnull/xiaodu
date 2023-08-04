@@ -29,6 +29,7 @@ import com.dataport.wellness.http.HttpIntData;
 import com.dataport.wellness.utils.AuthenticationUtil;
 import com.dataport.wellness.utils.BotConstants;
 import com.dataport.wellness.utils.GlobalConstants;
+import com.dataport.wellness.utils.SlotsUtil;
 import com.google.android.material.tabs.TabLayout;
 import com.hjq.http.EasyHttp;
 import com.hjq.http.body.JsonBody;
@@ -183,9 +184,10 @@ public class ServiceOrderActivity extends BaseActivity implements IBotIntentCall
         Log.d(TAG, "handleIntent: " + intentResult);
         if ("app_list_select_item".equals(intent.name)) {
             activityIntent = new Intent(getApplicationContext(), ServiceDetailActivity.class);
-            activityIntent.putExtra("productId", serviceList.get(Integer.parseInt(intent.slots.get(0).value) - 1).getProductId());
-            activityIntent.putExtra("providerId", serviceList.get(Integer.parseInt(intent.slots.get(0).value) - 1).getProviderId());
-            activityIntent.putExtra("distance", serviceList.get(Integer.parseInt(intent.slots.get(0).value) - 1).getDistance());
+            int value = SlotsUtil.getIntValue(intent.slots, "app_list_select_item_number");
+            activityIntent.putExtra("productId", serviceList.get(value - 1).getProductId());
+            activityIntent.putExtra("providerId", serviceList.get(value - 1).getProviderId());
+            activityIntent.putExtra("distance", serviceList.get(value - 1).getDistance());
             activityIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(activityIntent);
         } else {

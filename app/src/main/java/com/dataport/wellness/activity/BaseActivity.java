@@ -49,7 +49,7 @@ public class BaseActivity extends AppCompatActivity implements OnHttpListener<Ob
      */
     public void showDialog() {
         if (mDialog == null) {
-            Log.d("zcg", "创建加载中");
+
             mDialog = new LoadingDialog(this)
             .setAnimation(R.raw.loading)
             .setMsg("加载中...");
@@ -104,7 +104,6 @@ public class BaseActivity extends AppCompatActivity implements OnHttpListener<Ob
         if (isShowDialog()) {
             hideDialog();
         }
-        Log.d("zcg", "销毁对话框");
         mDialog = null;
     }
 

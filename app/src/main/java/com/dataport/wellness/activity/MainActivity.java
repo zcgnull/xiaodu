@@ -39,6 +39,7 @@ import com.dataport.wellness.http.HttpData;
 import com.dataport.wellness.http.HttpIntData;
 import com.dataport.wellness.http.glide.GlideApp;
 import com.dataport.wellness.utils.BotConstants;
+import com.dataport.wellness.utils.SlotsUtil;
 import com.dataport.wellness.utils.TimeUtil;
 import com.hjq.http.EasyHttp;
 import com.hjq.http.config.IRequestInterceptor;
@@ -447,30 +448,30 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         String intentResult = getString(R.string.result_intent) + intent.name + ",slots:" + intent.slots;
         Log.d(TAG, "handleIntent: " + intentResult);
         if ("app_home".equals(intent.name)) {
-            if ("app_home_serveorder".equals(intent.slots.get(0).name)) {
+            if (SlotsUtil.hasSlot(intent.slots, "app_home_serveorder")) {
                 activityIntent = new Intent(this, ServiceOrderActivity.class);
                 activityIntent.putExtra("location", location);
                 activityIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(activityIntent);
-            } else if ("app_home_device".equals(intent.slots.get(0).name)) {
+            } else if (SlotsUtil.hasSlot(intent.slots, "app_home_device")) {
                 activityIntent = new Intent(this, DeviceActivity.class);
                 activityIntent.putExtra("binderId", binderId);
                 activityIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(activityIntent);
-            } else if ("app_home_wellness".equals(intent.slots.get(0).name)) {
+            } else if (SlotsUtil.hasSlot(intent.slots, "app_home_wellness")) {
                 toModel(BotConstants.OPEN_WELL_NESS_URL);
-            } else if ("app_home_doctor".equals(intent.slots.get(0).name)) {
+            } else if (SlotsUtil.hasSlot(intent.slots, "app_home_doctor")) {
                 toModel(BotConstants.OPEN_FAMILY_DOCTOR_URL);
-            } else if ("app_home_consultation".equals(intent.slots.get(0).name)) {
+            } else if (SlotsUtil.hasSlot(intent.slots, "app_home_consultation")) {
 //            toModel(BotConstants.OPEN_MEDICATION_URL);
                 activityIntent = new Intent(this, OnLineActivity.class);
                 activityIntent.putExtra("idCard", binderIdCard);
                 activityIntent.putExtra("binderId", binderId);
                 activityIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(activityIntent);
-            } else if ("app_home_contact".equals(intent.slots.get(0).name)) {
+            } else if (SlotsUtil.hasSlot(intent.slots, "app_home_contact")) {
                 toModel(BotConstants.OPEN_CONTACTS_URL);
-            } else if ("app_home_health_consultation".equals(intent.slots.get(0).name)) {
+            } else if (SlotsUtil.hasSlot(intent.slots, "app_home_health_consultation")) {
                 if (consultingShow){
                     activityIntent = new Intent(this, SpeechActivity.class);
                     startActivity(activityIntent);

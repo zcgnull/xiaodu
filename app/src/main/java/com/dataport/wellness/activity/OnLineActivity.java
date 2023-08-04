@@ -40,6 +40,7 @@ import com.dataport.wellness.http.HttpData;
 import com.dataport.wellness.http.HttpIntData;
 import com.dataport.wellness.http.glide.GlideApp;
 import com.dataport.wellness.utils.BotConstants;
+import com.dataport.wellness.utils.SlotsUtil;
 import com.hjq.http.EasyHttp;
 import com.hjq.http.config.IRequestInterceptor;
 import com.hjq.http.listener.HttpCallback;
@@ -62,6 +63,7 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
 
 public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
 
@@ -375,6 +377,7 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
         };
         //登录
         tuiLogin.login(getApplicationContext(),
+                // TODO: 2023/8/4 是否需要替换 
                 1400634482,     // 请替换为步骤一取到的 SDKAppID
                 userId,        // 请替换为您的 UserID
                 userSig,  // 您可以在控制台中计算一个 UserSig 并填在这个位置
@@ -439,25 +442,25 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
                 handleType = "3";
                 BotSdk.getInstance().speak("请问您想语音咨询第几个医生", true);
             }
-        } else if ("app_list_select_item".equals(intent.name)) {//打开第几个
-            if (Integer.parseInt(intent.slots.get(0).value) <= doctorList.size()) {
+        } else if ("app_list_select_item".equals(intent.name)) {//咨询第几个
+            if (SlotsUtil.getIntValue(intent.slots, "app_list_select_item_number") <= doctorList.size()) {
                 if (handleType.equals("3")) {
                     handleType = "";
-                    if (doctorList.get(Integer.parseInt(intent.slots.get(0).value) - 1).isStartVoice()) {
-                        getIMDoctor(binderId, doctorList.get(Integer.parseInt(intent.slots.get(0).value) - 1).getId(), "3");
+                    if (doctorList.get(SlotsUtil.getIntValue(intent.slots, "app_list_select_item_number") - 1).isStartVoice()) {
+                        getIMDoctor(binderId, doctorList.get(SlotsUtil.getIntValue(intent.slots, "app_list_select_item_number") - 1).getId(), "3");
                     } else {
                         BotSdk.getInstance().speakRequest("当前医生不支持语音咨询");
                     }
                 } else if (handleType.equals("4")) {
                     handleType = "";
-                    if (doctorList.get(Integer.parseInt(intent.slots.get(0).value) - 1).isStartVideo()) {
-                        getIMDoctor(binderId, doctorList.get(Integer.parseInt(intent.slots.get(0).value) - 1).getId(), "4");
+                    if (doctorList.get(SlotsUtil.getIntValue(intent.slots, "app_list_select_item_number") - 1).isStartVideo()) {
+                        getIMDoctor(binderId, doctorList.get(SlotsUtil.getIntValue(intent.slots, "app_list_select_item_number") - 1).getId(), "4");
                     } else {
                         BotSdk.getInstance().speakRequest("当前医生不支持视频咨询");
                     }
                 } else {
                     handleType = "5";
-                    doctor = doctorList.get(Integer.parseInt(intent.slots.get(0).value) - 1);
+                    doctor = doctorList.get(SlotsUtil.getIntValue(intent.slots, "app_list_select_item_number") - 1);
                     if (doctor.isStartVoice() && doctor.isStartVideo()) {
                         BotSdk.getInstance().speak("请问您想语音咨询还是视频咨询", true);
                     } else {
@@ -473,26 +476,29 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
                     }
                 }
             } else {
-                BotSdk.getInstance().speakRequest("抱歉！没有第" + intent.slots.get(0).value + "个医生");
+                BotSdk.getInstance().speakRequest("抱歉！没有第" + SlotsUtil.getIntValue(intent.slots, "app_list_select_item_number") + "个医生");
             }
         } else if ("consultation_list".equals(intent.name)) {//咨询第几个
-            if (Integer.parseInt(intent.slots.get(1).value) <= doctorList.size()) {
-                if ("app_consultation_audio".equals(intent.slots.get(0).name)) {
-                    if (doctorList.get(Integer.parseInt(intent.slots.get(1).value) - 1).isStartVoice()) {
-                        getIMDoctor(binderId, doctorList.get(Integer.parseInt(intent.slots.get(1).value) - 1).getId(), "3");
+            int num = SlotsUtil.getIntValue(intent.slots, "app_list_select_item_number");
+            if (num <= doctorList.size()) {
+                if (SlotsUtil.hasSlot(intent.slots, "app_consultation_audio")) {
+                    if (doctorList.get(num - 1).isStartVoice()) {
+                        getIMDoctor(binderId, doctorList.get(num - 1).getId(), "3");
                     } else {
                         BotSdk.getInstance().speakRequest("当前医生不支持语音咨询");
                     }
-                } else if ("app_consultation_video".equals(intent.slots.get(0).name)) {
-                    if (doctorList.get(Integer.parseInt(intent.slots.get(1).value) - 1).isStartVideo()) {
-                        getIMDoctor(binderId, doctorList.get(Integer.parseInt(intent.slots.get(1).value) - 1).getId(), "4");
+                } else if (SlotsUtil.hasSlot(intent.slots, "app_consultation_video")) {
+                    if (doctorList.get(num - 1).isStartVideo()) {
+                        getIMDoctor(binderId, doctorList.get(num - 1).getId(), "4");
                     } else {
                         BotSdk.getInstance().speakRequest("当前医生不支持视频咨询");
                     }
                 }
             } else {
-                BotSdk.getInstance().speakRequest("抱歉！没有第" + intent.slots.get(1).value + "个医生");
+                BotSdk.getInstance().speakRequest("抱歉！没有第" + num + "个医生");
             }
+
+
         } else if ("hangup".equals(intent.name)) {
             hangUp();
         } else {
