@@ -408,12 +408,17 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
         closeDialog = null;
         settingDialog = null;
         closeConnect();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
+        BotMessageListener.getInstance().clearCallback();
         asr.send(SpeechConstant.ASR_STOP, null, null, 0, 0);
         asr.send(SpeechConstant.ASR_CANCEL, "{}", null, 0, 0);
         asr.unregisterListener(this);
         asr = null;
-        BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
-        BotMessageListener.getInstance().clearCallback();
     }
 
     //    -------------------------------------websocket------------------------------------------------
