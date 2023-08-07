@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -61,8 +62,11 @@ public class ServiceOrderActivity extends BaseActivity implements IBotIntentCall
     private List<ServiceTabBean> tabList = new ArrayList<>();
     private List<ServiceTabBean.ChildDTO> secondTabList = new ArrayList<>();
     private List<QueryCommodityApi.Bean.ListDTO> serviceList = new ArrayList<>();
+    private int totalNum = 0;
     private int pageNum = 1;
     private int pageSize = 10;
+
+    private boolean lastPage = false;
     private String serviceId = "";
     private String longitude;
     private String latitude;
@@ -104,6 +108,7 @@ public class ServiceOrderActivity extends BaseActivity implements IBotIntentCall
                 tabView.setBackground(getResources().getDrawable(R.drawable.service_tab_bg));
                 tabView.setTextColor(getResources().getColor(R.color.colorWhite));
                 if (tab.getPosition() == 0) {
+                    lastPage = false;
                     secondTab.setVisibility(View.GONE);
                     serviceId = "";
                     pageNum = 1;
@@ -139,6 +144,7 @@ public class ServiceOrderActivity extends BaseActivity implements IBotIntentCall
         secondTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                lastPage = false;
                 pageNum = 1;
                 serviceId = secondTabList.get(tab.getPosition()).getId();
                 queryCommodity(serviceId, 1);
@@ -158,6 +164,7 @@ public class ServiceOrderActivity extends BaseActivity implements IBotIntentCall
 
         refreshLayout = findViewById(R.id.refreshLayout);
         refreshLayout.setOnRefreshListener(refreshlayout -> {
+            lastPage = false;
             pageNum = 1;
             queryCommodity(serviceId, 1);
         });
@@ -183,13 +190,21 @@ public class ServiceOrderActivity extends BaseActivity implements IBotIntentCall
         String intentResult = getString(R.string.result_intent) + intent.name + ",slots:" + intent.slots;
         Log.d(TAG, "handleIntent: " + intentResult);
         if ("app_list_select_item".equals(intent.name)) {
-            activityIntent = new Intent(getApplicationContext(), ServiceDetailActivity.class);
             int value = SlotsUtil.getIntValue(intent.slots, "app_list_select_item_number");
-            activityIntent.putExtra("productId", serviceList.get(value - 1).getProductId());
-            activityIntent.putExtra("providerId", serviceList.get(value - 1).getProviderId());
-            activityIntent.putExtra("distance", serviceList.get(value - 1).getDistance());
-            activityIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            startActivity(activityIntent);
+            if (value > serviceList.size() && value <= totalNum){
+                BotSdk.getInstance().speakRequest("本页没有此项目，请翻页看看");
+            } else {
+                if (value > totalNum){
+                    BotSdk.getInstance().speakRequest("抱歉，没有第" + value + "个项目");
+                } else {
+                    activityIntent = new Intent(getApplicationContext(), ServiceDetailActivity.class);
+                    activityIntent.putExtra("productId", serviceList.get(SlotsUtil.getIntValue(intent.slots, "app_list_select_item_number") - 1).getProductId());
+                    activityIntent.putExtra("providerId", serviceList.get(SlotsUtil.getIntValue(intent.slots, "app_list_select_item_number") - 1).getProviderId());
+                    activityIntent.putExtra("distance", serviceList.get(SlotsUtil.getIntValue(intent.slots, "app_list_select_item_number") - 1).getDistance());
+                    activityIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(activityIntent);
+                }
+            }
         } else {
 //            BotSdk.getInstance().speak("我没有听清，请再说一遍",true);
             BotSdk.getInstance().speakRequest("我没有听清，请再说一遍");
@@ -246,6 +261,11 @@ public class ServiceOrderActivity extends BaseActivity implements IBotIntentCall
     }
 
     private void queryCommodity(String id, int type) {//type:1代表刷新2代表加载
+        if(lastPage){
+            BotSdk.getInstance().speakRequest("没有更多数据了");
+            refreshLayout.finishLoadMore();
+            return;
+        }
         String sign = "";
         JSONObject requestJson;
         Map<String, Object> mapJson = new HashMap<>();
@@ -275,7 +295,9 @@ public class ServiceOrderActivity extends BaseActivity implements IBotIntentCall
 
                     @Override
                     public void onSucceed(HttpIntData<QueryCommodityApi.Bean> result) {
+                        lastPage = result.getData().isLastPage();
                         if (type == 1) {
+                            totalNum = result.getData().getTotalCount();
                             serviceList.clear();
                             refreshLayout.finishRefresh();
                             if (result.getData().getList().size() == 0) {
