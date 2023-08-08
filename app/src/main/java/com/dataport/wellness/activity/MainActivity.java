@@ -22,7 +22,6 @@ import com.baidu.duer.bot.event.payload.LinkClickedEventPayload;
 import com.baidu.duer.botsdk.BotIntent;
 import com.baidu.duer.botsdk.BotSdk;
 import com.baidu.duer.botsdk.IDialogStateListener;
-import com.baidu.speech.asr.SpeechConstant;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.dataport.wellness.R;
 import com.dataport.wellness.activity.dialog.BaseDialog;
@@ -166,19 +165,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                                 if (consultingShow) {
                                     ln_speech.setVisibility(View.VISIBLE);
                                 }
-//                                if (null == token) {
-//                                    long tenantId = result.getData().isInWarehouse() ? result.getData().getTenantId() : 1;
-//                                    getDeviceToken(String.valueOf(tenantId), result.getData().isInWarehouse(), result.getData().getSn());
-//                                } else {
-//                                    BotConstants.DEVICE_TOKEN = token;
-//                                    if (!result.getData().isInWarehouse()) {//未授权
-//                                        getGuideData("noAuth");
-//                                    } else {
-//                                        getToken(result.getData().getSn());
-//                                    }
-//                                }
-                                long tenantId = result.getData().isInWarehouse() ? result.getData().getTenantId() : 1;
-                                getDeviceToken(String.valueOf(tenantId), result.getData().isInWarehouse(), result.getData().getSn());
+                                if (null == token) {
+                                    long tenantId = result.getData().isInWarehouse() ? result.getData().getTenantId() : 1;
+                                    getDeviceToken(String.valueOf(tenantId), result.getData().isInWarehouse(), result.getData().getSn());
+                                } else {
+                                    BotConstants.DEVICE_TOKEN = token;
+                                    if (!result.getData().isInWarehouse()) {//未授权
+                                        getGuideData("noAuth");
+                                    } else {
+                                        getToken(result.getData().getSn());
+                                    }
+                                }
+//                                long tenantId = result.getData().isInWarehouse() ? result.getData().getTenantId() : 1;
+//                                getDeviceToken(String.valueOf(tenantId), result.getData().isInWarehouse(), result.getData().getSn());
                             } else {
                                 Log.d(TAG, "code = "+ result.getCode() + " message = " + result.getMessage());
                                 Toast.makeText(MainActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
