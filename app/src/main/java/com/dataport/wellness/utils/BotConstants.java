@@ -32,10 +32,10 @@ public class BotConstants {
     //小度服务端
 //    public static final String XD_URL = "http://10.20.1.13:48080/";
 //    public static final String XD_URL = "http://10.20.0.158:48080/";
-    public static final String XD_URL = "http://172.20.3.112:8080/";
-//    public static final String XD_URL = "https://dueros.dataport.com.cn/";
+//    public static final String XD_URL = "http://172.20.3.112:8080/";
+    public static final String XD_URL = "https://dueros.dataport.com.cn/";
     //websocket地址
-    public static final String WEB_SOCKET_URL = "ws://172.20.3.112:8080/";
+    public static final String WEB_SOCKET_URL = "wss://dueros.dataport.com.cn/";
 //    public static final String WEB_SOCKET_URL = "ws://10.20.1.13:48080/";
 //    public static final String WEB_SOCKET_URL = "wss://dueros.dataport.com.cn/";
 
