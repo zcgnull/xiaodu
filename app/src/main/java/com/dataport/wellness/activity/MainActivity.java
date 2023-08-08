@@ -176,6 +176,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                                         getToken(result.getData().getSn());
                                     }
                                 }
+
 //                                long tenantId = result.getData().isInWarehouse() ? result.getData().getTenantId() : 1;
 //                                getDeviceToken(String.valueOf(tenantId), result.getData().isInWarehouse(), result.getData().getSn());
                             } else {
