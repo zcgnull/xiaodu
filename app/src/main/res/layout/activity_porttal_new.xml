@@ -12,6 +12,15 @@
         android:layout_height="match_parent"
         android:visibility="gone">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="河北数港科技有限公司"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:padding="@dimen/dp_30"
+            android:textStyle="bold"
+            android:textSize="@dimen/sp_20"/>
         <RelativeLayout
             android:id="@+id/rl_top"
             android:layout_width="match_parent"

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/dp_720"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="@dimen/dp_10"
+    app:cardElevation="0px">
+
+    <ScrollView
+        android:id="@+id/ll_ui_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_400"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/dp_20">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:layout_marginRight="@dimen/dp_20"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dp_10"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_title_illustrate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/dp_24"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:text="指标说明"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/line_size"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:background="@color/common_line_color" />
+                <TextView
+                    android:id="@+id/tv_illustrate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="@dimen/dp_5"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:text="动脉硬化指数测量仪通过测量收缩压、舒张压和脉率，同时测量动脉在压力改变时的脉动波形，分析得到动脉的弹性情况及动脉硬化程度其数值仅供临床参考."
+                    android:textSize="@dimen/sp_20" />
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dp_10"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_title_reference"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/dp_24"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:text="参考值"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/line_size"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:background="@color/common_line_color" />
+                <TextView
+                    android:id="@+id/tv_reference"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/sp_20"
+                    android:lineSpacingExtra="@dimen/dp_5"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:text="动脉硬化指数的正常理想值为小于等于70，正常高值为71-80，轻度到中度值为81~160，中度到重度值为大于等于161."/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.cardview.widget.CardView>

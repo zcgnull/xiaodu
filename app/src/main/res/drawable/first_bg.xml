@@ -1,0 +1,35 @@
+<!--<shape xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    android:shape="rectangle">-->
+<!--    &lt;!&ndash; rectangle(矩形，默认值)-->
+<!--            oval(椭圆，此时corners 节点会失效)-->
+<!--            line(直线，此时必须设置stroke 节点不然会报错)-->
+<!--            ring(圆环)-->
+<!--    &ndash;&gt;-->
+<!--    &lt;!&ndash;    指定了形状内部的填充颜色&ndash;&gt;-->
+<!--    <solid android:color="#3785EEF1"/>-->
+<!--    &lt;!&ndash;    指定了形状边线的粗细与颜色&ndash;&gt;-->
+
+<!--    <stroke-->
+<!--        android:width="5dp"-->
+<!--        android:color="#9A0606"/>-->
+
+<!--    &lt;!&ndash;指定了形状四个圆角的半径&ndash;&gt;-->
+<!--    <corners-->
+<!--        android:radius="10dp"/>-->
+<!--</shape>-->
+
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:bottom="-7dp"
+        android:right="-7dp"
+        android:top="-7dp">
+       >
+        <shape>
+            <solid android:color="#FFFFFF"/>
+            <stroke
+                android:width="5dp"
+                android:color="@color/colorBule"/>
+                <corners android:radius="10dp"/>
+        </shape>
+    </item>
+</layer-list>

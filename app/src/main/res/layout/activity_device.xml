@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="@dimen/dp_10"
-        android:visibility="gone">
+        android:visibility="visible"
+        >
 
         <RelativeLayout
             android:id="@+id/rl_top"
@@ -95,6 +96,7 @@
             android:layout_below="@id/first_tab"
             android:layout_marginLeft="@dimen/dp_20"
             android:layout_marginRight="@dimen/dp_20"
+            android:visibility="gone"
             app:tabGravity="start"
             app:tabIndicatorColor="@color/colorBule"
             app:tabMaxWidth="230dp"
@@ -106,6 +108,7 @@
             app:tabTextColor="#333" />
 
         <LinearLayout
+            android:id="@+id/ll_show"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/second_tab"
@@ -116,6 +119,7 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/ll_show_left"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginRight="@dimen/dp_10"
@@ -187,6 +191,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_show_right"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/dp_10"
@@ -215,6 +220,14 @@
                         android:textColor="@color/black"
                         android:textSize="@dimen/sp_18"
                         android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/iv_more"
+                        android:layout_width="@dimen/dp_25"
+                        android:layout_height="@dimen/dp_25"
+                        android:layout_marginLeft="@dimen/dp_10"
+                        android:layout_gravity="center"
+                        android:src="@mipmap/icon_more"/>
 
                 </LinearLayout>
 

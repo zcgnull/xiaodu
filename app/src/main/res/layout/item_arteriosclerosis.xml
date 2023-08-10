@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/ln_all"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@drawable/back_bg"
+    android:orientation="vertical"
+    android:padding="@dimen/dp_15"
+    android:layout_marginBottom="@dimen/dp_10"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/ll_show"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_20"
+        android:layout_marginBottom="@dimen/dp_20"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/ll_show_left"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="@dimen/dp_10"
+            android:layout_weight="1"
+            android:background="@drawable/back_bg"
+            android:orientation="vertical"
+            android:padding="@dimen/dp_15">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:scrollbars="vertical"
+                android:textSize="@dimen/sp_17"
+                android:text="健康的动脉具有弹性，但随着时间的推移，动脉整会变硬，这种情况通常称为动脉硬化。受累动脉的病变从内膜开始，局部有脂质积聚、纤维组织增生和钙质沉着，形成斑块，由于在动脉内膜积聚的脂质外观呈黄色粥样，因此称为动脉粥样硬化。它是心脑血管系统疾病中最常见的疾病，主要影影响身体内的大中动脉，如冠状动脉、颈动脉、脑动脉、肾动脉等动脉硬化指数又称为AS,利用常规24小时的动态血压监测数据计算得来,是可反映动脉硬化程度的指标。动脉硬化指数偏高主要考虑是由于年龄增长,或者动脉粥样硬化导致的。" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_show_right"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/dp_15"
+            android:paddingRight="@dimen/dp_15">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dp_10"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="5"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginRight="@dimen/dp_10"
+                    android:background="@drawable/asi_bg">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textSize="@dimen/sp_17"
+                        android:text="ASI动脉硬化指数"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_asi"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/sp_24"
+                            android:text="89"/>
+
+                        <ImageView
+                            android:id="@+id/iv_asi"
+                            android:layout_width="@dimen/dp_30"
+                            android:layout_height="@dimen/dp_30"
+                            android:src="@mipmap/arrow_up"/>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="5"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginRight="@dimen/dp_10"
+                    android:background="@drawable/asi_bg">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textSize="@dimen/sp_17"
+                        android:text="血管年龄"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_vascularage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/sp_24"
+                            android:text="35"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="岁"/>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dp_10"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="5"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginRight="@dimen/dp_10"
+                    android:background="@drawable/asi_bg">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textSize="@dimen/sp_17"
+                        android:text="收缩压"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_sbp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/sp_24"
+                            android:text="150"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/sp_17"
+                            android:text="mmHg"/>
+
+                        <ImageView
+                            android:id="@+id/iv_sbp"
+                            android:layout_width="@dimen/dp_30"
+                            android:layout_height="@dimen/dp_30"
+                            android:src="@mipmap/arrow_up"/>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="5"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginRight="@dimen/dp_10"
+                    android:background="@drawable/asi_bg">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textSize="@dimen/sp_17"
+                        android:text="舒张压"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_dbp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/sp_24"
+                            android:text="90"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/sp_17"
+                            android:text="mmHg"/>
+
+                        <ImageView
+                            android:id="@+id/iv_dbp"
+                            android:layout_width="@dimen/dp_30"
+                            android:layout_height="@dimen/dp_30"
+                            android:src="@mipmap/arrow_up"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dp_10"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="5"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginRight="@dimen/dp_10"
+                    android:background="@drawable/asi_bg">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textSize="@dimen/sp_17"
+                        android:text="脉率"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_bpm"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/sp_24"
+                            android:text="115"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/sp_17"
+                            android:text="次/分"/>
+
+                        <ImageView
+                            android:id="@+id/iv_bpm"
+                            android:layout_width="@dimen/dp_30"
+                            android:layout_height="@dimen/dp_30"
+                            android:src="@mipmap/arrow_up"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="5"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginRight="@dimen/dp_10"
+                    android:background="@color/gray">
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_30"
+                android:layout_gravity="center"
+                android:text="查看更多数据 >"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/dp_20"
+                android:text="测量时间：2023-08-03 11:47:00"/>
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
