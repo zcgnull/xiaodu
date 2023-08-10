@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -55,7 +56,11 @@ import com.hjq.http.model.HttpParams;
 import com.hjq.http.request.HttpRequest;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import q.rorbin.badgeview.Badge;
@@ -331,33 +336,43 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
         adapter.setListener((data, pos) -> {
             BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
             String speak = "";
+            String time = data.getStartTime();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            try {
+                Date date = sdf.parse(time);
+                Calendar calender = Calendar.getInstance();
+                calender.setTime(date);
+                time = calender.get(Calendar.YEAR) + "年" + (calender.get(Calendar.MONTH) + 1) + "月" + calender.get(Calendar.DATE) + "日" + calender.get(Calendar.HOUR_OF_DAY) + "点" + calender.get(Calendar.MINUTE) + "分" + calender.get(Calendar.SECOND) + "秒";
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             switch (data.getDataType()){
                 case "1":
-                    speak = "血压指标详情：" + data.getStartTime() + "，您的血压为，高压" + data.getSbp() + "毫米汞柱，低压" + data.getDbp() + "毫米汞柱，脉率为" + data.getBpm() + "次每分钟。";
+                    speak = "血压指标详情：" + time + "，您的血压为，高压" + data.getSbp() + "毫米汞柱，低压" + data.getDbp() + "毫米汞柱，脉率为" + data.getBpm() + "次每分钟。";
                     showInterpretationDialog(this, speak, data, "blp", data.getDbp(), data.getSbp(), "血压");
                     break;
                 case "2":
-                    speak = "血糖指标详情：" +  data.getStartTime() + "，您的血糖为" + data.getGls() + "毫摩尔每升。";
+                    speak = "血糖指标详情：" +  time + "，您的血糖为" + data.getGls() + "毫摩尔每升。";
                     showInterpretationDialog(this, speak, data, "bls", data.getGls(), null, "血糖");
                     break;
                 case "3":
-                    speak = "血酮指标详情：" +  data.getStartTime() + "，您的血酮为" + data.getBlk() + "毫摩尔每升。";
+                    speak = "血酮指标详情：" +  time + "，您的血酮为" + data.getBlk() + "毫摩尔每升。";
                     showInterpretationDialog(this, speak, data, "blk", data.getBlk(), null, "血酮");
                     break;
                 case "4":
-                    speak = "尿酸指标详情：" +  data.getStartTime() + "，您的尿酸为" + data.getUric() + "毫摩尔每升。";
+                    speak = "尿酸指标详情：" +  time + "，您的尿酸为" + data.getUric() + "毫摩尔每升。";
                     showInterpretationDialog(this, speak, data, "uric", data.getUric(), null, "尿酸");
                     break;
                 case "5":
-                    speak = "血氧指标详情：" +  data.getStartTime() + "，您的血氧为" + data.getBlo() + "%。";
+                    speak = "血氧指标详情：" +  time + "，您的血氧为" + data.getBlo() + "%。";
                     showInterpretationDialog(this, speak, data, "blo", data.getBlo(), null, "血氧");
                     break;
                 case "6":
-                    speak = "心率指标详情：" +  data.getStartTime() + "，您的心率为" + data.getBpm() + "次每分钟。";
+                    speak = "心率指标详情：" +  time + "，您的心率为" + data.getBpm() + "次每分钟。";
                     showInterpretationDialog(this, speak, data, "heart", data.getBpm(), null, "心率");
                     break;
                 case "7":
-                    speak = "动脉硬化指标详情：" +  data.getStartTime() +
+                    speak = "动脉硬化指标详情：" +  time +
                             "，您的动脉硬化指数为" + data.getAsi() + "。" +
                             "血管年龄：" + data.getBlvAge() + "岁。" +
                             "收缩压" + data.getSbp() + "毫米汞柱。" +
