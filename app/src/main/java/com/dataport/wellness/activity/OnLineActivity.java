@@ -291,6 +291,7 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
                             } else {
                                 refreshLayout.finishLoadMore();
                                 if (result.getData().getDoctorList().size() == 0) {
+                                    BotSdk.getInstance().speakRequest("没有更多数据了");
                                 } else {
                                     doctorList.addAll(result.getData().getDoctorList());
                                 }
@@ -377,7 +378,6 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
         };
         //登录
         tuiLogin.login(getApplicationContext(),
-                // TODO: 2023/8/4 是否需要替换 
                 1400634482,     // 请替换为步骤一取到的 SDKAppID
                 userId,        // 请替换为您的 UserID
                 userSig,  // 您可以在控制台中计算一个 UserSig 并填在这个位置

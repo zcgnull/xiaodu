@@ -1,11 +1,14 @@
 package com.dataport.wellness.activity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -98,6 +101,7 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
     private SettingDialog.Builder settingDialog;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
+    private MessageDialog.Builder messageDialog;
 
     private Runnable scrollRunnable = new Runnable() {
         @Override
@@ -112,8 +116,8 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
         setContentView(R.layout.activity_speech);
         sharedPreferences = getSharedPreferences("XD", MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        initView();
         initPermission();
+
         asr = EventManagerFactory.create(this, "asr");
         asr.registerListener(this);
     }
@@ -402,11 +406,16 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
         Log.e(TAG, "`````````````````````````onDestroy");
         editor.clear();
         sharedPreferences = null;
+        messageDialog = null;
         adapter = null;
         msgList = null;
         msgTypeList = null;
         closeDialog = null;
         settingDialog = null;
+        asr.send(SpeechConstant.ASR_STOP, null, null, 0, 0);
+        asr.send(SpeechConstant.ASR_CANCEL, "{}", null, 0, 0);
+        asr.unregisterListener(this);
+        asr = null;
         closeConnect();
     }
 
@@ -415,10 +424,7 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
         super.onPause();
         BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
         BotMessageListener.getInstance().clearCallback();
-        asr.send(SpeechConstant.ASR_STOP, null, null, 0, 0);
-        asr.send(SpeechConstant.ASR_CANCEL, "{}", null, 0, 0);
-        asr.unregisterListener(this);
-        asr = null;
+
     }
 
     //    -------------------------------------websocket------------------------------------------------
@@ -661,9 +667,19 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
         String tmpList[] = new String[toApplyList.size()];
         if (!toApplyList.isEmpty()) {
             ActivityCompat.requestPermissions(this, toApplyList.toArray(tmpList), 123);
+        }else {
+            initView();
         }
 
     }
+
+    private void gotoAudioSettingIntent() {
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        intent.setData(Uri.fromParts("package", getPackageName(), null));
+        startActivityForResult(intent, 321);
+    }
+
+
 
     @Override
     public void handleIntent(BotIntent intent, String customData) {
@@ -699,6 +715,8 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
 
     }
 
+
+
     /**
      * 当前聆听状态回调，包含
      * {@link IDialogStateListener.DialogState#IDLE} 空闲态
@@ -720,5 +738,47 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 123){
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                initView();
+            } else {
+                messageDialog = new MessageDialog.Builder(this);
+                messageDialog.setTitle("申请权限")
+                        .setMessage("健康咨询需要申请麦克风权限")
+                        .setConfirm("确认")
+                        .setCancel("取消")
+                        .setCanceledOnTouchOutside(false)
+                        .setListener(new MessageDialog.OnListener() {
+                            @Override
+                            public void onConfirm(BaseDialog dialog) {
+                                gotoAudioSettingIntent();
+                            }
 
+                            @Override
+                            public void onCancel(BaseDialog dialog) {
+                                BotSdk.getInstance().speakRequest("健康咨询需要麦克风权限才能使用");
+                                finish();
+                            }
+                        }).show();
+            }
+        }else {
+            finish();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //再次检查是否有麦克风权限
+        if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)) {
+            // 进入到这里代表没有权限.
+            BotSdk.getInstance().speakRequest("健康咨询需要麦克风权限才能使用");
+            this.finish();
+        } else {
+            initView();
+        }
+    }
 }

@@ -10,12 +10,12 @@ import com.hjq.http.model.CacheMode;
 import java.io.Serializable;
 import java.util.List;
 
-public class DeviceContentApi implements IRequestApi, IRequestServer {
+public class DeviceContentNewApi implements IRequestApi, IRequestServer {
 
     @NonNull
     @Override
     public String getApi() {
-        return "api/jkgl/jkgl/xiaodu/queryDataRecord";
+        return "api/jkgl/jkgl/xiaodu/queryDataRecordByBinderId";
     }
 
     @NonNull
@@ -28,13 +28,13 @@ public class DeviceContentApi implements IRequestApi, IRequestServer {
     public CacheMode getCacheMode() {
         return CacheMode.NO_CACHE;
     }
-    private int equipmentBindId;
+    private long binderId;
     private String dataTypeCode;
     private String beginDate;
     private String endDate;
 
-    public DeviceContentApi(int equipmentBindId, String dataTypeCode, String beginDate, String endDate) {
-        this.equipmentBindId = equipmentBindId;
+    public DeviceContentNewApi(long binderId, String dataTypeCode, String beginDate, String endDate) {
+        this.binderId = binderId;
         this.dataTypeCode = dataTypeCode;
         this.beginDate = beginDate;
         this.endDate = endDate;

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/dp_720"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="@dimen/dp_10"
+    app:cardElevation="0px">
+
+    <ScrollView
+        android:id="@+id/ll_ui_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_400"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/dp_20">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginRight="@dimen/dp_10"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_title_detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/dp_22"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:textColor="@color/black"
+                    android:text="指标详情"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/line_size"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:background="@color/common_line_color" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_30"
+                    android:layout_marginRight="@dimen/dp_30"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:orientation="vertical">
+
+
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/tv_time"
+                            android:layout_width="wrap_content"
+                            android:textColor="@color/gray"
+                            android:textSize="@dimen/sp_18"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:id="@+id/tv_type"
+                            android:layout_width="wrap_content"
+                            android:textSize="@dimen/sp_18"
+                            android:textColor="@color/colorBule"
+                            android:layout_alignParentRight="true"
+                            android:layout_height="wrap_content"/>
+
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/tv_show1"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:gravity="left"
+                            android:textSize="@dimen/sp_20"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:id="@+id/tv_show2"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:gravity="left"
+                            android:textSize="@dimen/sp_20"
+                            android:layout_alignParentRight="true"
+                            android:layout_height="wrap_content"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ln_add1"
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/tv_show3"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:gravity="left"
+                            android:textSize="@dimen/sp_20"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:id="@+id/tv_show4"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:gravity="left"
+                            android:textSize="@dimen/sp_20"
+                            android:layout_alignParentRight="true"
+                            android:layout_height="wrap_content"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ln_add2"
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/tv_show5"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:gravity="left"
+                            android:textSize="@dimen/sp_20"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:id="@+id/tv_show6"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:gravity="left"
+                            android:textSize="@dimen/sp_20"
+                            android:layout_alignParentRight="true"
+                            android:layout_height="wrap_content"/>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_marginRight="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_title_unscramble"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/dp_22"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:text="指标解读"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/line_size"
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:background="@color/common_line_color" />
+                    <TextView
+                        android:id="@+id/tv_state"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:layout_marginBottom="@dimen/dp_10"
+                        android:text="无"
+                        android:textSize="@dimen/sp_20" />
+
+                    <TextView
+                        android:id="@+id/tv_unscramble"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:lineSpacingExtra="@dimen/dp_5"
+                        android:text="动脉硬化指数测量仪通过测量收缩压、舒张压和脉率，同时测量动脉在压力改变时的脉动波形，分析得到动脉的弹性情况及动脉硬化程度其数值仅供临床参考."
+                        android:textSize="@dimen/sp_20" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/line_size"
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:background="@color/common_line_color" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.cardview.widget.CardView>

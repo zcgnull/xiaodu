@@ -69,15 +69,38 @@ public class DeviceContentPageApi implements IRequestApi, IRequestServer {
             private String equipmentNo;
             private String equipmentName;
             private Integer equipmentBindId;
+
             private Long binderId;
             private String dbp;
             private String sbp;
             private String bpm;
+            private String blk;
+            private String uric;
+            private String blo;
+            private String asi;
+            private String blvAge;
+            private String dbpType;
+            private String sbpType;
+            private String bpmType;
+            private String blkType;
+            private String uricType;
+            private String bloType;
+            private String asiType;
             private String startTime;
             private String dataSources;
             private String pharmacySituation;
             private String dataType;
             private String gls;
+
+            public String getGlsType() {
+                return glsType;
+            }
+
+            public void setGlsType(String glsType) {
+                this.glsType = glsType;
+            }
+
+            private String glsType;
             private String measureSituation;
 
             public String getEquipmentNo() {
@@ -182,6 +205,103 @@ public class DeviceContentPageApi implements IRequestApi, IRequestServer {
 
             public void setMeasureSituation(String measureSituation) {
                 this.measureSituation = measureSituation;
+            }
+
+
+            public String getBlk() {
+                return blk;
+            }
+
+            public void setBlk(String blk) {
+                this.blk = blk;
+            }
+
+            public String getUric() {
+                return uric;
+            }
+
+            public void setUric(String uric) {
+                this.uric = uric;
+            }
+
+            public String getBlo() {
+                return blo;
+            }
+
+            public void setBlo(String blo) {
+                this.blo = blo;
+            }
+
+            public String getAsi() {
+                return asi;
+            }
+
+            public void setAsi(String asi) {
+                this.asi = asi;
+            }
+
+            public String getBlvAge() {
+                return blvAge;
+            }
+
+            public void setBlvAge(String blvAge) {
+                this.blvAge = blvAge;
+            }
+
+            public String getDbpType() {
+                return dbpType;
+            }
+
+            public void setDbpType(String dbpType) {
+                this.dbpType = dbpType;
+            }
+
+            public String getSbpType() {
+                return sbpType;
+            }
+
+            public void setSbpType(String sbpType) {
+                this.sbpType = sbpType;
+            }
+
+            public String getBpmType() {
+                return bpmType;
+            }
+
+            public void setBpmType(String bpmType) {
+                this.bpmType = bpmType;
+            }
+
+            public String getBlkType() {
+                return blkType;
+            }
+
+            public void setBlkType(String blkType) {
+                this.blkType = blkType;
+            }
+
+            public String getUricType() {
+                return uricType;
+            }
+
+            public void setUricType(String uricType) {
+                this.uricType = uricType;
+            }
+
+            public String getBloType() {
+                return bloType;
+            }
+
+            public void setBloType(String bloType) {
+                this.bloType = bloType;
+            }
+
+            public String getAsiType() {
+                return asiType;
+            }
+
+            public void setAsiType(String asiType) {
+                this.asiType = asiType;
             }
         }
     }

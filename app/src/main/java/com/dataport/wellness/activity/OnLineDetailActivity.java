@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -58,6 +59,7 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
     private TextView docName, docCompany, docDep, docType, buyNum, content;
     private LinearLayout yy, sp;
     private MarqueeView marqueeView;
+    private RelativeLayout rl_no_data;
     private String speck;
 
     @Override
@@ -87,6 +89,7 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
             BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
             BotSdk.getInstance().speakRequest(messages.get(position));
         });
+
     }
 
     private void initView() {
@@ -99,6 +102,7 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
         yy = findViewById(R.id.btn_yy);
         sp = findViewById(R.id.btn_sp);
         content = findViewById(R.id.tv_context);
+        rl_no_data = findViewById(R.id.rl_no_data);
         if (data.isStartVoice()) {
             yy.setVisibility(View.VISIBLE);
         }
@@ -125,11 +129,15 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
         docDep.setText("科室：" + data.getDeptName());
         docType.setText("职称：" + data.getTitleName());
         buyNum.setText("已服务次数:" + data.getServiceNum());
+        if (data.getGoodat() == null){
+            content.setVisibility(View.GONE);
+            rl_no_data.setVisibility(View.VISIBLE);
+        }
         content.setText(data.getGoodat() == null ? "暂无" : data.getGoodat());
         TUICallEngine.createInstance(OnLineDetailActivity.this).addObserver(observer);
         speck = docName.getText().toString()+ "，" + (data.getInstitutionName().equals("") ? "" : docCompany.getText().toString()) + "，" +
                 (data.getDeptName().equals("") ? "" : docDep.getText().toString()) +"，" + (data.getTitleName().equals("") ? "" : docType.getText().toString()) +"，" +
-                (data.getGoodat().equals("") ? "" : content.getText().toString());
+                (data.getGoodat() == null   ? "" : content.getText().toString());
         BotSdk.getInstance().speakRequest(speck);
     }
 
