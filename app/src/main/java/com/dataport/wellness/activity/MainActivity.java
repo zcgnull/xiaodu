@@ -124,7 +124,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             serialField.setAccessible(true);
             // 获取SERIAL字段的值
             BotConstants.SN = (String) serialField.get(null);
-            BotConstants.SN = "950745EAV663360209E9";
+//            BotConstants.SN = "950745EAV663360209E9";
 //            BotConstants.SN="8T22041A2926DFA5";
 
             getDeviceInfo(BotConstants.SN);
