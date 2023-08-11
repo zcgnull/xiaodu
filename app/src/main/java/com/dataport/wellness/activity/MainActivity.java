@@ -22,19 +22,20 @@ import com.baidu.duer.bot.event.payload.LinkClickedEventPayload;
 import com.baidu.duer.botsdk.BotIntent;
 import com.baidu.duer.botsdk.BotSdk;
 import com.baidu.duer.botsdk.IDialogStateListener;
-import com.baidu.speech.asr.SpeechConstant;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.dataport.wellness.R;
 import com.dataport.wellness.activity.dialog.BaseDialog;
 import com.dataport.wellness.activity.dialog.MenuDialog;
 import com.dataport.wellness.api.health.QueryBinderApi;
 import com.dataport.wellness.api.health.TokenApi;
+import com.dataport.wellness.api.smalldu.ContentDirectVO;
 import com.dataport.wellness.api.smalldu.DeviceInfoApi;
 import com.dataport.wellness.api.smalldu.DeviceTokenApi;
 import com.dataport.wellness.api.smalldu.GuideDataApi;
 import com.dataport.wellness.api.smalldu.WeatherAddressApi;
 import com.dataport.wellness.botsdk.BotMessageListener;
 import com.dataport.wellness.botsdk.IBotIntentCallback;
+import com.dataport.wellness.enums.ContentDirectTypeEnum;
 import com.dataport.wellness.http.HttpData;
 import com.dataport.wellness.http.HttpIntData;
 import com.dataport.wellness.http.glide.GlideApp;
@@ -50,6 +51,7 @@ import com.hjq.http.request.HttpRequest;
 import com.sunfusheng.marqueeview.MarqueeView;
 
 import java.lang.reflect.Field;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -122,7 +124,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             serialField.setAccessible(true);
             // 获取SERIAL字段的值
             BotConstants.SN = (String) serialField.get(null);
-//            BotConstants.SN="950745EAV663360209E9";
+            BotConstants.SN = "950745EAV663360209E9";
 //            BotConstants.SN="8T22041A2926DFA5";
 
             getDeviceInfo(BotConstants.SN);
@@ -166,21 +168,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                                 if (consultingShow) {
                                     ln_speech.setVisibility(View.VISIBLE);
                                 }
-//                                if (null == token) {
-//                                    long tenantId = result.getData().isInWarehouse() ? result.getData().getTenantId() : 1;
-//                                    getDeviceToken(String.valueOf(tenantId), result.getData().isInWarehouse(), result.getData().getSn());
-//                                } else {
-//                                    BotConstants.DEVICE_TOKEN = token;
-//                                    if (!result.getData().isInWarehouse()) {//未授权
-//                                        getGuideData("noAuth");
-//                                    } else {
-//                                        getToken(result.getData().getSn());
-//                                    }
-//                                }
-                                long tenantId = result.getData().isInWarehouse() ? result.getData().getTenantId() : 1;
-                                getDeviceToken(String.valueOf(tenantId), result.getData().isInWarehouse(), result.getData().getSn());
+                                if (null == token) {
+                                    long tenantId = result.getData().isInWarehouse() ? result.getData().getTenantId() : 1;
+                                    getDeviceToken(String.valueOf(tenantId), result.getData().isInWarehouse(), result.getData().getSn());
+                                } else {
+                                    BotConstants.DEVICE_TOKEN = token;
+                                    if (!result.getData().isInWarehouse()) {//未授权
+                                        getGuideData("noAuth");
+                                    } else {
+                                        getToken(result.getData().getSn());
+                                    }
+                                }
+//                                long tenantId = result.getData().isInWarehouse() ? result.getData().getTenantId() : 1;
+//                                getDeviceToken(String.valueOf(tenantId), result.getData().isInWarehouse(), result.getData().getSn());
                             } else {
-                                Log.d(TAG, "code = "+ result.getCode() + " message = " + result.getMessage());
+                                Log.d(TAG, "code = " + result.getCode() + " message = " + result.getMessage());
                                 Toast.makeText(MainActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -252,6 +254,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                                 String address = binderList.get(0).getBinderCity() + binderList.get(0).getBinderDistrict();
                                 tvPlace.setText(address);
                                 getWeatherAddress(getAddress);
+                                contentDirect();
                             } else {
                                 getGuideData("noBind");
                             }
@@ -472,7 +475,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             } else if (SlotsUtil.hasSlot(intent.slots, "app_home_contact")) {
                 toModel(BotConstants.OPEN_CONTACTS_URL);
             } else if (SlotsUtil.hasSlot(intent.slots, "app_home_health_consultation")) {
-                if (consultingShow){
+                if (consultingShow) {
                     activityIntent = new Intent(this, SpeechActivity.class);
                     startActivity(activityIntent);
                 } else {
@@ -528,6 +531,43 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         BotMessageListener.getInstance().addCallback(this);
         BotSdk.getInstance().setDialogStateListener(this);
         Log.d(TAG, "handleIntent: onResume");
+
+    }
+
+    /**
+     * 获取第三方直达本技能的参数
+     */
+    private void contentDirect() {
+        String url = getIntent().getStringExtra("url");
+        if (null != url && "" != url) {
+            //url解析
+            String urlDecoder = null;
+            try {
+                urlDecoder = URLDecoder.decode(url, "UTF-8");
+                //解析json
+                ContentDirectVO contentDirectVO = JsonUtil.toObject(urlDecoder, ContentDirectVO.class);
+                Intent intent;
+                switch ( ContentDirectTypeEnum.valueOf(contentDirectVO.getType())) {
+                    case device_alarms:
+                        if(userId>0L) {
+                            Log.i("获取内容直达参数===========", "" + contentDirectVO.getType());
+                            intent = new Intent(this, DeviceEnvActivity.class);
+                            intent.putExtra("userId", userId);
+                            intent.putExtra("binderId", binderId);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                            startActivity(intent);
+                        }
+                        break;
+                    default:
+                        Log.i("获取内容直达参数===========","获取不到枚举值");
+                        break;
+                }
+
+            } catch (Exception e) {
+                /*捕获不处理，防止app崩溃*/
+            }
+
+        }
     }
 
     @Override
