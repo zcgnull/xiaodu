@@ -68,11 +68,21 @@
             android:textColor="@color/black"
             android:layout_height="match_parent"/>
 
-        <TextView
+<!--        <TextView
             android:id="@+id/device_name"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:text="告警设备"
+            android:gravity="center"
+            android:padding="@dimen/dp_10"
+            android:textSize="@dimen/sp_20"
+            android:textColor="@color/black"
+            android:layout_height="match_parent"/>-->
+        <TextView
+            android:id="@+id/alarm_type_name"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="告警原因"
             android:gravity="center"
             android:padding="@dimen/dp_10"
             android:textSize="@dimen/sp_20"
