@@ -261,6 +261,7 @@
             android:id="@+id/tv_context"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:textSize="@dimen/sp_20"
             android:text="擅长内容" />
 
 
