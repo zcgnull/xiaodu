@@ -49,11 +49,12 @@ public class DeviceEnvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ContentHolder contentHolder = (ContentHolder) holder;
-        contentHolder.deviceName.setText(list.get(position).getEquipmentName());
+//        contentHolder.deviceName.setText(list.get(position).getEquipmentName());
         contentHolder.alarmAddress.setText(list.get(position).getAddress() + list.get(position).getInstallationPositionName());
         contentHolder.alarmTime.setText(list.get(position).getAlarmTime());
         contentHolder.binderName.setText(list.get(position).getBinderName());
         contentHolder.processState.setText(list.get(position).getProcessStateName());
+        contentHolder.alarmTypeName.setText(list.get(position).getEquipmentName()+"\n"+list.get(position).getAlarmTypeName());
         if (!"1".equals(list.get(position).getProcessState())) {
             contentHolder.btnFlagRead.setVisibility(View.GONE);
             contentHolder.readTime.setVisibility(View.VISIBLE);
@@ -77,13 +78,14 @@ public class DeviceEnvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     public class ContentHolder extends RecyclerView.ViewHolder {
-        public TextView deviceName;
+//        public TextView deviceName;
 
         public TextView binderName;
         public TextView alarmAddress;
         public TextView alarmTime;
         public TextView readTime;
         public TextView processState;
+        private TextView alarmTypeName;
         public Button btnFlagRead;
 
         public LinearLayout lnBtn;
@@ -91,13 +93,14 @@ public class DeviceEnvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         public ContentHolder(View itemView) {
             super(itemView);
             processState=itemView.findViewById(R.id.process_state);
-            deviceName = itemView.findViewById(R.id.device_name);
+//            deviceName = itemView.findViewById(R.id.device_name);
             binderName = itemView.findViewById(R.id.binderName);
             alarmAddress = itemView.findViewById(R.id.alarm_address);
             alarmTime = itemView.findViewById(R.id.alarm_time);
             readTime = itemView.findViewById(R.id.read_time);
             btnFlagRead = itemView.findViewById(R.id.btn_flag_read);
             lnBtn = itemView.findViewById(R.id.ln_btn);
+            alarmTypeName=itemView.findViewById(R.id.alarm_type_name);
         }
     }
 }
