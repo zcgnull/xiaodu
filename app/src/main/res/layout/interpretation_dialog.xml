@@ -32,7 +32,7 @@
                     android:id="@+id/tv_title_detail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/dp_24"
+                    android:textSize="@dimen/dp_22"
                     android:textStyle="bold"
                     android:layout_marginLeft="@dimen/dp_10"
                     android:textColor="@color/black"
@@ -83,7 +83,6 @@
                             android:id="@+id/tv_show1"
                             android:layout_width="0dp"
                             android:layout_weight="1"
-                            android:textColor="@color/black"
                             android:gravity="left"
                             android:textSize="@dimen/sp_20"
                             android:layout_height="wrap_content"/>
@@ -94,7 +93,6 @@
                             android:layout_weight="1"
                             android:gravity="left"
                             android:textSize="@dimen/sp_20"
-                            android:textColor="@color/black"
                             android:layout_alignParentRight="true"
                             android:layout_height="wrap_content"/>
 
@@ -112,7 +110,6 @@
                             android:id="@+id/tv_show3"
                             android:layout_width="0dp"
                             android:layout_weight="1"
-                            android:textColor="@color/black"
                             android:gravity="left"
                             android:textSize="@dimen/sp_20"
                             android:layout_height="wrap_content"/>
@@ -123,7 +120,6 @@
                             android:layout_weight="1"
                             android:gravity="left"
                             android:textSize="@dimen/sp_20"
-                            android:textColor="@color/black"
                             android:layout_alignParentRight="true"
                             android:layout_height="wrap_content"/>
 
@@ -141,7 +137,6 @@
                             android:id="@+id/tv_show5"
                             android:layout_width="0dp"
                             android:layout_weight="1"
-                            android:textColor="@color/black"
                             android:gravity="left"
                             android:textSize="@dimen/sp_20"
                             android:layout_height="wrap_content"/>
@@ -152,7 +147,6 @@
                             android:layout_weight="1"
                             android:gravity="left"
                             android:textSize="@dimen/sp_20"
-                            android:textColor="@color/black"
                             android:layout_alignParentRight="true"
                             android:layout_height="wrap_content"/>
 
@@ -172,7 +166,7 @@
                         android:id="@+id/tv_title_unscramble"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/dp_24"
+                        android:textSize="@dimen/dp_22"
                         android:textStyle="bold"
                         android:textColor="@color/black"
                         android:text="指标解读"/>
@@ -188,7 +182,7 @@
                         android:layout_marginTop="@dimen/dp_10"
                         android:layout_marginBottom="@dimen/dp_10"
                         android:text="无"
-                        android:textSize="@dimen/sp_24" />
+                        android:textSize="@dimen/sp_20" />
 
                     <TextView
                         android:id="@+id/tv_unscramble"
