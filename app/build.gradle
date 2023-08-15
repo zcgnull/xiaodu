@@ -26,6 +26,8 @@ android {
             keyPassword '0335@dataport'
             storeFile file('dataport_wellness.jks')
             storePassword '0335@dataport'
+            v1SigningEnabled true
+            v2SigningEnabled true
         }
     }
     buildTypes {
