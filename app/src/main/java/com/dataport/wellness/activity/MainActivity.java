@@ -28,14 +28,12 @@ import com.dataport.wellness.activity.dialog.BaseDialog;
 import com.dataport.wellness.activity.dialog.MenuDialog;
 import com.dataport.wellness.api.health.QueryBinderApi;
 import com.dataport.wellness.api.health.TokenApi;
-import com.dataport.wellness.api.smalldu.ContentDirectVO;
 import com.dataport.wellness.api.smalldu.DeviceInfoApi;
 import com.dataport.wellness.api.smalldu.DeviceTokenApi;
 import com.dataport.wellness.api.smalldu.GuideDataApi;
 import com.dataport.wellness.api.smalldu.WeatherAddressApi;
 import com.dataport.wellness.botsdk.BotMessageListener;
 import com.dataport.wellness.botsdk.IBotIntentCallback;
-import com.dataport.wellness.enums.ContentDirectTypeEnum;
 import com.dataport.wellness.http.HttpData;
 import com.dataport.wellness.http.HttpIntData;
 import com.dataport.wellness.http.glide.GlideApp;
@@ -51,7 +49,6 @@ import com.hjq.http.request.HttpRequest;
 import com.sunfusheng.marqueeview.MarqueeView;
 
 import java.lang.reflect.Field;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -539,7 +536,25 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
      */
     private void contentDirect() {
         String url = getIntent().getStringExtra("url");
+        Intent intent=null;
         if (null != url && "" != url) {
+            switch (url) {
+                case "wellness://open?type=device_alrams"://打开告警信息
+                    if (userId > 0L) {
+                        Log.i("获取内容直达参数===========", "" + url);
+                        intent = new Intent(this, DeviceEnvActivity.class);
+                        intent.putExtra("userId", userId);
+                        intent.putExtra("binderId", binderId);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        startActivity(intent);
+                    }
+                    break;
+                default:
+                    Log.i("获取内容直达参数===========", "获取不到枚举值");
+                    break;
+            }
+        }
+/*        if (null != url && "" != url) {
             //url解析
             String urlDecoder = null;
             try {
@@ -564,10 +579,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 }
 
             } catch (Exception e) {
-                /*捕获不处理，防止app崩溃*/
+                *//*捕获不处理，防止app崩溃*//*
             }
 
-        }
+        }*/
     }
 
     @Override
