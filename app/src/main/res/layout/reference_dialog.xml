@@ -14,6 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_400"
         android:orientation="vertical"
+        android:background="@mipmap/dialog_bg"
         android:paddingTop="@dimen/dp_20">
 
         <LinearLayout
@@ -40,6 +41,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/line_size"
                     android:layout_marginTop="@dimen/dp_10"
+                    android:visibility="gone"
                     android:background="@color/common_line_color" />
                 <TextView
                     android:id="@+id/tv_illustrate"
@@ -70,6 +72,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/line_size"
                     android:layout_marginTop="@dimen/dp_10"
+                    android:visibility="gone"
                     android:background="@color/common_line_color" />
                 <TextView
                     android:id="@+id/tv_reference"
