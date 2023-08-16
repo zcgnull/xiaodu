@@ -2,6 +2,7 @@ package com.dataport.wellness.activity.dialog;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.text.method.ScrollingMovementMethod;
 import android.text.style.BulletSpan;
 import android.view.Gravity;
@@ -20,7 +21,7 @@ import com.dataport.wellness.utils.RichTextUtil;
 
 
 /**
- *    desc   : 指标解读 Dialog 布局封装
+ * desc   : 指标解读 Dialog 布局封装
  */
 public final class InterpretationDialog {
 
@@ -35,8 +36,8 @@ public final class InterpretationDialog {
         public TextView tv_title_unscramble;
         public TextView time;
         public TextView type;
-        public TextView show1,show2,show3,show4,show5,show6;
-        public LinearLayout add1,add2;
+        public TextView show1, show2, show3, show4, show5, show6;
+        public LinearLayout add1, add2;
 
         public Builder(Context context) {
             super(context);
@@ -45,7 +46,7 @@ public final class InterpretationDialog {
             setAnimStyle(BaseDialog.ANIM_IOS);
             setGravity(Gravity.CENTER);
 
-           
+
             tv_unscramble = findViewById(R.id.tv_unscramble);
             tv_state = findViewById(R.id.tv_state);
             tv_title_detail = findViewById(R.id.tv_title_detail);
@@ -60,10 +61,13 @@ public final class InterpretationDialog {
             show6 = findViewById(R.id.tv_show6);
             add1 = findViewById(R.id.ln_add1);
             add2 = findViewById(R.id.ln_add2);
+            Drawable icon = mContext.getResources().getDrawable(R.drawable.null_bg, null);
+            icon.setBounds(1, 1, 30, 30);
+            time.setCompoundDrawables(icon, null, null, null);
         }
 
         public Builder setTitle(String title) {
-            if (title !=null){
+            if (title != null) {
                 tv_title_detail.setText(title + tv_title_detail.getText());
                 tv_title_unscramble.setText(title + tv_title_unscramble.getText());
             }
@@ -78,9 +82,9 @@ public final class InterpretationDialog {
 
         public Builder setState(String text) {
             tv_state.setText(text);
-            if (text.contains("异常")){
+            if (text.contains("异常")) {
                 tv_state.setTextColor(Color.RED);
-            } else if (text.contains("正常")){
+            } else if (text.contains("正常")) {
                 tv_state.setTextColor(0xFF008000);
             } else {
                 tv_state.setTextColor(0x5791FF);
@@ -91,7 +95,7 @@ public final class InterpretationDialog {
         public Builder setRecord(DeviceContentPageApi.Bean.RecordListDTO list) {
             time.setText(list.getStartTime());
             String dataSources = list.getDataSources();
-            if (dataSources != null){
+            if (dataSources != null) {
                 if (dataSources.equals("1")) {
                     type.setText("手动录入");
                     type.setTextColor(mContext.getResources().getColor(R.color.colorBule));
@@ -103,7 +107,7 @@ public final class InterpretationDialog {
                 type.setText("设备录入");
                 type.setTextColor(mContext.getResources().getColor(R.color.colorBule));
             }
-            switch (list.getDataType()){
+            switch (list.getDataType()) {
                 case "1":
                     add1.setVisibility(View.VISIBLE);
                     show1.setText("收缩压 " + list.getSbp() + " mmHg");
@@ -114,7 +118,7 @@ public final class InterpretationDialog {
                     showIcon(list.getBpmType(), show3);
                     if (list.getPharmacySituation().equals("1")) {//用药前
                         show4.setText("用药前");
-                    } else if (list.getPharmacySituation().equals("2")){
+                    } else if (list.getPharmacySituation().equals("2")) {
                         show4.setText("用药后");
                     }
                     showIcon("2", show4);
@@ -166,18 +170,29 @@ public final class InterpretationDialog {
             return this;
         }
 
-        private void showIcon(String type, TextView view){
-            if ("0".equals(type)){
-                view.setCompoundDrawablesWithIntrinsicBounds(mContext.getResources().getDrawable(R.mipmap.arrow_down_green, null), null,null , null);
-                view.setCompoundDrawablePadding(0);
-            } else if ("1".equals(type)){
-                view.setCompoundDrawablesWithIntrinsicBounds(mContext.getResources().getDrawable(R.mipmap.arrow_up_red, null), null, null, null);
-                view.setCompoundDrawablePadding(0);
+        private void showIcon(String type, TextView view) {
+            Drawable icon;
+            if ("0".equals(type)) {
+                icon = mContext.getResources().getDrawable(R.mipmap.arrow_down_green, null);
+                // 必须设置
+                icon.setBounds(1, 1, 30, 30);
+                view.setCompoundDrawables(icon, null, null, null);
+//                view.setCompoundDrawablesWithIntrinsicBounds(mContext.getResources().getDrawable(R.mipmap.arrow_down_green, null), null,null , null);
+//                view.setCompoundDrawablePadding(0);
+            } else if ("1".equals(type)) {
+//                view.setCompoundDrawablesWithIntrinsicBounds(mContext.getResources().getDrawable(R.mipmap.arrow_up_red, null), null, null, null);
+//                view.setCompoundDrawablePadding(0);
+                icon = mContext.getResources().getDrawable(R.mipmap.arrow_up_red, null);
+                icon.setBounds(1, 1, 30, 30);
+                view.setCompoundDrawables(icon, null, null, null);
             } else {
-                view.setCompoundDrawablesWithIntrinsicBounds(mContext.getResources().getDrawable(R.mipmap.icon_null, null), null, null, null);
-                view.setCompoundDrawablePadding(0);
+//                view.setCompoundDrawablesWithIntrinsicBounds(mContext.getResources().getDrawable(R.mipmap.icon_null, null), null, null, null);
+//                view.setCompoundDrawablePadding(0);
+                icon = mContext.getResources().getDrawable(R.drawable.null_bg, null);
+                icon.setBounds(1, 1, 30, 30);
+                view.setCompoundDrawables(icon, null, null, null);
             }
         }
     }
-    
+
 }
