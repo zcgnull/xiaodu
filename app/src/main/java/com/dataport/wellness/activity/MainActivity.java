@@ -60,7 +60,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     private static final String TAG = "MainActivity";
     private MarqueeView marqueeView;
-    private TextView tvBinder, tvWeather, tvC, tvTime, tvDate, tvPlace, tvNoBind, tvNoAuth;
+    private TextView tvBinder, tvWeather, tvC, tvTime, tvDate, tvPlace, tvNoBind, tvNoAuth,companyName;
     private RelativeLayout rlSuccess, rlFail, rlFailSecond, mainBg, ln_speech;
     private ImageView ivQr;
     private long binderId;
@@ -86,6 +86,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         setTheme(R.style.AppTheme); // 设置为原主题
         setContentView(R.layout.activity_porttal_new);
         mainBg = findViewById(R.id.main_bg);
+        companyName=findViewById(R.id.company_name);
         rlSuccess = findViewById(R.id.rl_success);
         rlFail = findViewById(R.id.rl_fail);
         rlFailSecond = findViewById(R.id.rl_fail1);
@@ -156,6 +157,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                                 SharedPreferences sharedPreferences = getSharedPreferences("XD", MODE_PRIVATE);
                                 String token = sharedPreferences.getString("XD_TOKEN", null);
                                 Log.d(TAG, "SharedPreferencesToken: " + token);
+                                companyName.setText(result.getData().getTenantName());
                                 BotConstants.JK_URL = result.getData().getHealthUrl();
                                 BotConstants.YZ_URL = result.getData().getOldUrl();
                                 BotConstants.BaiduSpeechAppId = result.getData().getBaiduSpeechConfig().getAppId();

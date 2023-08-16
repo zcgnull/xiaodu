@@ -37,11 +37,21 @@ public class DeviceInfoApi  implements IRequestApi, IRequestServer {
 
         private String sn;
         private int tenantId;
+
+        private String tenantName;
         private boolean inWarehouse;
         private String oldUrl;
         private String healthUrl;
         private boolean consultingShow;
         private BaiduSpeechConfigDTO baiduSpeechConfig;
+
+        public String getTenantName() {
+            return tenantName;
+        }
+
+        public void setTenantName(String tenantName) {
+            this.tenantName = tenantName;
+        }
 
         public String getSn() {
             return sn;
