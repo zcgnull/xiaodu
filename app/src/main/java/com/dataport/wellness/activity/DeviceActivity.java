@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.LifecycleObserver;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -77,17 +76,17 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
     private TextView qs, jl;
     private TextView noBind;
     private LinearLayout ln_env_device;
-    private LinearLayout ln_show;
-
-    private LinearLayout ln_show_left;
-
-    private LinearLayout ln_show_right;
+    //    private LinearLayout ln_show;
+//
+//    private LinearLayout ln_show_left;
+//
+//    private LinearLayout ln_show_right;
     private LinearLayout ln_env_device1;
     private ImageView ivQr;
 
     private List<String> dateTabs = new ArrayList<>();
     private List<SignTypeApi.Bean.ListDTO> signTabs = new ArrayList<>();
-    private List<EquipmentListApi.Bean.ListDTO> equipmentTabs = new ArrayList<>();
+    //    private List<EquipmentListApi.Bean.ListDTO> equipmentTabs = new ArrayList<>();
     private List<DeviceContentApi.Bean.ListDTO> contentList = new ArrayList<>();
     private List<DeviceContentPageApi.Bean.RecordListDTO> rightList = new ArrayList<>();
     private long binderId;
@@ -98,11 +97,12 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
     private int pageSize = 10;
     private DeviceContentAdapter adapter;
     private LineChartManager lineChartManager;
-    private View arteriosclerosisView;
+    //    private View arteriosclerosisView;
     private InterpretationDialog.Builder interpretationDialog;
     private ReferenceDialog.Builder referenceDialog;
-//    private boolean asiFirst = true;
+    //    private boolean asiFirst = true;
     private ImageView iv_more;
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -113,63 +113,60 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
         rlSuccess = findViewById(R.id.rl_success);
         rlFail = findViewById(R.id.rl_fail);
         ln_env_device = findViewById(R.id.ln_env_device);
-        ln_env_device1=findViewById(R.id.ln_env_device1);
-        ln_show=findViewById(R.id.ll_show);
-        ln_show_left=findViewById(R.id.ll_show_left);
-        ln_show_right=findViewById(R.id.ll_show_right);
-        LayoutInflater layoutInflater=LayoutInflater.from(this);
-        arteriosclerosisView = layoutInflater.inflate(R.layout.item_arteriosclerosis, null);
+        ln_env_device1 = findViewById(R.id.ln_env_device1);
+//        ln_show=findViewById(R.id.ll_show);
+//        ln_show_left=findViewById(R.id.ll_show_left);
+//        ln_show_right=findViewById(R.id.ll_show_right);
+//        LayoutInflater layoutInflater=LayoutInflater.from(this);
+//        arteriosclerosisView = layoutInflater.inflate(R.layout.item_arteriosclerosis, null);
 
         noBind = findViewById(R.id.tv_nobind);
         ivQr = findViewById(R.id.iv_qr);
         Intent intent = getIntent();
         binderId = intent.getLongExtra("binderId", 0);
-        userId= intent.getLongExtra("userId", 0);
+        userId = intent.getLongExtra("userId", 0);
         noData = findViewById(R.id.rl_no_data);
         noDataLine = findViewById(R.id.rl_no_data_line);
         lineChart = findViewById(R.id.line_chart);
         qs = findViewById(R.id.tv_qs);
         jl = findViewById(R.id.tv_jl);
         iv_more = findViewById(R.id.iv_more);
-        iv_more.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String type = "";
-                String title = "";
-                switch (dataTypeCode){
-                    case "1":
-                        type = "blp";
-                        title = "血压";
-                        break;
-                    case "2":
-                        type = "bls";
-                        title = "血糖";
-                        break;
-                    case "3":
-                        type = "blk";
-                        title = "血酮";
-                        break;
-                    case "4":
-                        type = "uric";
-                        title = "尿酸";
-                        break;
-                    case "5":
-                        type = "blo";
-                        title = "血氧";
-                        break;
-                    case "6":
-                        type = "heart";
-                        title = "心率";
-                        break;
-                    case "7":
-                        type = "asi";
-                        title = "动脉硬化";
-                        break;
-                    default:
-                        break;
-                }
-                showReferenceDialog(v.getContext(), "", type, "0", "0", title);
+        iv_more.setOnClickListener(v -> {
+            String type = "";
+            String title = "";
+            switch (dataTypeCode) {
+                case "1":
+                    type = "blp";
+                    title = "血压";
+                    break;
+                case "2":
+                    type = "bls";
+                    title = "血糖";
+                    break;
+                case "3":
+                    type = "blk";
+                    title = "血酮";
+                    break;
+                case "4":
+                    type = "uric";
+                    title = "尿酸";
+                    break;
+                case "5":
+                    type = "blo";
+                    title = "血氧";
+                    break;
+                case "6":
+                    type = "heart";
+                    title = "心率";
+                    break;
+                case "7":
+                    type = "asi";
+                    title = "动脉硬化";
+                    break;
+                default:
+                    break;
             }
+            showReferenceDialog(v.getContext(), "", type, "0", "0", title);
         });
 
         firstTab = findViewById(R.id.first_tab);
@@ -203,7 +200,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
 //                    ln_show.removeView(arteriosclerosisView);
 //                }
 //                asiFirst = true;
-                switch (dataTypeCode){
+                switch (dataTypeCode) {
                     case "1":
                         qs.setText("血压趋势");
                         jl.setText("血压记录");
@@ -237,11 +234,13 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                         jl.setText("无");
                         break;
                 }
-                if (thirdTab.getTabAt(0).isSelected()) {
-                    getDeviceContent(dataTypeCode, TimeUtil.getInstance().getTimeOneMonth(), TimeUtil.getInstance().getCurrentTime(), 1);
-                    getDeviceContentPage(dataTypeCode, TimeUtil.getInstance().getTimeOneMonth(), TimeUtil.getInstance().getCurrentTime(), 1);
-                } else {
-                    thirdTab.getTabAt(0).select();
+                if (null != thirdTab.getTabAt(0)) {
+                    if (thirdTab.getTabAt(0).isSelected()) {
+                        getDeviceContent(dataTypeCode, TimeUtil.getInstance().getTimeOneMonth(), TimeUtil.getInstance().getCurrentTime(), 3);
+//                        getDeviceContentPage(dataTypeCode, TimeUtil.getInstance().getTimeOneMonth(), TimeUtil.getInstance().getCurrentTime(), 1);
+                    } else {
+                        thirdTab.getTabAt(0).select();
+                    }
                 }
             }
 
@@ -291,14 +290,14 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                 tabView.setTextColor(getResources().getColor(R.color.colorWhite));
                 if (tab.getPosition() == 1) {
                     getDeviceContent(dataTypeCode, TimeUtil.getInstance().getTimeAWeek(), TimeUtil.getInstance().getCurrentTime(), 1);
-                    getDeviceContentPage(dataTypeCode, TimeUtil.getInstance().getTimeAWeek(), TimeUtil.getInstance().getCurrentTime(), 1);
+//                    getDeviceContentPage(dataTypeCode, TimeUtil.getInstance().getTimeAWeek(), TimeUtil.getInstance().getCurrentTime(), 1);
                 } else if (tab.getPosition() == 2) {
-                    getDeviceContent(dataTypeCode, TimeUtil.getInstance().getYesterdayTime(), TimeUtil.getInstance().getCurrentTime(), 1);
-                    getDeviceContentPage(dataTypeCode, TimeUtil.getInstance().getYesterdayTime(), TimeUtil.getInstance().getCurrentTime(), 1);
+                    getDeviceContent(dataTypeCode, TimeUtil.getInstance().getYesterdayTime(), TimeUtil.getInstance().getCurrentTime(), 2);
+//                    getDeviceContentPage(dataTypeCode, TimeUtil.getInstance().getYesterdayTime(), TimeUtil.getInstance().getCurrentTime(), 1);
                 } else {
                     //if (equipmentBindId != 0) {
-                    getDeviceContent(dataTypeCode, TimeUtil.getInstance().getTimeOneMonth(), TimeUtil.getInstance().getCurrentTime(), 1);
-                    getDeviceContentPage(dataTypeCode, TimeUtil.getInstance().getTimeOneMonth(), TimeUtil.getInstance().getCurrentTime(), 1);
+                    getDeviceContent(dataTypeCode, TimeUtil.getInstance().getTimeOneMonth(), TimeUtil.getInstance().getCurrentTime(), 3);
+//                    getDeviceContentPage(dataTypeCode, TimeUtil.getInstance().getTimeOneMonth(), TimeUtil.getInstance().getCurrentTime(), 1);
                     //}
                 }
             }
@@ -315,17 +314,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
 
             }
         });
-        dateTabs.add("月");
-        dateTabs.add("周");
-        dateTabs.add("日");
-        for (String bean : dateTabs) {
-            TabLayout.Tab tab = thirdTab.newTab();
-            View tabView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.date_tab, null);
-            TextView tabText = tabView.findViewById(R.id.item_date_tab);
-            tabText.setText(bean);
-            tab.setCustomView(tabView);
-            thirdTab.addTab(tab);
-        }
+
 
         contentRv = findViewById(R.id.rv_content);
         GridLayoutManager contentManger = new GridLayoutManager(getApplicationContext(), 1);
@@ -346,33 +335,33 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            switch (data.getDataType()){
+            switch (data.getDataType()) {
                 case "1":
                     speak = "血压指标详情：" + time + "，您的血压为，高压" + data.getSbp() + "毫米汞柱，低压" + data.getDbp() + "毫米汞柱，脉率为" + data.getBpm() + "次每分钟。";
                     showInterpretationDialog(this, speak, data, "blp", data.getDbp(), data.getSbp(), "血压");
                     break;
                 case "2":
-                    speak = "血糖指标详情：" +  time + "，您的血糖为" + data.getGls() + "毫摩尔每升。";
+                    speak = "血糖指标详情：" + time + "，您的血糖为" + data.getGls() + "毫摩尔每升。";
                     showInterpretationDialog(this, speak, data, "bls", data.getGls(), null, "血糖");
                     break;
                 case "3":
-                    speak = "血酮指标详情：" +  time + "，您的血酮为" + data.getBlk() + "毫摩尔每升。";
+                    speak = "血酮指标详情：" + time + "，您的血酮为" + data.getBlk() + "毫摩尔每升。";
                     showInterpretationDialog(this, speak, data, "blk", data.getBlk(), null, "血酮");
                     break;
                 case "4":
-                    speak = "尿酸指标详情：" +  time + "，您的尿酸为" + data.getUric() + "毫摩尔每升。";
+                    speak = "尿酸指标详情：" + time + "，您的尿酸为" + data.getUric() + "毫摩尔每升。";
                     showInterpretationDialog(this, speak, data, "uric", data.getUric(), null, "尿酸");
                     break;
                 case "5":
-                    speak = "血氧指标详情：" +  time + "，您的血氧为" + data.getBlo() + "%。";
+                    speak = "血氧指标详情：" + time + "，您的血氧为" + data.getBlo() + "%。";
                     showInterpretationDialog(this, speak, data, "blo", data.getBlo(), null, "血氧");
                     break;
                 case "6":
-                    speak = "心率指标详情：" +  time + "，您的心率为" + data.getBpm() + "次每分钟。";
+                    speak = "心率指标详情：" + time + "，您的心率为" + data.getBpm() + "次每分钟。";
                     showInterpretationDialog(this, speak, data, "heart", data.getBpm(), null, "心率");
                     break;
                 case "7":
-                    speak = "动脉硬化指标详情：" +  time +
+                    speak = "动脉硬化指标详情：" + time +
                             "，您的动脉硬化指数为" + data.getAsi() + "。" +
                             "血管年龄：" + data.getBlvAge() + "岁。" +
                             "收缩压" + data.getSbp() + "毫米汞柱。" +
@@ -438,12 +427,13 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
 
     /**
      * 获取用户未处理报警数量
+     *
      * @param userId 用户主键
      */
-    private void getDeviceEnvCount(Long userId){
+    private void getDeviceEnvCount(Long userId) {
         EasyHttp.get(this)
                 .api(new DeviceEnvCountApi(userId))
-                .request(new HttpCallback<HttpData<DeviceEnvCountApi.Bean>>(this){
+                .request(new HttpCallback<HttpData<DeviceEnvCountApi.Bean>>(this) {
                     @Override
                     public void onSucceed(HttpData<DeviceEnvCountApi.Bean> result) {
                         if (result.getCode().equals("00000")) {
@@ -454,10 +444,12 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                     }
                 });
     }
+
     private void getSignType(long binderId) {
-        EasyHttp.get(this)
+        EasyHttp.get(DeviceActivity.this)
+
                 .api(new SignTypeApi(binderId))
-                .request(new HttpCallback<HttpData<SignTypeApi.Bean>>(this) {
+                .request(new HttpCallback<HttpData<SignTypeApi.Bean>>(DeviceActivity.this) {
 
                     @Override
                     public void onSucceed(HttpData<SignTypeApi.Bean> result) {
@@ -474,6 +466,17 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                                     tab.setCustomView(tabView);
                                     firstTab.addTab(tab);
                                 }
+                                dateTabs.add("月");
+                                dateTabs.add("周");
+                                dateTabs.add("日");
+                                for (String bean : dateTabs) {
+                                    TabLayout.Tab tab = thirdTab.newTab();
+                                    View tabView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.date_tab, null);
+                                    TextView tabText = tabView.findViewById(R.id.item_date_tab);
+                                    tabText.setText(bean);
+                                    tab.setCustomView(tabView);
+                                    thirdTab.addTab(tab);
+                                }
                             } else {
                                 getGuideData("noSign");
                                 rlSuccess.setVisibility(View.GONE);
@@ -484,6 +487,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                         }
                     }
                 });
+
     }
 
     private void getGuideData(String steerType) {
@@ -544,11 +548,12 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
 
                     @Override
                     public void onSucceed(HttpData<DeviceContentApi.Bean> result) {
+                        contentList.clear();
                         contentList = result.getData().getList();
                         if (contentList.size() > 0) {
                             noDataLine.setVisibility(View.GONE);
                             lineChart.setVisibility(View.VISIBLE);
-                            switch (dataTypeCode){
+                            switch (dataTypeCode) {
                                 case "1":
                                     showXYLineChart(contentList);
                                     break;
@@ -579,6 +584,13 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                             noDataLine.setVisibility(View.VISIBLE);
                             lineChart.setVisibility(View.GONE);
                         }
+                        if (type == 1){
+                            getDeviceContentPage(dataTypeCode, TimeUtil.getInstance().getTimeAWeek(), TimeUtil.getInstance().getCurrentTime(), 1);
+                        } else if (type == 2){
+                            getDeviceContentPage(dataTypeCode, TimeUtil.getInstance().getYesterdayTime(), TimeUtil.getInstance().getCurrentTime(), 1);
+                        } else {
+                            getDeviceContentPage(dataTypeCode, TimeUtil.getInstance().getTimeOneMonth(), TimeUtil.getInstance().getCurrentTime(), 1);
+                        }
                     }
                 });
     }
@@ -590,13 +602,13 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void getDeviceContentPage(String dataTypeCode, String beginDate, String endDate, int type) {//type:1代表刷新2代表加载
-        EasyHttp.get(this)
+        EasyHttp.get(DeviceActivity.this)
                 .api(new DeviceContentPageNewApi(binderId, dataTypeCode, beginDate, endDate, pageNum, pageSize))
-                .request(new HttpCallback<HttpData<DeviceContentPageApi.Bean>>(this) {
+                .request(new HttpCallback<HttpData<DeviceContentPageApi.Bean>>(DeviceActivity.this) {
 
                     @Override
                     public void onSucceed(HttpData<DeviceContentPageApi.Bean> result) {
-                        if(result.getCode().equals("00000")) {
+                        if (result.getCode().equals("00000")) {
                             if (type == 1) {
                                 rightList.clear();
                                 refreshLayout.finishRefresh();
@@ -668,7 +680,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
         lineChartManager.setSingleLine(xValues, entries1, lableNameList, colorList);
     }
 
-    private void showXTongLineChart(List<DeviceContentApi.Bean.ListDTO> contentList){
+    private void showXTongLineChart(List<DeviceContentApi.Bean.ListDTO> contentList) {
         lineChartManager = null;
         lineChartManager = new LineChartManager(lineChart);
         //设置x轴的数据
@@ -688,7 +700,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
         lineChartManager.setSingleLine(xValues, entries1, lableNameList, colorList);
     }
 
-    private void showNSLineChart(List<DeviceContentApi.Bean.ListDTO> contentList){
+    private void showNSLineChart(List<DeviceContentApi.Bean.ListDTO> contentList) {
         lineChartManager = null;
         lineChartManager = new LineChartManager(lineChart);
         //设置x轴的数据
@@ -708,7 +720,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
         lineChartManager.setSingleLine(xValues, entries1, lableNameList, colorList);
     }
 
-    private void showXYangLineChart(List<DeviceContentApi.Bean.ListDTO> contentList){
+    private void showXYangLineChart(List<DeviceContentApi.Bean.ListDTO> contentList) {
         lineChartManager = null;
         lineChartManager = new LineChartManager(lineChart);
         //设置x轴的数据
@@ -728,7 +740,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
         lineChartManager.setSingleLine(xValues, entries1, lableNameList, colorList);
     }
 
-    private void showXLLineChart(List<DeviceContentApi.Bean.ListDTO> contentList){
+    private void showXLLineChart(List<DeviceContentApi.Bean.ListDTO> contentList) {
         lineChartManager = null;
         lineChartManager = new LineChartManager(lineChart);
         //设置x轴的数据
@@ -748,7 +760,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
         lineChartManager.setSingleLine(xValues, entries1, lableNameList, colorList);
     }
 
-    private void showDMYHLineChart(List<DeviceContentApi.Bean.ListDTO> contentList){
+    private void showDMYHLineChart(List<DeviceContentApi.Bean.ListDTO> contentList) {
         lineChartManager = null;
         lineChartManager = new LineChartManager(lineChart);
         //设置x轴的数据
@@ -771,75 +783,75 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
     /**
      * 动脉硬化展示页
      */
-    private void showArteriosclerosis (DeviceContentPageApi.Bean.RecordListDTO recordListDTO){
-        ln_show_left.setVisibility(View.GONE);
-        ln_show_right.setVisibility(View.GONE);
-        //secondTab.setVisibility(View.INVISIBLE);
-        String speak = "";
-        TextView tv_asi = arteriosclerosisView.findViewById(R.id.tv_asi);
-        TextView tv_vascularage = arteriosclerosisView.findViewById(R.id.tv_vascularage);
-        TextView tv_sbp = arteriosclerosisView.findViewById(R.id.tv_sbp);
-        TextView tv_dbp = arteriosclerosisView.findViewById(R.id.tv_dbp);
-        TextView tv_bpm = arteriosclerosisView.findViewById(R.id.tv_bpm);
-        TextView tv_more = arteriosclerosisView.findViewById(R.id.tv_more);
-        tv_asi.setText(recordListDTO.getAsi());
-        tv_vascularage.setText(recordListDTO.getBlvAge());
-        tv_sbp.setText(recordListDTO.getSbp());
-        tv_dbp.setText(recordListDTO.getDbp());
-        tv_bpm.setText(recordListDTO.getBpm());
-        showIcon(recordListDTO.getAsiType(), arteriosclerosisView.findViewById(R.id.iv_asi));
-        showIcon(recordListDTO.getSbpType(), arteriosclerosisView.findViewById(R.id.iv_sbp));
-        showIcon(recordListDTO.getDbpType(), arteriosclerosisView.findViewById(R.id.iv_dbp));
-        showIcon(recordListDTO.getBpmType(), arteriosclerosisView.findViewById(R.id.iv_bpm));
-
-        tv_more.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ln_show_left.setVisibility(View.VISIBLE);
-                ln_show_right.setVisibility(View.VISIBLE);
-                //secondTab.setVisibility(View.VISIBLE);
-                BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
-                ln_show.removeView(arteriosclerosisView);
-            }
-        });
-        int asi = Integer.parseInt(recordListDTO.getAsi());
-        speak = "您的ASI动脉硬化指数为" + asi;
-
-        if (asi <= 70){
-            speak += ",评定结果：正常，干预方案：日常检测，健康的生活方式。";
-        } else if (asi <= 80){
-            speak += ",评定结果：正常高值，干预方案：加强监管，健康的生活方式。";
-        } else if (asi <= 160) {
-            speak += ",评定结果：轻度到中度，干预方案：明确病因，日常检查，对症治疗。";
-        } else {
-            speak += ",评定结果：中度到重度，干预方案：明确病因，日常检查，对症治疗。";
-        }
-
-        speak += "血管年龄：" +
-                recordListDTO.getBlvAge() +
-                "岁。" +
-                "收缩压" +
-                recordListDTO.getSbp() +
-                "毫米汞柱。" +
-                "舒张压" +
-                recordListDTO.getDbp() +
-                "毫米汞柱。" +
-                "脉率" +
-                recordListDTO.getBpm() +
-                "次每分钟。";
-
-        BotSdk.getInstance().speakRequest(speak);
-        ln_show.addView(arteriosclerosisView);
+    private void showArteriosclerosis(DeviceContentPageApi.Bean.RecordListDTO recordListDTO) {
+//        ln_show_left.setVisibility(View.GONE);
+//        ln_show_right.setVisibility(View.GONE);
+//        //secondTab.setVisibility(View.INVISIBLE);
+//        String speak = "";
+//        TextView tv_asi = arteriosclerosisView.findViewById(R.id.tv_asi);
+//        TextView tv_vascularage = arteriosclerosisView.findViewById(R.id.tv_vascularage);
+//        TextView tv_sbp = arteriosclerosisView.findViewById(R.id.tv_sbp);
+//        TextView tv_dbp = arteriosclerosisView.findViewById(R.id.tv_dbp);
+//        TextView tv_bpm = arteriosclerosisView.findViewById(R.id.tv_bpm);
+//        TextView tv_more = arteriosclerosisView.findViewById(R.id.tv_more);
+//        tv_asi.setText(recordListDTO.getAsi());
+//        tv_vascularage.setText(recordListDTO.getBlvAge());
+//        tv_sbp.setText(recordListDTO.getSbp());
+//        tv_dbp.setText(recordListDTO.getDbp());
+//        tv_bpm.setText(recordListDTO.getBpm());
+//        showIcon(recordListDTO.getAsiType(), arteriosclerosisView.findViewById(R.id.iv_asi));
+//        showIcon(recordListDTO.getSbpType(), arteriosclerosisView.findViewById(R.id.iv_sbp));
+//        showIcon(recordListDTO.getDbpType(), arteriosclerosisView.findViewById(R.id.iv_dbp));
+//        showIcon(recordListDTO.getBpmType(), arteriosclerosisView.findViewById(R.id.iv_bpm));
+//
+//        tv_more.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                ln_show_left.setVisibility(View.VISIBLE);
+//                ln_show_right.setVisibility(View.VISIBLE);
+//                //secondTab.setVisibility(View.VISIBLE);
+//                BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
+//                ln_show.removeView(arteriosclerosisView);
+//            }
+//        });
+//        int asi = Integer.parseInt(recordListDTO.getAsi());
+//        speak = "您的ASI动脉硬化指数为" + asi;
+//
+//        if (asi <= 70){
+//            speak += ",评定结果：正常，干预方案：日常检测，健康的生活方式。";
+//        } else if (asi <= 80){
+//            speak += ",评定结果：正常高值，干预方案：加强监管，健康的生活方式。";
+//        } else if (asi <= 160) {
+//            speak += ",评定结果：轻度到中度，干预方案：明确病因，日常检查，对症治疗。";
+//        } else {
+//            speak += ",评定结果：中度到重度，干预方案：明确病因，日常检查，对症治疗。";
+//        }
+//
+//        speak += "血管年龄：" +
+//                recordListDTO.getBlvAge() +
+//                "岁。" +
+//                "收缩压" +
+//                recordListDTO.getSbp() +
+//                "毫米汞柱。" +
+//                "舒张压" +
+//                recordListDTO.getDbp() +
+//                "毫米汞柱。" +
+//                "脉率" +
+//                recordListDTO.getBpm() +
+//                "次每分钟。";
+//
+//        BotSdk.getInstance().speakRequest(speak);
+//        ln_show.addView(arteriosclerosisView);
     }
 
-    private void showInterpretationDialog(Context context, String speak, DeviceContentPageApi.Bean.RecordListDTO list, String identifying, String value1, String value2, String title){
+    private void showInterpretationDialog(Context context, String speak, DeviceContentPageApi.Bean.RecordListDTO list, String identifying, String value1, String value2, String title) {
         final String speakNew = speak;
         EasyHttp.get(this)
                 .api(new IndicatorInterpretationApi(identifying, value1, value2, String.valueOf(binderId)))
                 .request(new HttpCallback<HttpInfo<IndicatorInterpretationApi.Bean>>(this) {
                     @Override
                     public void onSucceed(HttpInfo<IndicatorInterpretationApi.Bean> result) {
-                        if (result.getCode().equals("00000")){
+                        if (result.getCode().equals("00000")) {
                             String speak = speakNew;
                             String content = RichTextUtil.getRichTextStr(result.getInfo().getContent());
                             speak += title + "指标解读：" +
@@ -850,11 +862,11 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                                     .setState(result.getInfo().getTips())
                                     .setRecord(list)
                                     .addOnCancelListener(new BaseDialog.OnCancelListener() {
-                                @Override
-                                public void onCancel(BaseDialog dialog) {
-                                    BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
-                                }
-                            });
+                                        @Override
+                                        public void onCancel(BaseDialog dialog) {
+                                            BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
+                                        }
+                                    });
                             interpretationDialog.show();
                             BotSdk.getInstance().speakRequest(speak);
                         }
@@ -862,17 +874,17 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                 });
     }
 
-    private void showReferenceDialog(Context context, String speak, String identifying, String value1, String value2, String title){
+    private void showReferenceDialog(Context context, String speak, String identifying, String value1, String value2, String title) {
         final String speakNew = speak;
         EasyHttp.get(this)
                 .api(new IndicatorInterpretationApi(identifying, value1, value2, String.valueOf(binderId)))
                 .request(new HttpCallback<HttpInfo<IndicatorInterpretationApi.Bean>>(this) {
                     @Override
                     public void onSucceed(HttpInfo<IndicatorInterpretationApi.Bean> result) {
-                        if (result.getCode().equals("00000")){
+                        if (result.getCode().equals("00000")) {
                             String speak = speakNew;
                             String content = RichTextUtil.getRichTextStr(result.getInfo().getIllustrate());//详情
-                            speak += title+  "指标说明：" +
+                            speak += title + "指标说明：" +
                                     content +
                                     title + "参考值：" +
                                     result.getInfo().getRefer();
@@ -893,23 +905,22 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                 });
     }
 
-    private void showIcon(String type, ImageView view){
-        if ("0".equals(type)){
+    private void showIcon(String type, ImageView view) {
+        if ("0".equals(type)) {
             view.setImageResource(R.mipmap.arrow_down_green);
-        } else if ("1".equals(type)){
+        } else if ("1".equals(type)) {
             view.setImageResource(R.mipmap.arrow_up_red);
         }
     }
-
-
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
+        userId = null;
         dateTabs = null;
         adapter = null;
-        equipmentTabs = null;
+//        equipmentTabs = null;
         contentList = null;
         rightList = null;
         signTabs = null;
@@ -922,6 +933,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
 //        secondTab.removeAllTabs();
         thirdTab.clearOnTabSelectedListeners();
         thirdTab.removeAllTabs();
+        EasyHttp.cancel();
     }
 
     @Override
