@@ -17,7 +17,10 @@
             android:id="@+id/rl_top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dp_10">
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:layout_marginBottom="@dimen/dp_10">
 
             <LinearLayout
                 android:id="@+id/ln_back_online"
