@@ -102,16 +102,19 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
             super.onKickedOffline();
             Log.i(TAG, "You have been kicked off the line. Please login again!");
             logout();
-            // TODO: 2023/8/20 如何处理更优
-            Toast.makeText(getApplicationContext(), "账号在其他地方登录了,请重新进入！", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "账号在其他地方登录了,请重新进入线上医生！", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent("OnLineDetailActivity");
+            OnLineActivity.this.sendBroadcast(intent);
+            intent = new Intent("OnLineRecordActivity");
+            OnLineActivity.this.sendBroadcast(intent);
             finish();
-
         }
 
         @Override
         public void onUserSigExpired() {
             super.onUserSigExpired();
             Log.i(TAG, "Your user signature information has expired");
+            Toast.makeText(getApplicationContext(), "账号登录过期了,请重新进入线上医生！", Toast.LENGTH_SHORT).show();
             logout();
         }
     };

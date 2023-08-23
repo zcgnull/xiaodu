@@ -1,5 +1,9 @@
 package com.dataport.wellness.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -61,7 +65,7 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
     private MarqueeView marqueeView;
     private RelativeLayout rl_no_data;
     private String speck;
-
+    private FinishActivityRecevier mRecevier;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,7 +93,9 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
             BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
             BotSdk.getInstance().speakRequest(messages.get(position));
         });
-
+        //注册广播
+        mRecevier = new FinishActivityRecevier();
+        registerFinishReciver();
     }
 
     private void initView() {
@@ -167,6 +173,9 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
         TUICallEngine.createInstance(OnLineDetailActivity.this).removeObserver(observer);
         data=null;
         observer=null;
+        if (mRecevier != null) {
+            unregisterReceiver(mRecevier);
+        }
     }
 
     private TUICallObserver observer = new TUICallObserver() {
@@ -305,6 +314,22 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
                 hangUp();
             }
         }, delay, TimeUnit.SECONDS);
+    }
+
+    private class FinishActivityRecevier extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //根据需求添加自己需要关闭页面的action
+            if ("OnLineDetailActivity".equals(intent.getAction())) {
+                OnLineDetailActivity.this.finish();
+            }
+        }
+    }
+
+    private void registerFinishReciver() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("OnLineDetailActivity");
+        registerReceiver(mRecevier, intentFilter);
     }
 
     @Override
