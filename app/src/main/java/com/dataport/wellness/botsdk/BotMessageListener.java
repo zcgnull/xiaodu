@@ -128,6 +128,7 @@ public class BotMessageListener implements IBotMessageListener {
 
     @Override
     public void onRegisterFailed(int i) {
+        // TODO: 2023/8/21 无网络连接时可以优化一下
         Toast.makeText(ContextUtil.getContext(), "注册失败", Toast.LENGTH_LONG).show();
     }
 

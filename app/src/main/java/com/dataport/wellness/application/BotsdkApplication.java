@@ -11,6 +11,7 @@ import com.baidu.duer.botsdk.util.HeartBeatReporter;
 import com.dataport.wellness.BuildConfig;
 import com.dataport.wellness.botsdk.BotMessageListener;
 import com.dataport.wellness.botsdk.BotSDKUtils;
+import com.dataport.wellness.http.HttpTokenInterceptor;
 import com.dataport.wellness.http.RequestHandler;
 import com.dataport.wellness.http.RequestServer;
 import com.dataport.wellness.http.glide.GlideApp;
@@ -70,11 +71,12 @@ public class BotsdkApplication extends Application {
         registerActivityLifecycleCallbacks(new ActivityContollor());
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .addInterceptor(new HttpTokenInterceptor(getApplicationContext()))
                 .build();
 
         EasyConfig.with(okHttpClient)
                 // 是否打印日志
-                .setLogEnabled(false)
+                .setLogEnabled(true)
 
                 // 设置服务器配置（必须设置）
                 .setServer(new RequestServer())

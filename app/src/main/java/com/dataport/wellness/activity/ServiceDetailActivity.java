@@ -205,10 +205,14 @@ public class ServiceDetailActivity extends BaseActivity {
         banner.setAdapter(new BannerImageAdapter<ImgBean>(banners) {
             @Override
             public void onBindView(BannerImageHolder holder, ImgBean data, int position, int size) {
-                Glide.with(holder.itemView)
-                        .load(data.imageUrl)
-                        .apply(RequestOptions.bitmapTransform(new RoundedCorners(30)))
-                        .into(holder.imageView);
+                if ("".equals(data.imageUrl) || data.imageUrl == null){
+                    holder.imageView.setImageDrawable(getResources().getDrawable(R.drawable.default_serve));
+                } else {
+                    Glide.with(holder.itemView)
+                            .load(data.imageUrl)
+                            .apply(RequestOptions.bitmapTransform(new RoundedCorners(30)))
+                            .into(holder.imageView);
+                }
             }
         }).addBannerLifecycleObserver(this)//添加生命周期观察者
                 .setIndicator(new CircleIndicator(this));

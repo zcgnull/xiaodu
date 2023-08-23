@@ -7,11 +7,15 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.dataport.wellness.R;
+import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.ProtocolException;
+import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.client.ClientProtocolException;
+import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.conn.HttpHostConnectException;
 import com.google.gson.JsonSyntaxException;
 import com.hjq.gson.factory.GsonFactory;
 import com.hjq.http.EasyLog;
@@ -29,10 +33,16 @@ import com.hjq.http.request.HttpRequest;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InterruptedIOException;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Type;
+import java.net.NoRouteToHostException;
+import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
+
+import javax.net.ssl.SSLException;
+import javax.net.ssl.SSLHandshakeException;
 
 import okhttp3.Headers;
 import okhttp3.Response;
@@ -147,9 +157,29 @@ public final class RequestHandler implements IRequestHandler {
 //            }
 //            return e;
 //        }
-
-          if (e instanceof SocketTimeoutException) {
+        Log.d("zcg", "测试报错");
+        if (e instanceof SocketTimeoutException) {
             return new TimeoutException(mApplication.getString(R.string.http_server_out_time), e);
+        }
+
+        if(e instanceof InterruptedIOException){
+            return new CancelException(mApplication.getString(R.string.http_request_cancel), e);
+        }
+
+        if (e instanceof HttpHostConnectException){
+            return new com.hjq.http.exception.SocketException(mApplication.getString(R.string.http_socket_host), e);
+        }
+
+        if (e instanceof NoRouteToHostException){
+            return new com.hjq.http.exception.SocketException(mApplication.getString(R.string.http_socket_noroute), e);
+        }
+
+        if (e instanceof SocketException){
+            return new com.hjq.http.exception.SocketException(mApplication.getString(R.string.http_socket_error), e);
+        }
+
+        if (e instanceof ClientProtocolException){
+            return new ProtocolException(mApplication.getString(R.string.http_request_protocol), e);
         }
 
         if (e instanceof UnknownHostException) {
@@ -161,6 +191,15 @@ public final class RequestHandler implements IRequestHandler {
             }
             // 没有连接就是网络异常
             return new NetworkException(mApplication.getString(R.string.http_network_error), e);
+        }
+
+        if(e instanceof SSLHandshakeException){
+            //网络连接了，但是还没有认证，如校园网
+            return new com.hjq.http.exception.SSLException(mApplication.getString(R.string.http_request_ssh), e);
+        }
+
+        if (e instanceof SSLException){
+            return new com.hjq.http.exception.SSLException(mApplication.getString(R.string.http_request_ssh), e);
         }
 
         if (e instanceof IOException) {

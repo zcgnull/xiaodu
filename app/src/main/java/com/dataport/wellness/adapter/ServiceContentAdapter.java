@@ -58,13 +58,17 @@ public class ServiceContentAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         contentHolder.company.setText(list.get(position).getProviderName());
         // 交叉淡入的方式显示占位符，避免占位符还能显示。
         DrawableCrossFadeFactory factory = new DrawableCrossFadeFactory.Builder().setCrossFadeEnabled(true).build();
-        GlideApp.with(context)
-                .load(list.get(position).getPicture())
-                .transition(DrawableTransitionOptions.withCrossFade(factory))
-                .skipMemoryCache(true)//禁用内存缓存功能
-                .diskCacheStrategy(DiskCacheStrategy.NONE)//不缓存任何内容
-                .transform(new RoundedCorners((int) context.getResources().getDimension(R.dimen.dp_10)))
-                .into(contentHolder.icon);
+        if ("".equals(list.get(position).getPicture()) || list.get(position).getPicture() == null){
+            contentHolder.icon.setImageDrawable(context.getResources().getDrawable(R.drawable.default_serve));
+        } else {
+            GlideApp.with(context)
+                    .load(list.get(position).getPicture())
+                    .transition(DrawableTransitionOptions.withCrossFade(factory))
+                    .skipMemoryCache(true)//禁用内存缓存功能
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)//不缓存任何内容
+                    .transform(new RoundedCorners((int) context.getResources().getDimension(R.dimen.dp_10)))
+                    .into(contentHolder.icon);
+        }
         contentHolder.item.setOnClickListener(v -> listener.onItemClick(list.get(position), position));
     }
 

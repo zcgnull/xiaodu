@@ -257,7 +257,10 @@ public class ServiceOrderActivity extends BaseActivity implements IBotIntentCall
                             firstTab.addTab(tab);
                         }
                     }
+
                 });
+
+
     }
 
     private void queryCommodity(String id, int type) {//type:1代表刷新2代表加载
