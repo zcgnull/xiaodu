@@ -113,4 +113,8 @@ dependencies {
     //动画解析库
     implementation 'com.airbnb.android:lottie:4.1.0'
 
+    implementation 'com.google.firebase:firebase-crashlytics-buildtools:2.8.1'
+
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
+
 }
