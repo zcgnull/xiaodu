@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.RectF;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +27,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.dataport.wellness.R;
 import com.dataport.wellness.activity.dialog.BaseDialog;
 import com.dataport.wellness.activity.dialog.InterpretationDialog;
+import com.dataport.wellness.activity.dialog.RecordDialog;
 import com.dataport.wellness.activity.dialog.ReferenceDialog;
 import com.dataport.wellness.adapter.DeviceContentAdapter;
 import com.dataport.wellness.api.health.DeviceContentApi;
@@ -45,7 +48,12 @@ import com.dataport.wellness.utils.LineChartManager;
 import com.dataport.wellness.utils.RichTextUtil;
 import com.dataport.wellness.utils.TimeUtil;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.utils.MPPointF;
 import com.google.android.material.tabs.TabLayout;
 import com.hjq.http.EasyHttp;
 import com.hjq.http.config.IRequestInterceptor;
@@ -100,6 +108,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
     //    private View arteriosclerosisView;
     private InterpretationDialog.Builder interpretationDialog;
     private ReferenceDialog.Builder referenceDialog;
+    private RecordDialog.Builder recordDialog;
     //    private boolean asiFirst = true;
     private ImageView iv_more;
 
@@ -399,9 +408,80 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
         });
 
         getSignType(binderId);
-        // TODO: 2023/8/8
-        //showArteriosclerosis ();
-        //showInterpretationDialog();
+
+        recordDialog = new RecordDialog.Builder(this);
+        lineChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+                DeviceContentApi.Bean.ListDTO listDTO = contentList.get((int) e.getX());
+                MPPointF position = lineChart.getPosition(e, YAxis.AxisDependency.LEFT);
+                String speak = "";
+                String time = listDTO.getStartTime();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                try {
+                    Date date = sdf.parse(time);
+                    Calendar calender = Calendar.getInstance();
+                    calender.setTime(date);
+                    time = calender.get(Calendar.YEAR) + "年" + (calender.get(Calendar.MONTH) + 1) + "月" + calender.get(Calendar.DATE) + "日" + calender.get(Calendar.HOUR_OF_DAY) + "点" + calender.get(Calendar.MINUTE) + "分" + calender.get(Calendar.SECOND) + "秒";
+                } catch (ParseException error) {
+                    error.printStackTrace();
+                }
+                speak += time + "。";
+                recordDialog.setTime(listDTO.getStartTime())
+                        .setOffset((int) position.x - 70, (int) position.y - 200);
+                switch (dataTypeCode) {
+                    case "1":
+                        if (h.getDataSetIndex() == 0){
+                            recordDialog.setParameter("收缩压：" + listDTO.getSbp() + "mmHg");
+                            speak += "收缩压：" + listDTO.getSbp() + "mmHg";
+                        } else {
+                            recordDialog.setParameter("舒张压：" + listDTO.getDbp() + "mmHg");
+                            speak += "舒张压：" + listDTO.getDbp() + "mmHg";
+                        }
+                        break;
+                    case "2":
+                        recordDialog.setParameter("血糖：" + listDTO.getGls() + "mmol/L");
+                        speak += "血糖：" + listDTO.getGls() + "mmol/L";
+                        break;
+                    case "3":
+                        recordDialog.setParameter("血酮：" + listDTO.getBlk() + "mmol/L");
+                        speak += "血酮：" + listDTO.getBlk() + "mmol/L";
+                        break;
+                    case "4":
+                        recordDialog.setParameter("尿酸：" + listDTO.getUric() + "mmol/L");
+                        speak += "尿酸：" + listDTO.getUric() + "mmol/L";
+                        break;
+                    case "5":
+                        recordDialog.setParameter("血氧：" + listDTO.getBlo() + "%");
+                        speak += "血氧：" + listDTO.getBlo() + "%";
+                        break;
+                    case "6":
+                        recordDialog.setParameter("心率：" + listDTO.getBpm() + "次/分钟");
+                        speak += "心率：" + listDTO.getBpm() + "次/分钟";
+                        break;
+                    case "7":
+                        recordDialog.setParameter("动脉硬化指数：" + listDTO.getAsi());
+                        speak += "动脉硬化指数：" + listDTO.getAsi();
+                        break;
+                    default:
+                        recordDialog.setParameter("无");
+                        break;
+                }
+                recordDialog.addOnCancelListener(new BaseDialog.OnCancelListener() {
+                    @Override
+                    public void onCancel(BaseDialog dialog) {
+                        BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
+                    }
+                });
+                BotSdk.getInstance().speakRequest(speak);
+                recordDialog.show();
+
+            }
+            @Override
+            public void onNothingSelected() {
+            }
+        });
+
     }
 
     /**
@@ -864,6 +944,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                                     .addOnCancelListener(new BaseDialog.OnCancelListener() {
                                         @Override
                                         public void onCancel(BaseDialog dialog) {
+                                            interpretationDialog.dismiss();
                                             BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
                                         }
                                     });
@@ -895,6 +976,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                             referenceDialog.addOnCancelListener(new BaseDialog.OnCancelListener() {
                                 @Override
                                 public void onCancel(BaseDialog dialog) {
+                                    referenceDialog.dismiss();
                                     BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
                                 }
                             });
@@ -927,6 +1009,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
         lineChartManager = null;
         interpretationDialog = null;
         referenceDialog = null;
+        recordDialog = null;
         firstTab.clearOnTabSelectedListeners();
         firstTab.removeAllTabs();
 //        secondTab.clearOnTabSelectedListeners();

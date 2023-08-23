@@ -30,11 +30,13 @@ public class LineChartManager {
     private YAxis rightAxis;  //右边Y轴
     private XAxis xAxis;      //X轴
 
+
     public LineChartManager(LineChart mLineChart) {
         this.lineChart = mLineChart;
         leftAxis = lineChart.getAxisLeft();
         rightAxis = lineChart.getAxisRight();
         xAxis = lineChart.getXAxis();
+
     }
 
     /**
@@ -93,11 +95,16 @@ public class LineChartManager {
         xAxis.setAxisLineWidth(1.0f);
         xAxis.setAxisLineColor(Color.parseColor("#d5d5d5"));
 
+
+
         //保证Y轴从0开始，不然会上移一点
         leftAxis.setAxisMinimum(0f);
         // 显示数字但不显示线
         leftAxis.setDrawAxisLine(true);
         leftAxis.setTextColor(Color.parseColor("#d5d5d5"));
+
+        //置图表中最高值的顶部间距(占总轴范围的百分比)，与轴上的最高值相比。
+//        leftAxis.setSpaceTop(100f);
 
         leftAxis.setDrawGridLines(true);
 //        设置网格为虚线
@@ -127,8 +134,8 @@ public class LineChartManager {
         lineDataSet.setDrawCircleHole(false);
         lineDataSet.setValueTextSize(15f);
 
-        // 不显示具体值
-        lineDataSet.setDrawValues(true);
+        // 是否显示具体值
+        lineDataSet.setDrawValues(false);
 
 //        lineDataSet.setHighlightEnabled(false);
         //设置折线图填充

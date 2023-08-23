@@ -68,13 +68,18 @@ public class OnlineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         contentHolder.company.setText(list.get(position).getInstitutionName());
 //        // 交叉淡入的方式显示占位符，避免占位符还能显示。
         DrawableCrossFadeFactory factory = new DrawableCrossFadeFactory.Builder().setCrossFadeEnabled(true).build();
-        GlideApp.with(context)
-                .load(list.get(position).getDoctorUrl())
-                .skipMemoryCache(true)//禁用内存缓存功能
-                .diskCacheStrategy(DiskCacheStrategy.NONE)//不缓存任何内容
-                .transition(DrawableTransitionOptions.withCrossFade(factory))
-                .transform(new RoundedCorners((int) context.getResources().getDimension(R.dimen.dp_10)))
-                .into(contentHolder.icon);
+        if ("".equals(list.get(position).getDoctorUrl()) || list.get(position).getDoctorUrl() == null){
+            contentHolder.icon.setImageDrawable(context.getResources().getDrawable(R.drawable.default_doctor));
+        } else {
+            GlideApp.with(context)
+                    .load(list.get(position).getDoctorUrl())
+                    .skipMemoryCache(true)//禁用内存缓存功能
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)//不缓存任何内容
+                    .transition(DrawableTransitionOptions.withCrossFade(factory))
+//                .error(R.mipmap.default_doctor)
+                    .transform(new RoundedCorners((int) context.getResources().getDimension(R.dimen.dp_10)))
+                    .into(contentHolder.icon);
+        }
         contentHolder.item.setOnClickListener(v -> listener.onItemClick(list.get(position), position));
         if (list.get(position).isStartVoice()){
             contentHolder.yy.setVisibility(View.VISIBLE);

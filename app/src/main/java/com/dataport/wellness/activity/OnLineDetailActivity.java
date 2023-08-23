@@ -117,13 +117,19 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
 
     private void initData() {
         DrawableCrossFadeFactory factory = new DrawableCrossFadeFactory.Builder().setCrossFadeEnabled(true).build();
-        GlideApp.with(this)
-                .load(data.getDoctorUrl())
-                .skipMemoryCache(true)//禁用内存缓存功能
-                .diskCacheStrategy(DiskCacheStrategy.NONE)//不缓存任何内容
-                .transition(DrawableTransitionOptions.withCrossFade(factory))
-                .transform(new RoundedCorners((int) this.getResources().getDimension(R.dimen.dp_10)))
-                .into(head);
+        if ("".equals(data.getDoctorUrl()) || data.getDoctorUrl() == null){
+            head.setImageResource(R.drawable.default_doctor);
+        } else {
+            GlideApp.with(this)
+                    .load(data.getDoctorUrl())
+                    .skipMemoryCache(true)//禁用内存缓存功能
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)//不缓存任何内容
+//                    .error(R.mipmap.default_doctor)
+                    .transition(DrawableTransitionOptions.withCrossFade(factory))
+                    .transform(new RoundedCorners((int) this.getResources().getDimension(R.dimen.dp_10)))
+                    .into(head);
+        }
+
         docName.setText(data.getDoctorName());
         docCompany.setText("机构：" + data.getInstitutionName());
         docDep.setText("科室：" + data.getDeptName());

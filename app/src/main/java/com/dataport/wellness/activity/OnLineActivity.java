@@ -51,6 +51,7 @@ import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.sunfusheng.marqueeview.MarqueeView;
 import com.tencent.qcloud.tuicore.TUILogin;
 import com.tencent.qcloud.tuicore.interfaces.TUICallback;
+import com.tencent.qcloud.tuicore.interfaces.TUILoginListener;
 import com.tencent.qcloud.tuikit.TUICommonDefine;
 import com.tencent.qcloud.tuikit.tuicallengine.TUICallDefine;
 import com.tencent.qcloud.tuikit.tuicallengine.TUICallEngine;
@@ -88,16 +89,38 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
     private String handleType = "";
     private int delay = 0;
     private LoadingDialog mWaitDialog;
-    private TUILogin tuiLogin;
+    //private TUILogin tuiLogin;
     private GridLayoutManager contentManger;
     private List<String> messages = new ArrayList<>();
 
     private TUICallback tuiCallback;
+
+    //设置对登录结果的监听器
+    private TUILoginListener mLoginListener = new TUILoginListener() {
+        @Override
+        public void onKickedOffline() {
+            super.onKickedOffline();
+            Log.i(TAG, "You have been kicked off the line. Please login again!");
+            logout();
+            // TODO: 2023/8/20 如何处理更优
+            Toast.makeText(getApplicationContext(), "账号在其他地方登录了,请重新进入！", Toast.LENGTH_SHORT).show();
+            finish();
+
+        }
+
+        @Override
+        public void onUserSigExpired() {
+            super.onUserSigExpired();
+            Log.i(TAG, "Your user signature information has expired");
+            logout();
+        }
+    };
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_online);
         initView();
+        //initData();
         contentManger = new GridLayoutManager(getApplicationContext(), 2);
         contentManger.setOrientation(GridLayoutManager.VERTICAL);
         contentRv.setLayoutManager(contentManger);
@@ -112,6 +135,11 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
         });
         onlineAdapter.setYyClickListener((data, pos) -> getIMDoctor(binderId, data.getId(), "3"));
         onlineAdapter.setSpClickListener((data, pos) -> getIMDoctor(binderId, data.getId(), "4"));
+
+    }
+
+    private void initData(){
+        TUICallEngine.createInstance(getApplicationContext()).addObserver(observer);
     }
 
     private void initView() {
@@ -166,6 +194,11 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
             Log.i(TAG, "onCallEnd!");
             turnOff(type);
         }
+
+        @Override
+        public void onCallCancelled(String callerId) {
+            Log.d("zcg", "通话取消");
+        }
     };
 
     private void turnOn(String serviceCode) {
@@ -199,6 +232,7 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
         TUICallEngine.createInstance(getApplicationContext()).hangup(new TUICommonDefine.Callback() {
             @Override
             public void onSuccess() {
+
                 Log.i(TAG, "hangup!");
             }
 
@@ -345,23 +379,8 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
         if (!mWaitDialog.isShowing()) {
             mWaitDialog.show();
         }
-        //设置对登录结果的监听器
-//        TUILoginListener mLoginListener = new TUILoginListener() {
-//            @Override
-//            public void onKickedOffline() {
-//                super.onKickedOffline();
-//                Log.i(TAG, "You have been kicked off the line. Please login again!");
-//                //logout();
-//            }
-//
-//            @Override
-//            public void onUserSigExpired() {
-//                super.onUserSigExpired();
-//                Log.i(TAG, "Your user signature information has expired");
-//                //logout();
-//            }
-//        };
-//        TUILogin.addLoginListener(mLoginListener);
+
+        TUILogin.addLoginListener(mLoginListener);
         tuiCallback= new TUICallback() {
             @Override
             public void onSuccess() {
@@ -377,7 +396,7 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
             }
         };
         //登录
-        tuiLogin.login(getApplicationContext(),
+        TUILogin.login(getApplicationContext(),
                 1400634482,     // 请替换为步骤一取到的 SDKAppID
                 userId,        // 请替换为您的 UserID
                 userSig,  // 您可以在控制台中计算一个 UserSig 并填在这个位置
@@ -516,25 +535,8 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        pageNum = 0;
-        getOnlineDoctor(1);
-        BotMessageListener.getInstance().addCallback(this);
-        TUICallEngine.createInstance(getApplicationContext()).addObserver(observer);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        BotMessageListener.getInstance().clearCallback();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        tuiLogin.logout(new TUICallback() {
+    private void logout(){
+        TUILogin.logout(new TUICallback() {
             @Override
             public void onSuccess() {
                 Log.i(TAG, "onSuccess: tui logout success");
@@ -545,12 +547,38 @@ public class OnLineActivity extends BaseActivity implements IBotIntentCallback {
                 Log.i(TAG, "onError: tui logout error:" + errorMessage);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        pageNum = 0;
+        getOnlineDoctor(1);
+        Log.d("zcg", "onResume");
+        BotMessageListener.getInstance().addCallback(this);
+        TUICallEngine.createInstance(getApplicationContext()).addObserver(observer);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("zcg", "onPause");
+        BotMessageListener.getInstance().clearCallback();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        TUILogin.removeLoginListener(mLoginListener);
+        logout();
+        TUICallEngine.createInstance(getApplicationContext()).removeObserver(observer);
         TUICallEngine.destroyInstance();
         ivQr=null;
         tuiCallback=null;
         observer=null;
-        tuiLogin = null;
+        //tuiLogin = null;
         doctorList = null;
+        mLoginListener = null;
         onlineAdapter = null;
         doctor = null;
         contentRv = null;
