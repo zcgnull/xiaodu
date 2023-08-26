@@ -83,13 +83,13 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
     private LineChart lineChart;
     private TextView qs, jl;
     private TextView noBind;
-    private LinearLayout ln_env_device;
+//    private LinearLayout ln_env_device;
     //    private LinearLayout ln_show;
 //
 //    private LinearLayout ln_show_left;
 //
 //    private LinearLayout ln_show_right;
-    private LinearLayout ln_env_device1;
+//    private LinearLayout ln_env_device1;
     private ImageView ivQr;
 
     private List<String> dateTabs = new ArrayList<>();
@@ -121,8 +121,8 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
         findViewById(R.id.ln_back1).setOnClickListener(v -> finish());
         rlSuccess = findViewById(R.id.rl_success);
         rlFail = findViewById(R.id.rl_fail);
-        ln_env_device = findViewById(R.id.ln_env_device);
-        ln_env_device1 = findViewById(R.id.ln_env_device1);
+//        ln_env_device = findViewById(R.id.ln_env_device);
+//        ln_env_device1 = findViewById(R.id.ln_env_device1);
 //        ln_show=findViewById(R.id.ll_show);
 //        ln_show_left=findViewById(R.id.ll_show_left);
 //        ln_show_right=findViewById(R.id.ll_show_right);
@@ -180,18 +180,18 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
 
         firstTab = findViewById(R.id.first_tab);
         //环境监测
-        ln_env_device.setOnClickListener(v -> {
-            Intent deviceEnvIntent = new Intent(DeviceActivity.this, DeviceEnvActivity.class);
-            deviceEnvIntent.putExtra("userId", userId);
-            deviceEnvIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            startActivity(deviceEnvIntent);
-        });
-        ln_env_device1.setOnClickListener(v -> {
-            Intent deviceEnvIntent = new Intent(DeviceActivity.this, DeviceEnvActivity.class);
-            deviceEnvIntent.putExtra("userId", userId);
-            deviceEnvIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            startActivity(deviceEnvIntent);
-        });
+//        ln_env_device.setOnClickListener(v -> {
+//            Intent deviceEnvIntent = new Intent(DeviceActivity.this, DeviceEnvActivity.class);
+//            deviceEnvIntent.putExtra("userId", userId);
+//            deviceEnvIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//            startActivity(deviceEnvIntent);
+//        });
+//        ln_env_device1.setOnClickListener(v -> {
+//            Intent deviceEnvIntent = new Intent(DeviceActivity.this, DeviceEnvActivity.class);
+//            deviceEnvIntent.putExtra("userId", userId);
+//            deviceEnvIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//            startActivity(deviceEnvIntent);
+//        });
         firstTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -213,34 +213,42 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                     case "1":
                         qs.setText("血压趋势");
                         jl.setText("血压记录");
+                        BotSdk.getInstance().speakRequest("血压");
                         break;
                     case "2":
                         qs.setText("血糖趋势");
                         jl.setText("血糖记录");
+                        BotSdk.getInstance().speakRequest("血糖");
                         break;
                     case "3":
                         qs.setText("血酮趋势");
                         jl.setText("血酮记录");
+                        BotSdk.getInstance().speakRequest("血酮");
                         break;
                     case "4":
                         qs.setText("尿酸趋势");
                         jl.setText("尿酸记录");
+                        BotSdk.getInstance().speakRequest("尿酸");
                         break;
                     case "5":
                         qs.setText("血氧趋势");
                         jl.setText("血氧记录");
+                        BotSdk.getInstance().speakRequest("血氧");
                         break;
                     case "6":
                         qs.setText("心率趋势");
                         jl.setText("心率记录");
+                        BotSdk.getInstance().speakRequest("心率");
                         break;
                     case "7":
                         qs.setText("动脉硬化趋势");
                         jl.setText("动脉硬化记录");
+                        BotSdk.getInstance().speakRequest("动脉硬化");
                         break;
                     default:
                         qs.setText("无");
                         jl.setText("无");
+                        BotSdk.getInstance().speakRequest("无");
                         break;
                 }
                 if (null != thirdTab.getTabAt(0)) {
@@ -678,7 +686,7 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
     @Override
     protected void onResume() {
         super.onResume();
-        getDeviceEnvCount(userId);
+        //getDeviceEnvCount(userId);
     }
 
     private void getDeviceContentPage(String dataTypeCode, String beginDate, String endDate, int type) {//type:1代表刷新2代表加载

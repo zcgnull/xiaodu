@@ -8,10 +8,13 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.baidu.duer.bot.BotMessageProtocol;
 import com.baidu.duer.botsdk.BotIntent;
+import com.baidu.duer.botsdk.BotSdk;
 import com.dataport.wellness.R;
 import com.dataport.wellness.adapter.DeviceEnvAdapter;
 import com.dataport.wellness.api.health.DeviceEnvApi;
+import com.dataport.wellness.api.health.DeviceEnvCountApi;
 import com.dataport.wellness.api.health.DeviceEnvProcessApi;
 import com.dataport.wellness.botsdk.BotMessageListener;
 import com.dataport.wellness.botsdk.IBotIntentCallback;
@@ -79,7 +82,27 @@ public class DeviceEnvActivity extends BaseActivity implements IBotIntentCallbac
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
         warnList = null;
+    }
+
+    /**
+     * 获取用户未处理报警数量
+     *
+     * @param userId 用户主键
+     */
+    private void getDeviceEnvCount(Long userId) {
+        EasyHttp.get(this)
+                .api(new DeviceEnvCountApi(userId))
+                .request(new HttpCallback<HttpData<DeviceEnvCountApi.Bean>>(this) {
+                    @Override
+                    public void onSucceed(HttpData<DeviceEnvCountApi.Bean> result) {
+                        if (result.getCode().equals("00000")) {
+                            BotSdk.getInstance().speakRequest("您有" + result.getData().getNum() + "个未处理的告警，请及时处理。");
+                        }
+
+                    }
+                });
     }
 
     /**
@@ -104,6 +127,7 @@ public class DeviceEnvActivity extends BaseActivity implements IBotIntentCallbac
                                     noData.setVisibility(View.GONE);
                                     warnList = result.getData().getWarnList();
                                 }
+                                getDeviceEnvCount(userId);
                             } else {
                                 refreshLayout.finishLoadMore();
                                 if (null == result.getData().getWarnList() || result.getData().getWarnList().size() == 0) {

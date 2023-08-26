@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 
 import com.baidu.duer.bot.BotMessageProtocol;
 import com.baidu.duer.bot.directive.payload.JsonUtil;
+import com.baidu.duer.bot.directive.payload.UiControlPayload;
 import com.baidu.duer.bot.event.payload.LinkClickedEventPayload;
 import com.baidu.duer.botsdk.BotIntent;
 import com.baidu.duer.botsdk.BotSdk;
@@ -377,7 +378,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 BotSdk.getInstance().speakRequest("当前时间" + tvDate.getText().toString() + tvTime.getText().toString());
                 break;
             case R.id.ln_wellness:
-                toModel(BotConstants.OPEN_WELL_NESS_URL);
+                // TODO: 2023/8/26
+//                toModel(BotConstants.OPEN_WELL_NESS_URL);
+                intent = new Intent(this, DeviceEnvActivity.class);
+                intent.putExtra("userId", userId);
+                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
                 break;
             case R.id.ln_use_medical:
 //                toModel(BotConstants.OPEN_MEDICATION_URL);
@@ -461,7 +467,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 activityIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(activityIntent);
             } else if (SlotsUtil.hasSlot(intent.slots, "app_home_wellness")) {
-                toModel(BotConstants.OPEN_WELL_NESS_URL);
+                // TODO: 2023/8/26
+                activityIntent = new Intent(this, DeviceEnvActivity.class);
+                activityIntent.putExtra("userId", userId);
+                activityIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(activityIntent);
+//                toModel(BotConstants.OPEN_WELL_NESS_URL);
             } else if (SlotsUtil.hasSlot(intent.slots, "app_home_doctor")) {
                 toModel(BotConstants.OPEN_FAMILY_DOCTOR_URL);
             } else if (SlotsUtil.hasSlot(intent.slots, "app_home_consultation")) {
