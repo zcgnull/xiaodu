@@ -1,6 +1,7 @@
 package com.dataport.wellness.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -24,8 +25,10 @@ import com.hjq.http.EasyHttp;
 import com.hjq.http.listener.HttpCallback;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -76,6 +79,41 @@ public class DeviceEnvActivity extends BaseActivity implements IBotIntentCallbac
                 "",
                  data.getRecordId(),
                 "2"));//标记已读
+        adapter.setItemClickListener(pos -> {
+            BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
+            String speak = "";
+            DeviceEnvApi.Bean.DeviceEnvListDTO deviceEnvListDTO = warnList.get(pos);
+            String time = deviceEnvListDTO.getAlarmTime();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            try {
+                Date date = sdf.parse(time);
+                Calendar calender = Calendar.getInstance();
+                calender.setTime(date);
+                time = calender.get(Calendar.YEAR) + "年" + (calender.get(Calendar.MONTH) + 1) + "月" + calender.get(Calendar.DATE) + "日" + calender.get(Calendar.HOUR_OF_DAY) + "点" + calender.get(Calendar.MINUTE) + "分" + calender.get(Calendar.SECOND) + "秒";
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            speak += "家庭成员：" + deviceEnvListDTO.getBinderName() +
+                    "，告警时间：" + time +
+                    "，于" + deviceEnvListDTO.getAddress() + deviceEnvListDTO.getInstallationPositionName() +
+                    "，发生了" + deviceEnvListDTO.getEquipmentName() + deviceEnvListDTO.getAlarmTypeName();
+            if ("1".equals(deviceEnvListDTO.getProcessState())){
+                speak += "，状态：" + deviceEnvListDTO.getProcessStateName();
+            } else {
+                String processTime = deviceEnvListDTO.getProcessTime();
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                try {
+                    Date date = sdf.parse(time);
+                    Calendar calender = Calendar.getInstance();
+                    calender.setTime(date);
+                    processTime = calender.get(Calendar.YEAR) + "年" + (calender.get(Calendar.MONTH) + 1) + "月" + calender.get(Calendar.DATE) + "日" + calender.get(Calendar.HOUR_OF_DAY) + "点" + calender.get(Calendar.MINUTE) + "分" + calender.get(Calendar.SECOND) + "秒";
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                speak += ",已于" + processTime + "处理";
+            }
+            BotSdk.getInstance().speakRequest(speak);
+        });
         getDeviceEnvList(1);
     }
 
@@ -98,6 +136,7 @@ public class DeviceEnvActivity extends BaseActivity implements IBotIntentCallbac
                     @Override
                     public void onSucceed(HttpData<DeviceEnvCountApi.Bean> result) {
                         if (result.getCode().equals("00000")) {
+                            BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
                             BotSdk.getInstance().speakRequest("您有" + result.getData().getNum() + "个未处理的告警，请及时处理。");
                         }
 
