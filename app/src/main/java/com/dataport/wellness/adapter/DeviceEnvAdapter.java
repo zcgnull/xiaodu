@@ -24,6 +24,7 @@ public class DeviceEnvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
 
     private OnFlagReadClickListener flagReadClickListener;
+    private OnItemClickListener itemClickListener;
 
     public DeviceEnvAdapter(Context context) {
         this.context = context;
@@ -39,16 +40,22 @@ public class DeviceEnvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         this.flagReadClickListener = flagReadClickListener;
     }
 
+    public void setItemClickListener(OnItemClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
+    }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(context).inflate(R.layout.item_device_env, parent, false);
+
         return new ContentHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ContentHolder contentHolder = (ContentHolder) holder;
+        contentHolder.llwarn.setOnClickListener(v -> {itemClickListener.OnItemClickListener(position);});
 //        contentHolder.deviceName.setText(list.get(position).getEquipmentName());
         contentHolder.alarmAddress.setText(list.get(position).getAddress() + list.get(position).getInstallationPositionName());
         contentHolder.alarmTime.setText(list.get(position).getAlarmTime());
@@ -66,11 +73,13 @@ public class DeviceEnvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         contentHolder.btnFlagRead.setOnClickListener(v -> flagReadClickListener.OnFlagReadClickListener(list.get(position), position));
     }
 
-
     public interface OnFlagReadClickListener {
         void OnFlagReadClickListener(DeviceEnvApi.Bean.DeviceEnvListDTO data, int pos);
     }
 
+    public interface OnItemClickListener {
+        void OnItemClickListener(int pos);
+    }
 
     @Override
     public int getItemCount() {
@@ -80,6 +89,7 @@ public class DeviceEnvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public class ContentHolder extends RecyclerView.ViewHolder {
 //        public TextView deviceName;
 
+        public LinearLayout llwarn;
         public TextView binderName;
         public TextView alarmAddress;
         public TextView alarmTime;
@@ -92,6 +102,7 @@ public class DeviceEnvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         public ContentHolder(View itemView) {
             super(itemView);
+            llwarn = itemView.findViewById(R.id.ll_warn);
             processState=itemView.findViewById(R.id.process_state);
 //            deviceName = itemView.findViewById(R.id.device_name);
             binderName = itemView.findViewById(R.id.binderName);

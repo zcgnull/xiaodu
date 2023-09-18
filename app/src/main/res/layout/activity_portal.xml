@@ -97,7 +97,7 @@
 
     <TextView
         android:id="@+id/portal_title2"
-        android:layout_width="261px"
+        android:layout_width="wrap_content"
         android:layout_height="37px"
         android:layout_marginStart="989px"
         android:layout_marginBottom="33px"

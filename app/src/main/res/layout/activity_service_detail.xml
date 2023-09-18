@@ -97,11 +97,19 @@
                     android:layout_gravity="center_horizontal"
                     android:orientation="horizontal">
 
-                    <com.youth.banner.Banner
-                        android:id="@+id/banner"
-                        android:layout_width="400dp"
-                        android:layout_height="200dp"
-                        app:banner_radius="@dimen/dp_10" />
+                    <LinearLayout
+                        android:layout_width="@dimen/dp_400"
+                        android:layout_height="@dimen/dp_200">
+
+                        <com.youth.banner.Banner
+                            android:id="@+id/banner"
+                            android:layout_marginLeft="@dimen/dp_70"
+                            android:layout_width="@dimen/dp_200"
+                            android:layout_height="@dimen/dp_200"
+                            app:banner_radius="@dimen/dp_10"/>
+
+                    </LinearLayout>
+
 
                     <LinearLayout
                         android:layout_width="wrap_content"

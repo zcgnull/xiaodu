@@ -22,7 +22,9 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.baidu.duer.bot.BotMessageProtocol;
+import com.baidu.duer.botsdk.BotIntent;
 import com.baidu.duer.botsdk.BotSdk;
+import com.baidu.duer.botsdk.UiContextPayload;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.dataport.wellness.R;
 import com.dataport.wellness.activity.dialog.BaseDialog;
@@ -38,7 +40,10 @@ import com.dataport.wellness.api.health.DeviceEnvCountApi;
 import com.dataport.wellness.api.health.EquipmentListApi;
 import com.dataport.wellness.api.health.IndicatorInterpretationApi;
 import com.dataport.wellness.api.health.SignTypeApi;
+import com.dataport.wellness.api.old.ServiceTabBean;
 import com.dataport.wellness.api.smalldu.GuideDataApi;
+import com.dataport.wellness.botsdk.BotMessageListener;
+import com.dataport.wellness.botsdk.IBotIntentCallback;
 import com.dataport.wellness.http.HttpData;
 import com.dataport.wellness.http.HttpInfo;
 import com.dataport.wellness.http.HttpIntData;
@@ -68,12 +73,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import q.rorbin.badgeview.Badge;
 import q.rorbin.badgeview.QBadgeView;
 
-public class DeviceActivity extends BaseActivity implements View.OnClickListener {
+public class DeviceActivity extends BaseActivity implements View.OnClickListener, IBotIntentCallback {
 
     private TabLayout firstTab, thirdTab;
     //private TabLayout secondTab;
@@ -83,13 +89,13 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
     private LineChart lineChart;
     private TextView qs, jl;
     private TextView noBind;
-    private LinearLayout ln_env_device;
+//    private LinearLayout ln_env_device;
     //    private LinearLayout ln_show;
 //
 //    private LinearLayout ln_show_left;
 //
 //    private LinearLayout ln_show_right;
-    private LinearLayout ln_env_device1;
+//    private LinearLayout ln_env_device1;
     private ImageView ivQr;
 
     private List<String> dateTabs = new ArrayList<>();
@@ -121,8 +127,8 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
         findViewById(R.id.ln_back1).setOnClickListener(v -> finish());
         rlSuccess = findViewById(R.id.rl_success);
         rlFail = findViewById(R.id.rl_fail);
-        ln_env_device = findViewById(R.id.ln_env_device);
-        ln_env_device1 = findViewById(R.id.ln_env_device1);
+//        ln_env_device = findViewById(R.id.ln_env_device);
+//        ln_env_device1 = findViewById(R.id.ln_env_device1);
 //        ln_show=findViewById(R.id.ll_show);
 //        ln_show_left=findViewById(R.id.ll_show_left);
 //        ln_show_right=findViewById(R.id.ll_show_right);
@@ -180,18 +186,18 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
 
         firstTab = findViewById(R.id.first_tab);
         //环境监测
-        ln_env_device.setOnClickListener(v -> {
-            Intent deviceEnvIntent = new Intent(DeviceActivity.this, DeviceEnvActivity.class);
-            deviceEnvIntent.putExtra("userId", userId);
-            deviceEnvIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            startActivity(deviceEnvIntent);
-        });
-        ln_env_device1.setOnClickListener(v -> {
-            Intent deviceEnvIntent = new Intent(DeviceActivity.this, DeviceEnvActivity.class);
-            deviceEnvIntent.putExtra("userId", userId);
-            deviceEnvIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            startActivity(deviceEnvIntent);
-        });
+//        ln_env_device.setOnClickListener(v -> {
+//            Intent deviceEnvIntent = new Intent(DeviceActivity.this, DeviceEnvActivity.class);
+//            deviceEnvIntent.putExtra("userId", userId);
+//            deviceEnvIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//            startActivity(deviceEnvIntent);
+//        });
+//        ln_env_device1.setOnClickListener(v -> {
+//            Intent deviceEnvIntent = new Intent(DeviceActivity.this, DeviceEnvActivity.class);
+//            deviceEnvIntent.putExtra("userId", userId);
+//            deviceEnvIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//            startActivity(deviceEnvIntent);
+//        });
         firstTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -213,34 +219,42 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                     case "1":
                         qs.setText("血压趋势");
                         jl.setText("血压记录");
+                        BotSdk.getInstance().speakRequest("血压");
                         break;
                     case "2":
                         qs.setText("血糖趋势");
                         jl.setText("血糖记录");
+                        BotSdk.getInstance().speakRequest("血糖");
                         break;
                     case "3":
                         qs.setText("血酮趋势");
                         jl.setText("血酮记录");
+                        BotSdk.getInstance().speakRequest("血酮");
                         break;
                     case "4":
                         qs.setText("尿酸趋势");
                         jl.setText("尿酸记录");
+                        BotSdk.getInstance().speakRequest("尿酸");
                         break;
                     case "5":
                         qs.setText("血氧趋势");
                         jl.setText("血氧记录");
+                        BotSdk.getInstance().speakRequest("血氧");
                         break;
                     case "6":
                         qs.setText("心率趋势");
                         jl.setText("心率记录");
+                        BotSdk.getInstance().speakRequest("心率");
                         break;
                     case "7":
                         qs.setText("动脉硬化趋势");
                         jl.setText("动脉硬化记录");
+                        BotSdk.getInstance().speakRequest("动脉硬化");
                         break;
                     default:
                         qs.setText("无");
                         jl.setText("无");
+                        BotSdk.getInstance().speakRequest("无");
                         break;
                 }
                 if (null != thirdTab.getTabAt(0)) {
@@ -561,6 +575,8 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                                 getGuideData("noSign");
                                 rlSuccess.setVisibility(View.GONE);
                             }
+
+                            initClientContext(); //注册意图
                         } else {
                             getGuideData("noSign");
                             rlSuccess.setVisibility(View.GONE);
@@ -678,7 +694,14 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
     @Override
     protected void onResume() {
         super.onResume();
-        getDeviceEnvCount(userId);
+        BotMessageListener.getInstance().addCallback(this);
+        //getDeviceEnvCount(userId);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        BotMessageListener.getInstance().clearCallback();
     }
 
     private void getDeviceContentPage(String dataTypeCode, String beginDate, String endDate, int type) {//type:1代表刷新2代表加载
@@ -993,6 +1016,57 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
         } else if ("1".equals(type)) {
             view.setImageResource(R.mipmap.arrow_up_red);
         }
+    }
+
+    /**
+     * 注册UIControl， UIControl就是根据界面元素自定义语音指令
+     */
+    private void initClientContext() {
+        UiContextPayload payload = new UiContextPayload();
+//        //翻页
+//        payload.addHyperUtterance(
+//                BotConstants.VOICE_PAGE_URL,
+//                null,
+//                BotConstants.UiControlType.STEP,
+//                null);
+
+        //切换tab
+        HashMap<String, String> params = null;
+        for (SignTypeApi.Bean.ListDTO signTab : signTabs) {
+            params = new HashMap<>();
+            params.put("name", signTab.getDataTypeName());
+            payload.addHyperUtterance(
+                    BotConstants.VOICE_TAB_URL,
+                    null,
+                    BotConstants.UiControlType.TAB,
+                    params);
+        }
+
+        BotSdk.getInstance().updateUiContext(payload);
+    }
+
+    @Override
+    public void handleIntent(BotIntent intent, String customData) {
+
+    }
+
+    /**
+     * 云端返回的UIContext匹配结果
+     *
+     * @param url      自定义交互描述中的url
+     * @param paramMap 对于系统内建类型，参数列表。参数就是从query中通过分词取得的关键词。
+     */
+    @Override
+    public void onClickLink(String url, HashMap<String, String> paramMap) {
+        Log.d("zcg", "本地意图");
+        if (BotConstants.VOICE_TAB_URL.equals(url)) {
+            firstTab.selectTab(firstTab.getTabAt(Integer.parseInt(paramMap.get("index_da"))));
+        }
+    }
+
+    @Override
+    public void onHandleScreenNavigatorEvent(int event) {
+
     }
 
     @Override

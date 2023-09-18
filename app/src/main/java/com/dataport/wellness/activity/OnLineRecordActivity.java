@@ -1,5 +1,9 @@
 package com.dataport.wellness.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -54,7 +58,9 @@ public class OnLineRecordActivity extends BaseActivity implements IBotIntentCall
 
     private List<OnlineRecordApi.Bean.AdviceRecordListDTO> recordList = new ArrayList<>();
     private OnLineRecordAdapter adapter;
+    private FinishActivityRecevier mRecevier;
 
+    private int limit = 0; //是否限制时长
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,10 +87,14 @@ public class OnLineRecordActivity extends BaseActivity implements IBotIntentCall
         adapter.setAdviceListener((data, pos) -> {
             type = data.getServiceCode();
             delay = Integer.valueOf(data.getLimitDuration());
+            limit = Integer.valueOf(data.getIsLimit());
             getIMLogin(binderId, data.getDoctorId());
         });
         getOnlineRecord(1);
         TUICallEngine.createInstance(OnLineRecordActivity.this).addObserver(observer);
+        //注册广播
+        mRecevier = new FinishActivityRecevier();
+        registerFinishReciver();
     }
 
     @Override
@@ -93,6 +103,9 @@ public class OnLineRecordActivity extends BaseActivity implements IBotIntentCall
         TUICallEngine.createInstance(OnLineRecordActivity.this).removeObserver(observer);
         recordList=null;
         observer=null;
+        if (mRecevier != null) {
+            unregisterReceiver(mRecevier);
+        }
     }
 
     private TUICallObserver observer = new TUICallObserver() {
@@ -100,7 +113,9 @@ public class OnLineRecordActivity extends BaseActivity implements IBotIntentCall
         public void onCallBegin(TUICommonDefine.RoomId roomId, TUICallDefine.MediaType callMediaType, TUICallDefine.Role callRole) {
             Log.i(TAG, "onCallBegin!");
             turnOn(type);
-            statService(delay);
+            if (limit == 1){
+                statService(delay);
+            }
         }
 
         public void onCallEnd(TUICommonDefine.RoomId roomId, TUICallDefine.MediaType callMediaType, TUICallDefine.Role callRole, long totalTime) {
@@ -241,7 +256,21 @@ public class OnLineRecordActivity extends BaseActivity implements IBotIntentCall
     public void onHandleScreenNavigatorEvent(int event) {
 
     }
+    private class FinishActivityRecevier extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //根据需求添加自己需要关闭页面的action
+            if ("OnLineRecordActivity".equals(intent.getAction())) {
+                OnLineRecordActivity.this.finish();
+            }
+        }
+    }
 
+    private void registerFinishReciver() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("OnLineRecordActivity");
+        registerReceiver(mRecevier, intentFilter);
+    }
     @Override
     protected void onResume() {
         super.onResume();
@@ -253,4 +282,5 @@ public class OnLineRecordActivity extends BaseActivity implements IBotIntentCall
         super.onPause();
         BotMessageListener.getInstance().clearCallback();
     }
+
 }

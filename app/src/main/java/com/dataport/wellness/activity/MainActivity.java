@@ -1,7 +1,9 @@
 package com.dataport.wellness.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,6 +20,7 @@ import androidx.annotation.Nullable;
 
 import com.baidu.duer.bot.BotMessageProtocol;
 import com.baidu.duer.bot.directive.payload.JsonUtil;
+import com.baidu.duer.bot.directive.payload.UiControlPayload;
 import com.baidu.duer.bot.event.payload.LinkClickedEventPayload;
 import com.baidu.duer.botsdk.BotIntent;
 import com.baidu.duer.botsdk.BotSdk;
@@ -60,7 +63,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     private static final String TAG = "MainActivity";
     private MarqueeView marqueeView;
-    private TextView tvBinder, tvWeather, tvC, tvTime, tvDate, tvPlace, tvNoBind, tvNoAuth,companyName;
+    private TextView tvBinder, tvWeather, tvC, tvTime, tvDate, tvPlace, tvNoBind, tvNoAuth, companyName, versionName;
     private RelativeLayout rlSuccess, rlFail, rlFailSecond, mainBg, ln_speech;
     private ImageView ivQr;
     private long binderId;
@@ -86,7 +89,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         setTheme(R.style.AppTheme); // 设置为原主题
         setContentView(R.layout.activity_porttal_new);
         mainBg = findViewById(R.id.main_bg);
-        companyName=findViewById(R.id.company_name);
+        companyName = findViewById(R.id.company_name);
+        versionName = findViewById(R.id.version_name);
         rlSuccess = findViewById(R.id.rl_success);
         rlFail = findViewById(R.id.rl_fail);
         rlFailSecond = findViewById(R.id.rl_fail1);
@@ -131,11 +135,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         }
         List<String> messages = new ArrayList<>();
         messages.add("请试试对我说：“小度小度，呼叫家庭医生”");
-        messages.add("请试试对我说：“小度小度，打开线上医生”");
-        messages.add("请试试对我说：“小度小度，打开健康数据”");
-        messages.add("请试试对我说：“小度小度，呼叫服务中心”");
+        messages.add("请试试对我说：“小度小度，打开线上问诊”");
+        messages.add("请试试对我说：“小度小度，打开健康档案”");
         messages.add("请试试对我说：“小度小度，打开养老服务”");
         messages.add("请试试对我说：“小度小度，打开亲朋好友”");
+        messages.add("请试试对我说：“小度小度，打开环境监测”");
         marqueeView.startWithList(messages);
         marqueeView.setOnItemClickListener((position, textView) -> {
             BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
@@ -158,6 +162,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                                 String token = sharedPreferences.getString("XD_TOKEN", null);
                                 Log.d(TAG, "SharedPreferencesToken: " + token);
                                 companyName.setText(result.getData().getTenantName());
+                                versionName.setText("V" + getVersionName(MainActivity.this));
                                 BotConstants.JK_URL = result.getData().getHealthUrl();
                                 BotConstants.YZ_URL = result.getData().getOldUrl();
                                 BotConstants.BaiduSpeechAppId = result.getData().getBaiduSpeechConfig().getAppId();
@@ -235,6 +240,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     private void getPerson(String sn) {
+        // TODO: 2023/9/11 存储人员binderId，下次打开时默认使用
         EasyHttp.get(this)
                 .api(new QueryBinderApi(sn))
                 .request(new HttpCallback<HttpData<QueryBinderApi.Bean>>(this) {
@@ -244,13 +250,38 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                         if (result.getCode().equals("00000")) {
                             binderList = result.getData().getList();
                             if (binderList.size() > 0) {
-                                rlSuccess.setVisibility(View.VISIBLE);
-                                tvBinder.setText(binderList.get(0).getBinderName() + "(" + binderList.get(0).getRelation() + ")");
-                                binderId = binderList.get(0).getBinderId();
-                                userId = binderList.get(0).getUserId();
-                                binderIdCard = binderList.get(0).getBinderIdcard();
-                                String getAddress = binderList.get(0).getBinderProvince() + binderList.get(0).getBinderCity() + binderList.get(0).getBinderDistrict() + binderList.get(0).getBinderAddress();
-                                String address = binderList.get(0).getBinderCity() + binderList.get(0).getBinderDistrict();
+                                boolean flag = true;
+                                String getAddress = "";
+                                String address = "";
+                                if (hasSettings("settings")){
+                                    //使用配置文件中指定的人
+                                    binderId = Long.parseLong(loadSettings("settings", "binderId", "0"));
+                                    for (int i = 0; i < binderList.size(); i++) {
+                                        QueryBinderApi.Bean.ListDTO listDTO = binderList.get(i);
+                                        if (listDTO.getBinderId() == binderId){
+                                            flag = false;
+                                            rlSuccess.setVisibility(View.VISIBLE);
+                                            tvBinder.setText(binderList.get(i).getBinderName() + "(" + binderList.get(i).getRelation() + ")");
+                                            binderId = binderList.get(i).getBinderId();
+                                            userId = binderList.get(i).getUserId();
+                                            binderIdCard = binderList.get(i).getBinderIdcard();
+                                            getAddress = binderList.get(i).getBinderProvince() + binderList.get(i).getBinderCity() + binderList.get(i).getBinderDistrict() + binderList.get(i).getBinderAddress();
+                                            address = binderList.get(i).getBinderCity() + binderList.get(i).getBinderDistrict();
+                                        }
+                                    }
+                                }
+
+                                if (flag){
+                                    //没有设置文件或设置中的人被删除时，创建或更新为默认第一个人。
+                                    saveSettings("settings", "binderId", String.valueOf(binderList.get(0).getBinderId()));
+                                    rlSuccess.setVisibility(View.VISIBLE);
+                                    tvBinder.setText(binderList.get(0).getBinderName() + "(" + binderList.get(0).getRelation() + ")");
+                                    binderId = binderList.get(0).getBinderId();
+                                    userId = binderList.get(0).getUserId();
+                                    binderIdCard = binderList.get(0).getBinderIdcard();
+                                    getAddress = binderList.get(0).getBinderProvince() + binderList.get(0).getBinderCity() + binderList.get(0).getBinderDistrict() + binderList.get(0).getBinderAddress();
+                                    address = binderList.get(0).getBinderCity() + binderList.get(0).getBinderDistrict();
+                                }
                                 tvPlace.setText(address);
                                 getWeatherAddress(getAddress);
                                 contentDirect();
@@ -377,7 +408,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 BotSdk.getInstance().speakRequest("当前时间" + tvDate.getText().toString() + tvTime.getText().toString());
                 break;
             case R.id.ln_wellness:
-                toModel(BotConstants.OPEN_WELL_NESS_URL);
+                // TODO: 2023/8/26
+//                toModel(BotConstants.OPEN_WELL_NESS_URL);
+                intent = new Intent(this, DeviceEnvActivity.class);
+                intent.putExtra("userId", userId);
+                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
                 break;
             case R.id.ln_use_medical:
 //                toModel(BotConstants.OPEN_MEDICATION_URL);
@@ -419,6 +455,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                         String address = binderList.get(position).getBinderCity() + binderList.get(position).getBinderDistrict();
                         tvPlace.setText(address);
                         getWeatherAddress(getAddress);
+                        //将binderId放入设置文件
+                        saveSettings("settings", "binderId", String.valueOf(binderId));
                     }
 
                     @Override
@@ -442,7 +480,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         payload.url = "dueros://8dcbd6d2-f434-3c9a-41d4-dde55b54a6ca/urlProxy?from=DBP_APK&token=0a5082003c7080bc2b9ed44d706f92f8";
         BotSdk.getInstance().uploadLinkClickedEvent(payload);*/
     }
-
+    /**
+     * 获取当前本地apk的版本名称
+     *
+     * @param mContext
+     * @return
+     */
+    public static String getVersionName(Context mContext) {
+        String versionName = "";
+        try {
+            //获取软件版本号，对应AndroidManifest.xml下android:versionCode
+            versionName = mContext.getPackageManager().
+                    getPackageInfo(mContext.getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return versionName;
+    }
     @Override
     public void handleIntent(BotIntent intent, String customData) {
         Intent activityIntent;
@@ -461,7 +515,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 activityIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(activityIntent);
             } else if (SlotsUtil.hasSlot(intent.slots, "app_home_wellness")) {
-                toModel(BotConstants.OPEN_WELL_NESS_URL);
+//                toModel(BotConstants.OPEN_WELL_NESS_URL);
+            } else if (SlotsUtil.hasSlot(intent.slots, "app_home_deviceenv")) {
+                activityIntent = new Intent(this, DeviceEnvActivity.class);
+                activityIntent.putExtra("userId", userId);
+                activityIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(activityIntent);
             } else if (SlotsUtil.hasSlot(intent.slots, "app_home_doctor")) {
                 toModel(BotConstants.OPEN_FAMILY_DOCTOR_URL);
             } else if (SlotsUtil.hasSlot(intent.slots, "app_home_consultation")) {
@@ -608,4 +667,45 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     public void onDialogStateChanged(DialogState dialogState) {
         Log.i("监听bot状态============", dialogState.name());
     }
+
+    /**
+     * 判度是否存在名为settingName的设置文件
+     * @param settingName
+     * @return
+     */
+    private boolean hasSettings(String settingName){
+        boolean isSettingsExist = false;
+        SharedPreferences sharedPreferences = getSharedPreferences(settingName, MODE_PRIVATE);
+        if (sharedPreferences != null) {
+            isSettingsExist = true;
+        }
+        return isSettingsExist;
+    }
+
+    /**
+     * 存储设置信息
+     * @param settingName 设置名
+     * @param key   key
+     * @param value value
+     */
+    private void saveSettings(String settingName, String key, String value) {
+        SharedPreferences sharedPreferences = getSharedPreferences(settingName, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(key, value);
+        editor.apply();
+    }
+
+    /**
+     * 读取设置信息
+     * @param settingName 设置名
+     * @param key  key
+     * @param defValue 默认value，没有对应value时使用
+     * @return
+     */
+    private String loadSettings(String settingName, String key, String defValue) {
+        SharedPreferences sharedPreferences = getSharedPreferences(settingName, MODE_PRIVATE);
+        return sharedPreferences.getString(key, defValue);
+    }
 }
+
+

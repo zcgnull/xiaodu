@@ -33,11 +33,13 @@ public class BotConstants {
 //    public static final String XD_URL = "http://10.20.1.13:48080/";
 //    public static final String XD_URL = "http://10.20.0.158:48080/";
 //    public static final String XD_URL = "http://172.20.3.112:8080/";
+//    public static final String XD_URL = " https://pleased-presumably-ladybird.ngrok-free.app/";
     public static final String XD_URL = "https://dueros.dataport.com.cn/";
     //websocket地址
-    public static final String WEB_SOCKET_URL = "wss://dueros.dataport.com.cn/";
-//    public static final String WEB_SOCKET_URL = "ws://10.20.1.13:48080/";
 //    public static final String WEB_SOCKET_URL = "wss://dueros.dataport.com.cn/";
+//    public static final String WEB_SOCKET_URL = "ws://10.20.1.13:48080/";
+//public static final String WEB_SOCKET_URL = "ws://127.0.0.1:48080/";
+    public static final String WEB_SOCKET_URL = "wss://dueros.dataport.com.cn/";
 
     /**
      * BotID和签名key ,可以在自己的技能控制台看到相关信息：https://dueros.baidu.com/dbp/main/console
@@ -52,6 +54,8 @@ public class BotConstants {
     // UIControl用到的路由常量
     public static final String CLICK_LOGIN_URL = "sdkdemo://clicklogin";
     public static final String CLICK_REGISTER_URL = "sdkdemo://clickregister";
+    public static final String VOICE_PAGE_URL = "sdkdemo://voicepage";
+    public static final String VOICE_TAB_URL = "sdkdemo://voicetab";
     public static final String SELETC_TEST_URL = "sdkdemo://selecttest/";
     public static final String INPUT_TEST_URL = "sdkdemo://inputtest/";
     // 课程表 or 日程表页面
@@ -106,7 +110,11 @@ public class BotConstants {
         public static final String LINK = "link";
         public static final String SELECT = "select";
         public static final String INPUT = "input";
+        public static final String TAB = "tab";
         public static final String BUTTON = "button";
+        public static final String PAGER = "pager";
+        public static final String STEP = "step";
+
     }
 
     /**

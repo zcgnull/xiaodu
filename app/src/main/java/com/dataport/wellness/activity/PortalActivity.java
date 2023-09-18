@@ -1,12 +1,15 @@
 package com.dataport.wellness.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,7 +38,6 @@ public class PortalActivity extends BaseActivity implements View.OnClickListener
     private ImageView imageDuer;
     private RecyclerView duerHelp;
     private EditText echoZone;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -51,6 +53,7 @@ public class PortalActivity extends BaseActivity implements View.OnClickListener
         orderBtn.setOnClickListener(this);
         deviceBtn.setOnClickListener(this);
         servicerBtn.setOnClickListener(this);
+
 
   /*     echoZone = findViewById(R.id.displayDemo);
         echoZone.setText("created");*/
@@ -143,6 +146,8 @@ public class PortalActivity extends BaseActivity implements View.OnClickListener
 
 
     }
+
+
 
     @Override
     public void onClickLink(String url, HashMap<String, String> paramMap) {

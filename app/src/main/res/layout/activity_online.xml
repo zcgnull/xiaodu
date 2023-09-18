@@ -11,13 +11,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="@dimen/dp_10"
-        >
+        android:visibility="gone">
 
         <RelativeLayout
             android:id="@+id/rl_top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dp_10">
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:layout_marginBottom="@dimen/dp_10">
 
             <LinearLayout
                 android:id="@+id/ln_back_online"
@@ -50,7 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="线上医生"
+                android:text="线上问诊"
                 android:textColor="#333333"
                 android:textSize="30sp"
                 android:textStyle="bold" />
@@ -209,7 +212,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="线上医生"
+                android:text="线上问诊"
                 android:textColor="#333333"
                 android:textSize="30sp"
                 android:textStyle="bold" />
