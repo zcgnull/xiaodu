@@ -73,6 +73,10 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 public class SpeechActivity extends BaseActivity implements EventListener, IDialogStateListener, IBotIntentCallback {
 
@@ -109,17 +113,20 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
             contentRv.scrollToPosition(msgList.size() - 1);
         }
     };
+    private ScheduledExecutorService mService;
+    private ScheduledFuture<?> scheduledFuture;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_speech);
+        mService = Executors.newScheduledThreadPool(1);
         sharedPreferences = getSharedPreferences("XD", MODE_PRIVATE);
         editor = sharedPreferences.edit();
         initPermission();
-
         asr = EventManagerFactory.create(this, "asr");
         asr.registerListener(this);
+
     }
 
     private void initView() {
@@ -160,7 +167,6 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
                             .setWidthAndHeight(0.5f, 0.5f) //百分比
                             .setListener((dialog, position, geekModel, QAModel) -> {
                                 //监听  position 选择的位置 geekModel 是否使用 极客模式 QAModel 问答模型
-                                Log.d("zcg", "点击了确认" + position + geekModel + QAModel);
                                 settingPos = position;
                                 msgType = msgTypeList.get(position).getValue();
                                 isJK = geekModel;
@@ -196,7 +202,7 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
     private void sendWebSocket(String params) {
         String sendMsg = "";
         EventBean eventBean = GsonFactory.getSingletonGson().fromJson(params, EventBean.class);
-        sendMsg = eventBean.getBest_result();
+        sendMsg = eventBean.getOrigin_result().getResult().getWord().get(0);
         if (isJK) {
             isAnswering = true;
             sendTv.setText(sendMsg);
@@ -404,6 +410,11 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
     protected void onDestroy() {
         super.onDestroy();
         Log.e(TAG, "`````````````````````````onDestroy");
+        if (scheduledFuture != null){
+            scheduledFuture.cancel(true);
+        }
+        mService.shutdown();
+        mService = null;
         editor.clear();
         sharedPreferences = null;
         messageDialog = null;
@@ -417,6 +428,7 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
         asr.unregisterListener(this);
         asr = null;
         closeConnect();
+
     }
 
     @Override
@@ -425,6 +437,13 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
         BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
         BotMessageListener.getInstance().clearCallback();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // TODO: 2023/9/4 可能会有问题
+        BotMessageListener.getInstance().addCallback(this);
     }
 
     //    -------------------------------------websocket------------------------------------------------
@@ -560,9 +579,23 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
 //        }
 //    };
 
+
     //    -------------------------------------语音识别------------------------------------------------
+    private String lastParams = ""; //最优临时结果，没有最后的结果时使用，大部分时候不会生效
     @Override
     public void onEvent(String name, String params, byte[] data, int offset, int length) {
+        Log.i("zcg", "    name : " + name);
+        statListener(5);
+        if (params != null){
+            Log.i("zcg", "   params：" + params);
+        }else {
+            Log.i("zcg", "params is null     " + lastParams);
+            if (!"".equals(lastParams)){
+                sendWebSocket(lastParams);
+                lastParams = "";
+            }
+        }
+
         String logTxt = "name: " + name;
         if (webSocketStatus) {
             if (name.equals(SpeechConstant.CALLBACK_EVENT_ASR_READY)) {
@@ -598,11 +631,18 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
                 if (params.contains("\"partial_result\"")) {
                     // 一句话的临时识别结果
                     logTxt += ", 临时识别结果：" + params;
+                    lastParams = params;
                     setTv(params);
                 } else if (params.contains("\"final_result\"")) {
                     // 一句话的最终识别结果
                     logTxt += ", 最终识别结果：" + params;
                     sendWebSocket(params);
+                    lastParams = "";
+                    if (scheduledFuture != null){
+                        if (!scheduledFuture.isDone()){
+                            scheduledFuture.cancel(true);
+                        }
+                    }
                 } else {
                     // 一般这里不会运行
                     logTxt += " ;params :" + params;
@@ -623,6 +663,26 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
         Log.i(TAG, "onEvent!" + logTxt);
     }
 
+    /**
+     * 没有更多内容后，结束监听
+     * @param delay 倒计时时间
+     */
+    private void statListener(int delay) {
+        if (scheduledFuture != null){
+            scheduledFuture.cancel(true);
+        }
+        //onCreate中有时无法创建ScheduledExecutorService
+        if (mService == null){
+            Log.i("zcg", "新建的线程池");
+            mService = Executors.newScheduledThreadPool(1);
+        }
+        scheduledFuture = mService.schedule(() -> {
+            Log.i("zcg", "结束识别");
+            //发送停止录音事件，提前结束录音等待识别结果
+            asr.send(SpeechConstant.ASR_STOP, null, null, 0, 0);
+        }, delay, TimeUnit.SECONDS);
+    }
+
     private void asrStart() {
         Map<String, Object> params = new LinkedHashMap<>();
         // 基于SDK集成2.1 设置识别参数
@@ -630,7 +690,7 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
         params.put(SpeechConstant.APP_KEY, BotConstants.BaiduSpeechAppKey); // 添加apiKey
         params.put(SpeechConstant.SECRET, BotConstants.BaiduSpeechSecretKey); // 添加secretKey
         params.put(SpeechConstant.ACCEPT_AUDIO_VOLUME, false);
-        params.put(SpeechConstant.VAD, "10");
+        params.put(SpeechConstant.VAD, SpeechConstant.VAD_DNN);
         (new AutoCheck(getApplicationContext(), new Handler() {
             public void handleMessage(Message msg) {
                 if (msg.what == 100) {
@@ -732,7 +792,9 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
         if (dialogState.name().equals("TTS_FINISH") && webSocketStatus && isJK && canStart) {
             asrStart();
         } else if (dialogState.name().equals("LISTENING")) {
+            lastParams = "";
             canStart = false;
+            Log.i("zcg", "取消语音识别");
             asr.send(SpeechConstant.ASR_STOP, null, null, 0, 0);
             asr.send(SpeechConstant.ASR_CANCEL, "{}", null, 0, 0);
         }
@@ -781,4 +843,8 @@ public class SpeechActivity extends BaseActivity implements EventListener, IDial
             initView();
         }
     }
+
+
 }
+
+

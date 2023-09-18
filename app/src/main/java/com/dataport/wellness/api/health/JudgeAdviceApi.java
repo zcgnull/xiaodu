@@ -73,6 +73,15 @@ public class JudgeAdviceApi implements IRequestApi, IRequestServer {
             private String remainingDuration;
             private String isTimeOut;
             private String isExist;
+            private String isLimit;
+
+            public String getIsLimit() {
+                return isLimit;
+            }
+
+            public void setIsLimit(String isLimit) {
+                this.isLimit = isLimit;
+            }
 
             public int getAdviceUseRecordId() {
                 return adviceUseRecordId;

@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -25,9 +26,11 @@ import com.dataport.wellness.R;
 import com.dataport.wellness.api.health.AdviceDoctorApi;
 import com.dataport.wellness.api.health.IMLoginApi;
 import com.dataport.wellness.api.health.JudgeAdviceApi;
+import com.dataport.wellness.api.health.OnlineDoctorV2Api;
 import com.dataport.wellness.api.health.StartRecordApi;
 import com.dataport.wellness.api.health.TurnOffApi;
 import com.dataport.wellness.api.health.TurnOnApi;
+import com.dataport.wellness.been.OnLineDoctorBean;
 import com.dataport.wellness.been.OnlineDoctorListBean;
 import com.dataport.wellness.botsdk.BotMessageListener;
 import com.dataport.wellness.botsdk.IBotIntentCallback;
@@ -47,6 +50,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 public class OnLineDetailActivity extends BaseActivity implements IBotIntentCallback {
@@ -66,6 +70,12 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
     private RelativeLayout rl_no_data;
     private String speck;
     private FinishActivityRecevier mRecevier;
+    private boolean calling = false; //是否正在通话
+
+    private int limit = 0; //是否限制时长
+    private ScheduledExecutorService mService; //挂断倒计时用的线程池
+    private ScheduledFuture<?> schedule; //挂断倒计时任务
+    private String idCard;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +83,7 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
         findViewById(R.id.ln_back).setOnClickListener(v -> finish());
         binderId = getIntent().getLongExtra("binderId", 0);
         data = (OnlineDoctorListBean) getIntent().getSerializableExtra("data");
+        idCard = getIntent().getStringExtra("idCard");
         getIMLogin(binderId, data.getId());
         initView();
         initData();
@@ -160,7 +171,7 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
         } else if ("app_consultation_audio".equals(intent.name)) {//语音咨询
             judgeAdvice("3", data.getId(), binderId);
         } else if ("hangup".equals(intent.name)) {
-            hangUp();
+            hangUp(2);
         } else {
             BotSdk.getInstance().speakRequest("我没有听清，请再说一遍");
         }
@@ -171,6 +182,13 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
         super.onDestroy();
         BotSdk.getInstance().triggerDuerOSCapacity(BotMessageProtocol.DuerOSCapacity.AI_DUER_SHOW_INTERRPT_TTS, null);
         TUICallEngine.createInstance(OnLineDetailActivity.this).removeObserver(observer);
+        if (schedule != null){
+            schedule.cancel(true);
+        }
+        if (mService != null){
+            mService.shutdown();
+        }
+        mService = null;
         data=null;
         observer=null;
         if (mRecevier != null) {
@@ -183,18 +201,61 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
         public void onCallBegin(TUICommonDefine.RoomId roomId, TUICallDefine.MediaType callMediaType, TUICallDefine.Role callRole) {
             Log.i(TAG, "onCallBegin!");
             turnOn(type);
-            statService(delay);
+            calling = true;
+            if (limit == 1){
+                statService(delay);
+            }
         }
 
         public void onCallEnd(TUICommonDefine.RoomId roomId, TUICallDefine.MediaType callMediaType, TUICallDefine.Role callRole, long totalTime) {
             Log.i(TAG, "onCallEnd!");
             turnOff(type);
+            calling = false;
+            if (schedule != null){
+                schedule.cancel(true);
+                Log.d("zcg", "任务结束");
+            }
+            Log.d("zcg", "通话结束");
+        }
+
+        @Override
+        public void onCallCancelled(String callerId) {
+            super.onCallCancelled(callerId);
+            calling = false;
         }
 
         public void onUserNetworkQualityChanged(List<TUICommonDefine.NetworkQualityInfo> networkQualityList) {
             Log.i(TAG, "onUserNetworkQualityChanged!");
         }
     };
+
+    private void getOnlineDoctor() {
+        EasyHttp.get(this)
+                .api(new OnlineDoctorV2Api(idCard, 1, 10))
+                .request(new HttpCallback<HttpData<OnLineDoctorBean>>(this) {
+
+                    @Override
+                    public void onSucceed(HttpData<OnLineDoctorBean> result) {
+                        if (result.getData().getPublicReamin() == 0 && result.getData().getVioceReamin() == 0 && result.getData().getVideoReamin() == 0) {
+                            finish();
+                        } else {
+                            int publicReamin = result.getData().getPublicReamin();
+                            if (publicReamin == 0){
+                                int vioceReamin = result.getData().getVioceReamin();
+                                int videoReamin = result.getData().getVideoReamin();
+                                if (videoReamin == 0){
+                                    sp.setVisibility(View.GONE);
+                                }
+                                if (vioceReamin == 0){
+                                    yy.setVisibility(View.GONE);
+                                }
+                                Log.d("zcg", vioceReamin + "   " + videoReamin);
+                            }
+                        }
+                    }
+                });
+    }
+
 
     private void judgeAdvice(String serviceCode, long doctorId, long binderId) {
         type = serviceCode;
@@ -207,6 +268,7 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
                         if (result.getCode().equals("00000")) {
                             if (result.getInfo().getIsExist().equals("1")) {
                                 delay = Integer.valueOf(result.getInfo().getRemainingDuration());
+                                limit = Integer.valueOf(result.getInfo().getIsLimit());
                                 if (type.equals("3")) {
                                     TUICallKit.createInstance(OnLineDetailActivity.this).call(doctorTimId, TUICallDefine.MediaType.Audio);
                                 } else {
@@ -229,6 +291,7 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
                     public void onSucceed(AdviceDoctorApi.Bean result) {
                         if (result.getCode().equals("00000")) {
                             startRecord(result.getInfo().getAdviceUseRecordId());
+                            limit = Integer.valueOf(result.getInfo().getIsLimit());
                             if (result.getInfo().getIsLimit().equals("1")) {
                                 delay = result.getInfo().getLimitDuration();
                             }
@@ -292,28 +355,42 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
                 });
     }
 
-    private void hangUp() {
-        TUICallEngine.createInstance(OnLineDetailActivity.this).hangup(new TUICommonDefine.Callback() {
-            @Override
-            public void onSuccess() {
-                Log.i(TAG, "hangup!");
-            }
+    /**
+     *
+     * @param state 状态 1：自动挂断 2：小度挂断
+     */
+    private void hangUp(int state) {
+        if (state == 1 && calling){
+            TUICallEngine.createInstance(getApplicationContext()).hangup(new TUICommonDefine.Callback() {
+                @Override
+                public void onSuccess() {
+                    Toast.makeText(getApplicationContext(), "通话超过单次服务时长限制，系统自动挂断。", Toast.LENGTH_SHORT).show();
+                    Log.i(TAG, "hangup!");
+                }
 
-            @Override
-            public void onError(int i, String s) {
+                @Override
+                public void onError(int i, String s) {
 
-            }
-        });
+                }
+            });
+        }
     }
 
     private void statService(int delay) {
-        ScheduledExecutorService mService = Executors.newScheduledThreadPool(1);
-        mService.schedule(new Runnable() {
-            @Override
-            public void run() {
-                hangUp();
+        if (mService == null){
+            mService = Executors.newScheduledThreadPool(1);
+        }
+        if (schedule == null){
+            schedule = mService.schedule(() -> hangUp(1), delay, TimeUnit.SECONDS);
+        } else {
+            if (schedule.isDone() || schedule.isCancelled()){
+                schedule = mService.schedule(() -> hangUp(1), delay, TimeUnit.SECONDS);
+            } else {
+                schedule.cancel(true);
+                schedule = mService.schedule(() -> hangUp(1), delay, TimeUnit.SECONDS);
             }
-        }, delay, TimeUnit.SECONDS);
+        }
+        Log.d("zcg", delay + "任务开始");
     }
 
     private class FinishActivityRecevier extends BroadcastReceiver {
@@ -345,6 +422,7 @@ public class OnLineDetailActivity extends BaseActivity implements IBotIntentCall
     @Override
     protected void onResume() {
         super.onResume();
+        getOnlineDoctor();
         BotMessageListener.getInstance().addCallback(this);
     }
 

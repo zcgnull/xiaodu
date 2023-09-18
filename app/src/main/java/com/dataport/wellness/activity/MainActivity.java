@@ -240,6 +240,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     private void getPerson(String sn) {
+        // TODO: 2023/9/11 存储人员binderId，下次打开时默认使用
         EasyHttp.get(this)
                 .api(new QueryBinderApi(sn))
                 .request(new HttpCallback<HttpData<QueryBinderApi.Bean>>(this) {
@@ -249,13 +250,38 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                         if (result.getCode().equals("00000")) {
                             binderList = result.getData().getList();
                             if (binderList.size() > 0) {
-                                rlSuccess.setVisibility(View.VISIBLE);
-                                tvBinder.setText(binderList.get(0).getBinderName() + "(" + binderList.get(0).getRelation() + ")");
-                                binderId = binderList.get(0).getBinderId();
-                                userId = binderList.get(0).getUserId();
-                                binderIdCard = binderList.get(0).getBinderIdcard();
-                                String getAddress = binderList.get(0).getBinderProvince() + binderList.get(0).getBinderCity() + binderList.get(0).getBinderDistrict() + binderList.get(0).getBinderAddress();
-                                String address = binderList.get(0).getBinderCity() + binderList.get(0).getBinderDistrict();
+                                boolean flag = true;
+                                String getAddress = "";
+                                String address = "";
+                                if (hasSettings("settings")){
+                                    //使用配置文件中指定的人
+                                    binderId = Long.parseLong(loadSettings("settings", "binderId", "0"));
+                                    for (int i = 0; i < binderList.size(); i++) {
+                                        QueryBinderApi.Bean.ListDTO listDTO = binderList.get(i);
+                                        if (listDTO.getBinderId() == binderId){
+                                            flag = false;
+                                            rlSuccess.setVisibility(View.VISIBLE);
+                                            tvBinder.setText(binderList.get(i).getBinderName() + "(" + binderList.get(i).getRelation() + ")");
+                                            binderId = binderList.get(i).getBinderId();
+                                            userId = binderList.get(i).getUserId();
+                                            binderIdCard = binderList.get(i).getBinderIdcard();
+                                            getAddress = binderList.get(i).getBinderProvince() + binderList.get(i).getBinderCity() + binderList.get(i).getBinderDistrict() + binderList.get(i).getBinderAddress();
+                                            address = binderList.get(i).getBinderCity() + binderList.get(i).getBinderDistrict();
+                                        }
+                                    }
+                                }
+
+                                if (flag){
+                                    //没有设置文件或设置中的人被删除时，创建或更新为默认第一个人。
+                                    saveSettings("settings", "binderId", String.valueOf(binderList.get(0).getBinderId()));
+                                    rlSuccess.setVisibility(View.VISIBLE);
+                                    tvBinder.setText(binderList.get(0).getBinderName() + "(" + binderList.get(0).getRelation() + ")");
+                                    binderId = binderList.get(0).getBinderId();
+                                    userId = binderList.get(0).getUserId();
+                                    binderIdCard = binderList.get(0).getBinderIdcard();
+                                    getAddress = binderList.get(0).getBinderProvince() + binderList.get(0).getBinderCity() + binderList.get(0).getBinderDistrict() + binderList.get(0).getBinderAddress();
+                                    address = binderList.get(0).getBinderCity() + binderList.get(0).getBinderDistrict();
+                                }
                                 tvPlace.setText(address);
                                 getWeatherAddress(getAddress);
                                 contentDirect();
@@ -429,6 +455,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                         String address = binderList.get(position).getBinderCity() + binderList.get(position).getBinderDistrict();
                         tvPlace.setText(address);
                         getWeatherAddress(getAddress);
+                        //将binderId放入设置文件
+                        saveSettings("settings", "binderId", String.valueOf(binderId));
                     }
 
                     @Override
@@ -639,4 +667,45 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     public void onDialogStateChanged(DialogState dialogState) {
         Log.i("监听bot状态============", dialogState.name());
     }
+
+    /**
+     * 判度是否存在名为settingName的设置文件
+     * @param settingName
+     * @return
+     */
+    private boolean hasSettings(String settingName){
+        boolean isSettingsExist = false;
+        SharedPreferences sharedPreferences = getSharedPreferences(settingName, MODE_PRIVATE);
+        if (sharedPreferences != null) {
+            isSettingsExist = true;
+        }
+        return isSettingsExist;
+    }
+
+    /**
+     * 存储设置信息
+     * @param settingName 设置名
+     * @param key   key
+     * @param value value
+     */
+    private void saveSettings(String settingName, String key, String value) {
+        SharedPreferences sharedPreferences = getSharedPreferences(settingName, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(key, value);
+        editor.apply();
+    }
+
+    /**
+     * 读取设置信息
+     * @param settingName 设置名
+     * @param key  key
+     * @param defValue 默认value，没有对应value时使用
+     * @return
+     */
+    private String loadSettings(String settingName, String key, String defValue) {
+        SharedPreferences sharedPreferences = getSharedPreferences(settingName, MODE_PRIVATE);
+        return sharedPreferences.getString(key, defValue);
+    }
 }
+
+

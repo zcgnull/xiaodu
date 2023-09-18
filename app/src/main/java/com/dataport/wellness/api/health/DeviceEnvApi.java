@@ -31,7 +31,7 @@ public class DeviceEnvApi implements IRequestApi, IRequestServer {
     }
     private Integer pageNo;//页码 一开始
     private Integer pageSize;//每页条数
-    private long userId;
+    private long userId;    
     private String equipmentNo;
 
     public DeviceEnvApi(long userId, Integer pageNo, Integer pageSize,String equipmentNo) {

@@ -59,6 +59,8 @@ public class OnLineRecordActivity extends BaseActivity implements IBotIntentCall
     private List<OnlineRecordApi.Bean.AdviceRecordListDTO> recordList = new ArrayList<>();
     private OnLineRecordAdapter adapter;
     private FinishActivityRecevier mRecevier;
+
+    private int limit = 0; //是否限制时长
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +87,7 @@ public class OnLineRecordActivity extends BaseActivity implements IBotIntentCall
         adapter.setAdviceListener((data, pos) -> {
             type = data.getServiceCode();
             delay = Integer.valueOf(data.getLimitDuration());
+            limit = Integer.valueOf(data.getIsLimit());
             getIMLogin(binderId, data.getDoctorId());
         });
         getOnlineRecord(1);
@@ -110,7 +113,9 @@ public class OnLineRecordActivity extends BaseActivity implements IBotIntentCall
         public void onCallBegin(TUICommonDefine.RoomId roomId, TUICallDefine.MediaType callMediaType, TUICallDefine.Role callRole) {
             Log.i(TAG, "onCallBegin!");
             turnOn(type);
-            statService(delay);
+            if (limit == 1){
+                statService(delay);
+            }
         }
 
         public void onCallEnd(TUICommonDefine.RoomId roomId, TUICallDefine.MediaType callMediaType, TUICallDefine.Role callRole, long totalTime) {

@@ -65,7 +65,12 @@ public class OnLineRecordAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         contentHolder.doctor.setText(list.get(position).getDoctorName());
         contentHolder.time.setText(list.get(position).getCreateTime());
 
-        contentHolder.xz.setText(sumSecondToTime(Integer.valueOf(list.get(position).getLimitDuration())));
+        Integer limitDuration = Integer.valueOf(list.get(position).getLimitDuration());
+        if (limitDuration <= 0){
+            contentHolder.xz.setText("无限制");
+        } else {
+            contentHolder.xz.setText(sumSecondToTime(limitDuration));
+        }
         contentHolder.sj.setText(sumSecondToTime(Integer.valueOf(list.get(position).getServiceDuration())));
         contentHolder.done.setText(list.get(position).getCompleteTime());
         if (list.get(position).getUseState().equals("1")) {

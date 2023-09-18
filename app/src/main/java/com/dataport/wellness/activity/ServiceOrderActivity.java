@@ -2,6 +2,7 @@ package com.dataport.wellness.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.fastjson.JSON;
@@ -19,6 +21,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baidu.duer.bot.BotMessageProtocol;
 import com.baidu.duer.botsdk.BotIntent;
 import com.baidu.duer.botsdk.BotSdk;
+import com.baidu.duer.botsdk.UiContextPayload;
 import com.dataport.wellness.R;
 import com.dataport.wellness.adapter.ServiceContentAdapter;
 import com.dataport.wellness.api.old.QueryCommodityApi;
@@ -64,12 +67,15 @@ public class ServiceOrderActivity extends BaseActivity implements IBotIntentCall
     private List<QueryCommodityApi.Bean.ListDTO> serviceList = new ArrayList<>();
     private int totalNum = 0;
     private int pageNum = 1;
-    private int pageSize = 10;
+    private int pageSize = 9;
 
     private boolean lastPage = false;
     private String serviceId = "";
     private String longitude;
     private String latitude;
+
+    private int position = 1;
+    private LinearSmoothScroller smoothScroller;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -181,6 +187,19 @@ public class ServiceOrderActivity extends BaseActivity implements IBotIntentCall
             BotSdk.getInstance().speakRequest(messages.get(position));
         });
         queryTab();
+
+        smoothScroller = new LinearSmoothScroller(this) {
+            //垂直滑动结束的位置
+            @Override
+            public int getVerticalSnapPreference() {
+                return SNAP_TO_START;
+            }
+            //滑动速度
+            @Override
+            protected float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
+                return 0.5f;
+            }
+        };
     }
 
     @Override
@@ -211,10 +230,6 @@ public class ServiceOrderActivity extends BaseActivity implements IBotIntentCall
         }
     }
 
-    @Override
-    public void onClickLink(String url, HashMap<String, String> paramMap) {
-
-    }
 
     @Override
     public void onHandleScreenNavigatorEvent(int event) {
@@ -256,8 +271,8 @@ public class ServiceOrderActivity extends BaseActivity implements IBotIntentCall
                             tab.setCustomView(tabView);
                             firstTab.addTab(tab);
                         }
+                        initClientContext(); //注册本地意图
                     }
-
                 });
 
 
@@ -298,6 +313,7 @@ public class ServiceOrderActivity extends BaseActivity implements IBotIntentCall
 
                     @Override
                     public void onSucceed(HttpIntData<QueryCommodityApi.Bean> result) {
+                        Log.d("zcg", "asd");
                         lastPage = result.getData().isLastPage();
                         if (type == 1) {
                             totalNum = result.getData().getTotalCount();
@@ -321,6 +337,121 @@ public class ServiceOrderActivity extends BaseActivity implements IBotIntentCall
                         contentAdapter.setList(serviceList);
                     }
                 });
+    }
+
+    /**
+     * 判度RecyclerView是否滑动到了底部
+     * @param recyclerView
+     * @param percent 百分比
+     * @return
+     */
+    public boolean isSlideToBottom(RecyclerView recyclerView, float percent){
+        if (recyclerView == null) return false;
+        if ((recyclerView.computeVerticalScrollExtent() + recyclerView.computeVerticalScrollOffset()) * percent >= recyclerView.computeVerticalScrollRange()){
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 判度RecyclerView是否滑动到了顶部
+     * @param recyclerView
+     * @return
+     */
+    public boolean isSlideToTop(RecyclerView recyclerView){
+        if (recyclerView == null) return false;
+        if (recyclerView.computeVerticalScrollOffset() == 0){
+            return true;
+        }
+        return false;
+    }
+
+
+    /**
+     * 上一页
+     * @param itemNum 每页标签数
+     */
+    private void pageUp(int itemNum){
+        if (isSlideToTop(contentRv)){
+            BotSdk.getInstance().speakRequest("已经是顶部了");
+        } else {
+            position-=itemNum;
+            if(position < 0){
+                position = 0;
+            }
+            smoothScroller.setTargetPosition(position); //要到达的位置
+            RecyclerView.LayoutManager layoutManager = contentRv.getLayoutManager();
+            layoutManager.startSmoothScroll(smoothScroller); //开始滑动
+        }
+    }
+
+    /**
+     * 下一页
+     * @param itemNum 每页标签数
+     */
+    private void pageDown(int itemNum){
+        if (isSlideToBottom(contentRv, 1.1f)){
+            //加载更多
+            refreshLayout.autoLoadMore();
+        } else {
+            position+=itemNum;
+            if(position > serviceList.size()){
+                position = serviceList.size();
+            }
+            smoothScroller.setTargetPosition(position); //要到达的位置
+            RecyclerView.LayoutManager layoutManager = contentRv.getLayoutManager();
+
+            layoutManager.startSmoothScroll(smoothScroller); //开始滑动
+        }
+    }
+
+    /**
+     * 注册UIControl， UIControl就是根据界面元素自定义语音指令
+     */
+    private void initClientContext() {
+        UiContextPayload payload = new UiContextPayload();
+        //翻页
+        payload.addHyperUtterance(
+                BotConstants.VOICE_PAGE_URL,
+                null,
+                BotConstants.UiControlType.STEP,
+                null);
+
+        //切换tab
+        HashMap<String, String> params = null;
+        for (ServiceTabBean serviceTabBean : tabList) {
+            params = new HashMap<>();
+            params.put("name", serviceTabBean.getName());
+            payload.addHyperUtterance(
+                    BotConstants.VOICE_TAB_URL,
+                    null,
+                    BotConstants.UiControlType.TAB,
+                    params);
+        }
+
+        BotSdk.getInstance().updateUiContext(payload);
+    }
+
+    /**
+     * 云端返回的UIContext匹配结果
+     *
+     * @param url      自定义交互描述中的url
+     * @param paramMap 对于系统内建类型，参数列表。参数就是从query中通过分词取得的关键词。
+     */
+    @Override
+    public void onClickLink(String url, HashMap<String, String> paramMap) {
+        Log.d("zcg", "本地意图");
+        if (BotConstants.VOICE_PAGE_URL.equals(url)) {
+            if ("1".equals(paramMap.get("by"))){
+                //下一页
+                pageDown(6);
+            } else if ("-1".equals(paramMap.get("by"))){
+                //上一页
+                pageUp(6);
+            }
+        } else if (BotConstants.VOICE_TAB_URL.equals(url)){
+            firstTab.selectTab(firstTab.getTabAt(Integer.parseInt(paramMap.get("index_da")) - 1));
+        }
     }
 
     @Override
